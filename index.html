@@ -77,20 +77,34 @@
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
   .form-row.full{grid-template-columns:1fr;}
   .field label{
-    display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-    color:rgba(28,27,46,.48);font-weight:600;margin-bottom:7px;
+    display:block;font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:15px;letter-spacing:0;text-transform:none;
+    color:rgba(28,27,46,.72);margin-bottom:8px;
   }
-  .field input,.field select{
+  .field .hint{
+    display:block;font-family:'Inter',sans-serif;font-style:normal;
+    font-size:11px;letter-spacing:.04em;color:rgba(28,27,46,.42);margin:-2px 0 8px;
+  }
+  .field input,.field select,.field textarea{
     width:100%;padding:12px 13px;border-radius:10px;
     border:1px solid rgba(28,27,46,.12);background:#fff;
     color:var(--ink);font-size:14.5px;outline:none;
     transition:border-color .15s, box-shadow .15s;
   }
-  .field input:focus,.field select:focus{
+  .field textarea{
+    min-height:96px;resize:vertical;line-height:1.55;font-weight:300;
+    font-family:'Inter',sans-serif;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{
     border-color:color-mix(in srgb, var(--accent) 70%, #1C1B2E);
     box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
   }
-  .field input::placeholder{color:rgba(28,27,46,.35);}
+  .field input::placeholder,.field textarea::placeholder{color:rgba(28,27,46,.35);}
+  .notes-field{margin-top:4px;}
+  .notes-field textarea{
+    background:linear-gradient(180deg, #fff 0%, #fbf8f2 100%);
+    border-color:rgba(28,27,46,.14);
+  }
   .form-actions{margin-top:6px;}
   .form-submit{
     width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -200,7 +214,18 @@
   .invite-loc{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:600;}
   .invite-names{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(34px,4.6vw,48px);margin:0 0 20px;line-height:1.1;}
   .invite-date{font-size:13px;color:rgba(28,27,46,.55);margin-bottom:26px;}
-  .invite-copy{font-size:15.5px;line-height:1.8;color:rgba(28,27,46,.78);max-width:480px;margin:0 auto 34px;font-weight:300;}
+  .invite-copy{font-size:15.5px;line-height:1.8;color:rgba(28,27,46,.78);max-width:480px;margin:0 auto 22px;font-weight:300;}
+  .invite-notes{
+    max-width:480px;margin:0 auto 34px;padding:14px 18px;
+    border-left:2px solid color-mix(in srgb, var(--accent) 70%, transparent);
+    text-align:left;font-size:13.5px;line-height:1.65;font-style:italic;
+    color:rgba(28,27,46,.62);font-weight:300;
+  }
+  .invite-notes.hidden{display:none;}
+  .invite-notes-label{
+    display:block;font-style:normal;font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:rgba(28,27,46,.4);font-weight:600;margin-bottom:6px;
+  }
   .cta-btn{
     display:inline-flex;align-items:center;gap:8px;
     background:var(--accent);color:var(--ink);font-weight:600;font-size:14px;
@@ -263,25 +288,42 @@
     transform:translateX(104%);transition:transform .28s cubic-bezier(.22,.8,.28,1);
     box-shadow:-24px 0 60px -30px rgba(0,0,0,.55);
     display:flex;flex-direction:column;padding:28px 28px 32px;
+    overflow-y:auto;
   }
   .vendor-drawer.open{transform:translateX(0);}
   .vd-close{
     align-self:flex-end;width:36px;height:36px;border-radius:50%;
     border:1px solid rgba(28,27,46,.12);font-size:18px;color:rgba(28,27,46,.55);
-    display:flex;align-items:center;justify-content:center;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
   }
   .vd-close:hover{background:rgba(28,27,46,.05);color:var(--ink);}
   .vd-cat{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:12px 0 8px;}
   .vd-name{font-family:'Fraunces',serif;font-style:italic;font-size:30px;margin:0 0 8px;line-height:1.15;}
   .vd-price{font-size:22px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;margin-bottom:18px;}
   .vd-blurb{font-size:14.5px;line-height:1.65;color:rgba(28,27,46,.72);margin:0 0 20px;font-weight:300;}
-  .vd-section{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,27,46,.42);font-weight:600;margin:0 0 10px;}
-  .vd-includes{margin:0 0 22px;padding:0 0 0 18px;color:rgba(28,27,46,.78);font-size:14px;line-height:1.7;}
+  .vd-section{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,27,46,.42);font-weight:600;margin:22px 0 10px;}
+  .vd-blurb + .vd-section{margin-top:4px;}
+  .vd-includes{margin:0 0 4px;padding:0 0 0 18px;color:rgba(28,27,46,.78);font-size:14px;line-height:1.7;}
+  .vd-why{margin:0 0 4px;padding:0 0 0 18px;color:rgba(28,27,46,.78);font-size:14px;line-height:1.65;}
+  .vd-why li{margin-bottom:6px;}
   .vd-style{
     background:var(--paper-dim);border-radius:12px;padding:14px 16px;
     font-size:13.5px;line-height:1.55;color:rgba(28,27,46,.7);font-style:italic;
   }
-  .vd-booked{margin-top:auto;padding-top:20px;font-size:12.5px;color:var(--accent);font-weight:600;}
+  .vd-reviews{display:flex;flex-direction:column;gap:10px;margin:0 0 4px;}
+  .vd-review{
+    background:rgba(28,27,46,.04);border-radius:12px;padding:12px 14px;
+    border:1px solid rgba(28,27,46,.06);
+  }
+  .vd-review-stars{
+    font-size:11px;letter-spacing:.04em;color:var(--gold);font-weight:600;margin-bottom:6px;
+  }
+  .vd-review-quote{
+    font-family:'Fraunces',serif;font-style:italic;font-size:14px;line-height:1.5;
+    color:rgba(28,27,46,.78);margin:0 0 8px;
+  }
+  .vd-review-by{font-size:11.5px;color:rgba(28,27,46,.45);}
+  .vd-booked{margin-top:auto;padding-top:22px;font-size:12.5px;color:var(--accent);font-weight:600;}
 
   /* ================= SCENE ================= */
   #scene{background:#000;}
@@ -312,42 +354,44 @@
 <div id="landing" class="screen">
   <div class="landing-shell">
     <h1 class="landing-mark">Marrymap</h1>
-    <p class="landing-sub">Tell us the wedding. Watch the agent shop the marketplace, book vendors, and build the day — live.</p>
+    <p class="landing-sub">Write the bones of the day. The agent shops the marketplace, books vendors, and builds it live.</p>
 
     <form class="wedding-form" id="wedding-form" novalidate>
       <div class="form-row">
         <div class="field">
-          <label for="f-p1">Partner 1</label>
+          <label for="f-p1">One of you</label>
           <input id="f-p1" name="partner1" type="text" placeholder="Priya" required autocomplete="given-name">
         </div>
         <div class="field">
-          <label for="f-p2">Partner 2</label>
+          <label for="f-p2">And the other</label>
           <input id="f-p2" name="partner2" type="text" placeholder="Arjun" required autocomplete="given-name">
         </div>
       </div>
       <div class="form-row full">
         <div class="field">
-          <label for="f-loc">Destination</label>
+          <label for="f-loc">Where it happens</label>
           <input id="f-loc" name="location" type="text" placeholder="Goa, India" required>
         </div>
       </div>
       <div class="form-row">
         <div class="field">
-          <label for="f-date">Wedding date</label>
+          <label for="f-date">The date</label>
           <input id="f-date" name="date" type="text" placeholder="February 14, 2027" required>
         </div>
         <div class="field">
-          <label for="f-guests">Guests</label>
+          <label for="f-guests">How many</label>
           <input id="f-guests" name="guests" type="number" min="10" max="500" placeholder="80" required>
         </div>
       </div>
       <div class="form-row">
         <div class="field">
-          <label for="f-budget">Budget (USD)</label>
+          <label for="f-budget">Rough budget</label>
+          <span class="hint">USD, give or take</span>
           <input id="f-budget" name="budget" type="number" min="5000" max="500000" step="1000" placeholder="42000" required>
         </div>
         <div class="field">
-          <label for="f-vibe">Vibe</label>
+          <label for="f-vibe">Setting</label>
+          <span class="hint">A starting point</span>
           <select id="f-vibe" name="vibe">
             <option value="beach">Beach</option>
             <option value="vineyard">Vineyard</option>
@@ -356,6 +400,13 @@
             <option value="coastal">Coastal</option>
             <option value="wine">Wine country</option>
           </select>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="field notes-field">
+          <label for="f-notes">Other notes — what should this wedding feel like?</label>
+          <span class="hint">Free write. Traditions, energy, must-haves, what you want guests to remember.</span>
+          <textarea id="f-notes" name="notes" maxlength="600" placeholder="Barefoot ceremony, long dinner under string lights, no stiff timeline — just the people we love and a sunset that won’t quit…"></textarea>
         </div>
       </div>
       <div class="form-actions">
@@ -410,6 +461,10 @@
         <h3 class="invite-names" id="inv-names"></h3>
         <div class="invite-date" id="inv-date"></div>
         <p class="invite-copy" id="inv-copy"></p>
+        <div class="invite-notes hidden" id="inv-notes">
+          <span class="invite-notes-label">From your notes</span>
+          <span id="inv-notes-text"></span>
+        </div>
         <button class="cta-btn" data-go-scene>Go to your wedding →</button>
       </div>
     </div>
@@ -448,6 +503,10 @@
   <p class="vd-blurb" id="vd-blurb"></p>
   <div class="vd-section">What's included</div>
   <ul class="vd-includes" id="vd-includes"></ul>
+  <div class="vd-section">Why your agent picked this</div>
+  <ul class="vd-why" id="vd-why"></ul>
+  <div class="vd-section">Reviews</div>
+  <div class="vd-reviews" id="vd-reviews"></div>
   <div class="vd-section">Style note</div>
   <div class="vd-style" id="vd-style"></div>
   <div class="vd-booked">✓ Booked by your Marrymap agent</div>
@@ -468,6 +527,7 @@ const COUPLES = [
     vibe:'beach',
     palette:{ bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
     inviteCopy:'Mehndi, music, and the Arabian Sea — three days of celebration on the sands of Goa. Join us as we begin our forever.',
+    notes:'Three days with our families — mehndi that feels joyful, barefoot dinner by the water, and music loud enough that everyone dances.',
     vendors:[
       {category:'Travel',  name:'GoaAir Group Blocks',            price:9800,  note:'62 guests, DEL/BOM → GOI'},
       {category:'Venue',   name:'Taj-style Beachfront Lawn',       price:14500, note:'3-day mehndi + sangeet + ceremony'},
@@ -486,6 +546,7 @@ const COUPLES = [
     vibe:'vineyard',
     palette:{ bg:'#3a2f1f', accent:'#7A8450', glow:'#C96F4A' },
     inviteCopy:'Sun-warmed hills, long tables, and wine under the Tuscan stars. Come celebrate love the way Italy does — slowly, joyfully, together.',
+    notes:'Long tables, golden light, and a weekend that feels like a house party at a villa — not a ballroom.',
     vendors:[
       {category:'Travel',  name:'Firenze Charter Coaches',        price:8500,  note:'80 guests, FLR/PSA transfers'},
       {category:'Venue',   name:'Il Borgo Vineyard Estate',        price:18000, note:'Weekend buyout, hilltop chapel'},
@@ -504,6 +565,7 @@ const COUPLES = [
     vibe:'island',
     palette:{ bg:'#1f2f3a', accent:'#2E6FA3', glow:'#FF8C69' },
     inviteCopy:"Whitewashed walls, endless blue, and a sunset that never quite ends. We're saying 'I do' on the cliffs of Mykonos.",
+    notes:'Sunset vows on the cliffs, seafood that keeps coming, and a dance floor that starts before the sun finishes.',
     vendors:[
       {category:'Travel',  name:'Aegean Air Group Charter',        price:11000, note:'70 guests, JMK island transfers'},
       {category:'Venue',   name:'Cliffside Caldera Villa',         price:19500, note:'Private cliff estate, sunset ceremony'},
@@ -609,8 +671,20 @@ const $$ = sel => Array.from(document.querySelectorAll(sel));
 const fmtMoney = n => '$' + Math.round(n).toLocaleString('en-US');
 const shortK = n => Math.round(n/1000) + 'k';
 
+function normalizeHex(input){
+  if(typeof input === 'number' && Number.isFinite(input)){
+    return '#' + ((input >>> 0) & 0xffffff).toString(16).padStart(6, '0');
+  }
+  const s = String(input == null ? '' : input).trim();
+  if(/^#[0-9a-f]{6}$/i.test(s)) return s;
+  if(/^[0-9a-f]{6}$/i.test(s)) return '#' + s;
+  if(/^0x[0-9a-f]{1,6}$/i.test(s)){
+    return '#' + parseInt(s, 16).toString(16).padStart(6, '0');
+  }
+  return '#000000';
+}
 function hexToRgb(hex){
-  const h = hex.replace('#','');
+  const h = normalizeHex(hex).slice(1);
   return { r: parseInt(h.substring(0,2),16), g: parseInt(h.substring(2,4),16), b: parseInt(h.substring(4,6),16) };
 }
 function rgbToHexNum(r,g,b){ return (Math.round(r)<<16) + (Math.round(g)<<8) + Math.round(b); }
@@ -623,7 +697,8 @@ function darkenHexToNum(hex, factor){
   return rgbToHexNum(c.r*factor, c.g*factor, c.b*factor);
 }
 function numToHex(n){
-  return '#' + n.toString(16).padStart(6,'0');
+  if(typeof n === 'string') return normalizeHex(n);
+  return '#' + ((Number(n) >>> 0) & 0xffffff).toString(16).padStart(6, '0');
 }
 
 function getBudgetTier(budgetTotal, guests){
@@ -658,6 +733,19 @@ function scaleVendors(vendors, guests, budgetTotal){
   return scaled;
 }
 
+function sanitizeNotes(raw){
+  return String(raw || '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 600);
+}
+function truncateNotes(s, n=90){
+  const t = sanitizeNotes(s);
+  if(t.length <= n) return t;
+  return t.slice(0, n - 1).replace(/\s+\S*$/, '').trimEnd() + '…';
+}
+
 function buildWeddingFromForm(raw){
   const p1 = (raw.partner1 || 'Partner One').trim();
   const p2 = (raw.partner2 || 'Partner Two').trim();
@@ -667,6 +755,7 @@ function buildWeddingFromForm(raw){
   const guests = Math.max(10, parseInt(raw.guests, 10) || 80);
   const budgetTotal = Math.max(5000, parseInt(raw.budget, 10) || 40000);
   const vibe = raw.vibe || 'beach';
+  const notes = sanitizeNotes(raw.notes);
   const seed = findSeed(location, vibe);
   const vendors = scaleVendors(seed.vendors, guests, budgetTotal);
   const inviteCopy = seed.inviteCopy
@@ -675,7 +764,7 @@ function buildWeddingFromForm(raw){
 
   return {
     id: 'custom-' + Date.now(),
-    names, location, date, guests, budgetTotal, vibe,
+    names, location, date, guests, budgetTotal, vibe, notes,
     palette: { ...seed.palette },
     inviteCopy,
     vendors,
@@ -728,20 +817,199 @@ const CATEGORY_BLURBS = {
   Music: 'The emotional arc of the day, from hush to dance floor.'
 };
 
+const PLACE_COLOR_STORY = {
+  'priya-arjun': 'sunset marigold and rose against Arabian Sea evenings',
+  'jake-emily': 'olive greens and terracotta warmth under Tuscan light',
+  'marcus-david': 'Aegean blues with coral-sunset warmth on whitewashed stone',
+  'sofia-mateo': 'jungle dusk — marigold, fuchsia, and lantern gold',
+  'aiko-wei': 'soft sage and lilac against cliffside ocean air',
+  'lena-sarah': 'cabernet deeps and harvest gold through vineyard rows',
+  'kwame-ngozi': 'spice-gold and ocean teal along the Swahili coast'
+};
+
+const TIER_FEEL = {
+  high: "We're leaning into the full treatment — longer service windows and richer finishes.",
+  mid: 'Right-sized for this guest list: polished without tipping into excess.',
+  low: "Kept clean and complete — everything you need, nothing you don't."
+};
+
+const CATEGORY_REVIEWS = {
+  Travel: [
+    { stars:'★★★★★', quote:'Every guest landed with a smile and a welcome bag. Zero chaos at arrivals.', by:'Ananya R., 2025' },
+    { stars:'Couples Choice · 4.9/5', quote:'On 120+ destination weddings, still the calmest transfer team we book.', by:'Marrymap Marketplace' }
+  ],
+  Venue: [
+    { stars:'★★★★★', quote:'The space held ceremony and dinner without feeling like a hotel ballroom.', by:'Elena M., 2025' },
+    { stars:'4.8/5 · 86 weddings', quote:'Golden-hour timing was perfect. Guests still talk about the view.', by:'Destination Digest' }
+  ],
+  Catering: [
+    { stars:'★★★★★', quote:'Stations that moved like a party, not a cafeteria line. People went back for thirds.', by:'Jordan K., 2024' },
+    { stars:'Editor’s pick · 4.9/5', quote:'Dietary needs handled quietly — nobody felt like an exception.', by:'The Knot Local' }
+  ],
+  Flowers: [
+    { stars:'★★★★☆', quote:'Looked magazine-real in person and held through humidity and wind.', by:'Mei L., 2025' },
+    { stars:'Couples Choice · 4.8/5', quote:'Arch was the photo everyone sent home. Strike was seamless.', by:'Marrymap Marketplace' }
+  ],
+  Music: [
+    { stars:'★★★★★', quote:'Ceremony hush to dance-floor chaos — they read the room perfectly.', by:'Samira T., 2025' },
+    { stars:'4.9/5 · 140 weddings', quote:'Live cues + DJ handoff with zero dead air. Guests never left the floor.', by:'WeddingWire' }
+  ]
+};
+
+const HERO_REVIEWS = {
+  'priya-arjun|Travel': [
+    { stars:'★★★★★', quote:'DEL and BOM flights staggered all afternoon — GoaAir still got everyone to the lawn on time.', by:'Priya S., 2025' },
+    { stars:'Couples Choice · 4.9/5', quote:'Welcome bags with local SIMs made aunties feel taken care of instantly.', by:'Marrymap Marketplace' }
+  ],
+  'priya-arjun|Venue': [
+    { stars:'★★★★★', quote:'Three days on one lawn and it never felt repetitive — mehndi to vows to dinner.', by:'Arjun M., 2025' },
+    { stars:'4.9/5 · beachfront estates', quote:'Arabian Sea backdrop without fighting hotel event rules.', by:'India Wedding Report' }
+  ],
+  'priya-arjun|Catering': [
+    { stars:'★★★★★', quote:'Live chaat that somehow stayed elegant. Uncles still text about the seafood counter.', by:'Neha P., 2024' }
+  ],
+  'priya-arjun|Flowers': [
+    { stars:'★★★★★', quote:'Marigold and orchid mandap that smelled like celebration the second you walked in.', by:'Kavya R., 2025' }
+  ],
+  'priya-arjun|Music': [
+    { stars:'★★★★★', quote:'Dhol hit and the whole lawn stood up. Reception never cooled off.', by:'Rohan D., 2025' }
+  ],
+  'jake-emily|Travel': [
+    { stars:'★★★★★', quote:'FLR and PSA pickups felt private-tourier calm for eighty people.', by:'Emily W., 2025' }
+  ],
+  'jake-emily|Venue': [
+    { stars:'★★★★★', quote:'Hilltop chapel at golden hour — our photographer cried before we did.', by:'Jake H., 2024' },
+    { stars:'Couples Choice · 4.9/5', quote:'Weekend buyout meant our people owned the borgo, not a shared schedule.', by:'Marrymap Marketplace' }
+  ],
+  'jake-emily|Catering': [
+    { stars:'★★★★★', quote:'Family-style that tasted like Nonna actually cooked. Wine pairings never missed.', by:'Chiara B., 2025' }
+  ],
+  'jake-emily|Flowers': [
+    { stars:'★★★★☆', quote:'Olive branch and wildflowers — romantic without looking arranged-for-Instagram.', by:'Sophie L., 2025' }
+  ],
+  'jake-emily|Music': [
+    { stars:'★★★★★', quote:'Strings for the aisle, then a DJ who understood Italians and Americans equally.', by:'Marco F., 2024' }
+  ],
+  'marcus-david|Travel': [
+    { stars:'★★★★★', quote:'JMK island hops for seventy guests and nobody missed the welcome drinks.', by:'Marcus A., 2025' },
+    { stars:'Couples Choice · 4.9/5', quote:'Ferry and van timing that respects Mykonos wind, not just a spreadsheet.', by:'Aegean Weddings Index' }
+  ],
+  'marcus-david|Venue': [
+    { stars:'★★★★★', quote:'Private cliff estate — sunset vows with zero strangers on the terrace.', by:'David R., 2025' },
+    { stars:'4.9/5 · 64 cliff weddings', quote:'Caldera light does the heavy lifting; the team protected the timeline.', by:'Hellenic Bride' }
+  ],
+  'marcus-david|Catering': [
+    { stars:'★★★★★', quote:'Mezze that kept arriving like the night refused to end. Seafood was absurdly fresh.', by:'Nikos P., 2024' }
+  ],
+  'marcus-david|Flowers': [
+    { stars:'★★★★☆', quote:'White bougainvillea against that blue — simple, wind-smart, unforgettable.', by:'Helena K., 2025' }
+  ],
+  'marcus-david|Music': [
+    { stars:'★★★★★', quote:'Bouzouki for the processional, then a DJ who knew when to let the terrace breathe.', by:'Alex & Theo, 2025' }
+  ]
+};
+
+function seedKey(couple){
+  return couple.seedId || couple.id || '';
+}
+
+function placeName(couple){
+  return (couple.location || 'your destination').split(',')[0].trim();
+}
+
+function humanizeVendorLine(vendor, couple){
+  const place = placeName(couple);
+  const raw = (vendor.note || '').replace(/^\d+\s*guests?,?\s*/i, '').replace(/^·\s*/, '').trim();
+  switch(vendor.category){
+    case 'Travel':
+      return `Guest arrivals for ${couple.guests} in ${place}: ${raw || 'smooth airport-to-venue transfers'}.`;
+    case 'Venue':
+      return `The ceremony home — ${raw || 'a site that holds vows and dinner in one breath'}.`;
+    case 'Catering':
+      return `The table story: ${raw || 'a menu paced for celebration'}.`;
+    case 'Flowers':
+      return `Florals that photograph clean: ${raw || 'arch, aisle, and personal flowers'}.`;
+    case 'Music':
+      return `The day’s soundtrack — ${raw || 'ceremony hush into a full dance floor'}.`;
+    default:
+      return raw || `Booked for ${place}.`;
+  }
+}
+
+function buildStyleNote(vendor, couple){
+  const place = placeName(couple);
+  const colorStory = PLACE_COLOR_STORY[seedKey(couple)] || `a palette that feels native to ${place}`;
+  const tierFeel = TIER_FEEL[couple.tier] || TIER_FEEL.mid;
+  let out = `${humanizeVendorLine(vendor, couple)} ${tierFeel} For ${place}, think ${colorStory}.`;
+  if(couple.notes){
+    const snip = truncateNotes(couple.notes, 72).replace(/[.!?…]+$/, '');
+    out += ` Keeping your note close — “${snip}.”`;
+  }
+  return out;
+}
+
+function buildWhyReasons(vendor, couple){
+  const place = placeName(couple);
+  const cat = vendor.category;
+  const reasons = [];
+
+  reasons.push(`Best marketplace fit for ${couple.guests} guests in ${place} without overcrowding the day.`);
+
+  if(couple.tier === 'high'){
+    reasons.push('Elevated service windows and finishes that match your budget tier.');
+  } else if(couple.tier === 'low'){
+    reasons.push('Cleanest value lock that still covers the essentials beautifully.');
+  } else {
+    reasons.push('Strong quality-to-price match for a signature celebration this size.');
+  }
+
+  const catWhy = {
+    Travel: `Proven group logistics into ${place} — coordinators who treat arrivals like hospitality, not a bus route.`,
+    Venue: `One site that holds ceremony and reception so guests aren’t venue-hopping.`,
+    Catering: `Menu pacing and stations that photograph well and feed a hungry dance floor.`,
+    Flowers: `Design language that survives wind, heat, and a full photo timeline.`,
+    Music: `Live cues plus reception energy that follows the room, not a rigid playlist.`
+  };
+  reasons.push(catWhy[cat] || 'Topped peer quotes on availability, reviews, and timeline fit this week.');
+
+  if(couple.notes){
+    reasons.push(`Pulled forward because it echoes your notes: “${truncateNotes(couple.notes, 58)}”.`);
+  } else if(couple.vibe){
+    reasons.push(`Scored highest against a ${couple.vibe} setting versus the next two shortlisted options.`);
+  }
+
+  // Prefer hero-specific third reason flavor via name mention
+  const hero = seedKey(couple);
+  if(hero === 'priya-arjun' && cat === 'Venue'){
+    reasons[2] = 'Only lawn on shortlist with a true three-day mehndi-to-reception hold.';
+  } else if(hero === 'jake-emily' && cat === 'Venue'){
+    reasons[2] = 'Weekend buyout — your people own the borgo, not a shared hotel calendar.';
+  } else if(hero === 'marcus-david' && cat === 'Travel'){
+    reasons[2] = 'JMK island timing that respects wind delays, not just the itinerary PDF.';
+  }
+
+  return reasons.slice(0, 3);
+}
+
+function buildReviews(vendor, couple){
+  const key = `${seedKey(couple)}|${vendor.category}`;
+  const hero = HERO_REVIEWS[key];
+  if(hero && hero.length) return hero.slice(0, 2);
+  return (CATEGORY_REVIEWS[vendor.category] || CATEGORY_REVIEWS.Venue).slice(0, 2);
+}
+
 function vendorDetail(vendor, couple){
   const cat = vendor.category;
   const includes = (CATEGORY_INCLUDES[cat] || CATEGORY_INCLUDES.Venue).slice(0, couple.tier === 'high' ? 4 : couple.tier === 'low' ? 2 : 3);
-  const tierNote = couple.tier === 'high'
-    ? 'Premium tier — upgraded finishes and longer service windows.'
-    : couple.tier === 'low'
-      ? 'Essential package — clean, complete, no fluff.'
-      : 'Signature package — balanced polish for the guest count.';
-  const style = `For ${couple.location}: ${vendor.note}. ${tierNote} Palette leans ${couple.palette.accent} with ${couple.palette.glow} accents.`;
+  const why = buildWhyReasons(vendor, couple);
   return {
     ...vendor,
     blurb: CATEGORY_BLURBS[cat] || 'Booked and confirmed by your Marrymap agent.',
     includes,
-    style
+    why,
+    reviews: buildReviews(vendor, couple),
+    style: buildStyleNote(vendor, couple),
+    pickReason: why[0]
   };
 }
 
@@ -797,6 +1065,7 @@ function fillFormFromCouple(couple){
   $('#f-guests').value = couple.guests;
   $('#f-budget').value = couple.budgetTotal;
   $('#f-vibe').value = couple.vibe || 'beach';
+  $('#f-notes').value = couple.notes || '';
 }
 
 function renderLanding(){
@@ -828,13 +1097,19 @@ let agentTimer = null;
 
 function buildAgentLines(couple){
   const lines = [];
-  lines.push({icon:'✦', cls:'ink', text:`Searching marketplace: ${couple.location.split(',')[0]}, ${couple.guests} guests, $${shortK(couple.budgetTotal)}…`});
+  const place = placeName(couple);
+  lines.push({icon:'✦', cls:'ink', text:`Searching marketplace: ${place}, ${couple.guests} guests, $${shortK(couple.budgetTotal)}…`});
+  if(couple.notes){
+    lines.push({icon:'✦', cls:'ink', text:`Reading your notes — “${truncateNotes(couple.notes, 96)}” … shaping picks around that.`});
+  }
   couple.vendors.forEach((v, i) => {
+    const detail = vendorDetail(v, couple);
+    const whyShort = truncateNotes(detail.pickReason, 64);
     if(v.flag){
       lines.push({icon:'⚑', cls:'clay', text:`${v.category} — quoted high · negotiating…`});
-      lines.push({icon:'✓', cls:'accent', text:`${v.category} — locked at ${fmtMoney(v.price)} (${v.name})`, vendorIndex:i});
+      lines.push({icon:'✓', cls:'accent', text:`${v.category} — locked at ${fmtMoney(v.price)} (${v.name}) · ${whyShort}`, vendorIndex:i});
     } else {
-      lines.push({icon:'✓', cls:'accent', text:`${v.category} — ${v.name} · ${fmtMoney(v.price)}`, vendorIndex:i});
+      lines.push({icon:'✓', cls:'accent', text:`${v.category} — ${v.name} · ${fmtMoney(v.price)} · ${whyShort}`, vendorIndex:i});
     }
   });
   const total = couple.vendors.reduce((s,v) => s + v.price, 0);
@@ -888,6 +1163,14 @@ function openVendorDetail(vendor, couple){
   $('#vd-price').textContent = fmtMoney(d.price);
   $('#vd-blurb').textContent = d.blurb;
   $('#vd-includes').innerHTML = d.includes.map(i => `<li>${i}</li>`).join('');
+  $('#vd-why').innerHTML = d.why.map(r => `<li>${r}</li>`).join('');
+  $('#vd-reviews').innerHTML = d.reviews.map(r => `
+    <div class="vd-review">
+      <div class="vd-review-stars">${r.stars}</div>
+      <p class="vd-review-quote">“${r.quote}”</p>
+      <div class="vd-review-by">${r.by}</div>
+    </div>
+  `).join('');
   $('#vd-style').textContent = d.style;
   $('#vendor-backdrop').classList.add('open');
   $('#vendor-drawer').classList.add('open');
@@ -916,6 +1199,15 @@ function renderPlan(couple){
   $('#inv-names').textContent = couple.names;
   $('#inv-date').textContent = couple.date;
   $('#inv-copy').textContent = couple.inviteCopy;
+  const notesEl = $('#inv-notes');
+  const notesText = $('#inv-notes-text');
+  if(couple.notes){
+    notesText.textContent = couple.notes;
+    notesEl.classList.remove('hidden');
+  } else {
+    notesText.textContent = '';
+    notesEl.classList.add('hidden');
+  }
 
   const vendorList = $('#vendor-list');
   vendorList.innerHTML = '';
@@ -1027,23 +1319,34 @@ let sceneBuildId = 0;
 const SKY_URL = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80';
 
 function initThree(){
-  renderer = new THREE.WebGLRenderer({ antialias:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  if(typeof THREE === 'undefined' || !THREE.WebGLRenderer){
+    throw new Error('THREE is not available');
+  }
+  const canvasHost = $('#scene-canvas');
+  renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false, powerPreference:'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  $('#scene-canvas').appendChild(renderer.domElement);
+  canvasHost.innerHTML = '';
+  canvasHost.appendChild(renderer.domElement);
   window.addEventListener('resize', () => {
+    if(!renderer || !camera) return;
     renderer.setSize(window.innerWidth, window.innerHeight);
-    if(camera){
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-    }
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
   });
 }
 
 function makeCanvasTexture(draw, w=512, h=512){
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
-  draw(c.getContext('2d'), w, h);
+  const ctx = c.getContext('2d');
+  try {
+    draw(ctx, w, h);
+  } catch (err) {
+    console.warn('Canvas texture paint failed; using flat fallback', err);
+    ctx.fillStyle = '#2a2438';
+    ctx.fillRect(0, 0, w, h);
+  }
   const tex = new THREE.CanvasTexture(c);
   if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
   tex.needsUpdate = true;
@@ -1159,17 +1462,28 @@ function buildWeddingScene(couple){
   sky.position.y = 16;
   scene.add(sky);
 
-  // try loading photographic sky
-  const loader = new THREE.TextureLoader();
-  loader.setCrossOrigin('anonymous');
-  loader.load(SKY_URL, tex => {
-    if(buildId !== sceneBuildId){ tex.dispose(); return; }
-    if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-    const old = skyMat.map;
-    skyMat.map = tex;
-    skyMat.needsUpdate = true;
-    if(old) old.dispose();
-  }, undefined, () => { /* keep canvas fallback */ });
+  // try loading photographic sky — never let CORS/network failures break the scene
+  try {
+    const loader = new THREE.TextureLoader();
+    if(typeof loader.setCrossOrigin === 'function') loader.setCrossOrigin('anonymous');
+    else loader.crossOrigin = 'anonymous';
+    loader.load(SKY_URL, tex => {
+      try {
+        if(buildId !== sceneBuildId){ tex.dispose(); return; }
+        if(!skyMat || skyMat.map === undefined){ tex.dispose(); return; }
+        if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+        const old = skyMat.map;
+        skyMat.map = tex;
+        skyMat.needsUpdate = true;
+        if(old && old !== tex) old.dispose();
+      } catch (err) {
+        console.warn('Sky texture apply failed; keeping canvas fallback', err);
+        try { tex.dispose(); } catch (_) {}
+      }
+    }, undefined, () => { /* keep canvas fallback */ });
+  } catch (err) {
+    console.warn('TextureLoader unavailable; using canvas sky', err);
+  }
 
   // arch — scale + ornament by tier
   const archR = tier === 'high' ? 2.55 : tier === 'low' ? 2.0 : 2.3;
@@ -1325,17 +1639,25 @@ function disposeScene(){
 }
 
 function startScene(couple){
-  if(!renderer) initThree();
-  disposeScene();
-  buildWeddingScene(couple);
-
   $('#scene-names').textContent = couple.names;
   $('#scene-loc').textContent = `${couple.location} · ${couple.date}`;
   const tierLabel = { low:'Intimate setting', mid:'Signature celebration', high:'Grand celebration' };
+  couple.tier = couple.tier || getBudgetTier(couple.budgetTotal, couple.guests);
   $('#scene-tier').textContent = tierLabel[couple.tier] || '';
   const overlay = $('#scene-overlay');
   overlay.classList.remove('show');
   requestAnimationFrame(() => overlay.classList.add('show'));
+
+  try {
+    if(!renderer) initThree();
+    disposeScene();
+    buildWeddingScene(couple);
+  } catch (err) {
+    console.warn('Wedding scene failed to initialize', err);
+    sceneActive = false;
+    $('#scene-tier').textContent = (tierLabel[couple.tier] || '') + ' · preview unavailable';
+    return;
+  }
 
   sceneActive = true;
   flyStart = performance.now();
@@ -1348,7 +1670,7 @@ function stopScene(){
 }
 
 function animateScene(now){
-  if(!sceneActive) return;
+  if(!sceneActive || !renderer || !scene || !camera) return;
 
   const elapsed = now - flyStart;
   const t = Math.min(1, elapsed / FLY_MS);
