@@ -2066,26 +2066,77 @@ function makeHeroPanoramaTexture(tex, palette, tier){
   }, 4096, 1024);
 }
 
-function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
+async function firstExistingUrl(urls){
+  for(const u of urls){
+    try {
+      const r = await fetch(resolveAssetUrl(u), { method: 'HEAD' });
+      if(r.ok) return u;
+    } catch (_) {}
+  }
+  return null;
+}
+
+function addPanoramaSphere(scene, tex, buildId){
+  // Inverted sphere inside the sky cylinder: a true equirectangular skybox,
+  // full coverage overhead and behind — the venue photo in every direction.
+  const geo = new THREE.SphereGeometry(58, 64, 40);
+  geo.scale(-1, 1, 1);
+  const mat = new THREE.MeshBasicMaterial({ map: tex, fog: false, toneMapped: false });
+  const dome = new THREE.Mesh(geo, mat);
+  dome.position.y = 6;
+  dome.rotation.y = Math.PI; // panorama center faces the opening camera
+  dome.userData.buildId = buildId;
+  scene.add(dome);
+  return dome;
+}
+
+function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat, skyMesh){
   const heroUrl = getCoupleImage(couple);
   if(!heroUrl){
     applySkyTexture(skyMat, SKY_URL, buildId);
     return;
   }
 
-  loadSceneTexture(heroUrl, tex => {
-    if(buildId !== sceneBuildId){ tex.dispose(); return; }
-    if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-    tex.wrapS = THREE.ClampToEdgeWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    scene.userData.heroTexture = tex;
+  const useHeroFallback = () => {
+    loadSceneTexture(heroUrl, tex => {
+      if(buildId !== sceneBuildId){ tex.dispose(); return; }
+      if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+      tex.wrapS = THREE.ClampToEdgeWrapping;
+      tex.wrapT = THREE.ClampToEdgeWrapping;
+      scene.userData.heroTexture = tex;
 
-    // The destination image becomes the world: guests stand inside it.
-    applySkyTextureFromTex(skyMat, makeHeroPanoramaTexture(tex, couple.palette, tier), buildId);
+      // The destination image becomes the world: guests stand inside it.
+      applySkyTextureFromTex(skyMat, makeHeroPanoramaTexture(tex, couple.palette, tier), buildId);
 
-    addCeremonyBackdrop(scene, tex, tier, buildId);
-    addAislePhotoEasels(scene, tex, tier, buildId);
-  }, () => applySkyTexture(skyMat, SKY_URL, buildId));
+      addCeremonyBackdrop(scene, tex, tier, buildId);
+      addAislePhotoEasels(scene, tex, tier, buildId);
+    }, () => applySkyTexture(skyMat, SKY_URL, buildId));
+  };
+
+  // Prefer a true 360° equirectangular panorama when one has been generated
+  // (assets/weddings/<seed>-pano.jpg|png|webp — see /api/panorama/prompts).
+  const base = heroUrl.replace(/-hero\.(png|jpe?g|webp)$/i, '');
+  const panoCandidates = [`${base}-pano.jpg`, `${base}-pano.png`, `${base}-pano.webp`];
+
+  firstExistingUrl(panoCandidates).then(panoUrl => {
+    if(buildId !== sceneBuildId) return;
+    if(!panoUrl){ useHeroFallback(); return; }
+
+    loadSceneTexture(panoUrl, tex => {
+      if(buildId !== sceneBuildId){ tex.dispose(); return; }
+      if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+      addPanoramaSphere(scene, tex, buildId);
+      if(skyMesh) skyMesh.visible = false;
+
+      // Still dress the aisle with the flat hero on easels for foreground detail.
+      loadSceneTexture(heroUrl, htex => {
+        if(buildId !== sceneBuildId){ htex.dispose(); return; }
+        if(THREE.SRGBColorSpace) htex.colorSpace = THREE.SRGBColorSpace;
+        scene.userData.heroTexture = htex;
+        addAislePhotoEasels(scene, htex, tier, buildId);
+      });
+    }, useHeroFallback);
+  });
 }
 
 function initThree(){
@@ -2718,7 +2769,7 @@ function buildBeachEnvironment(scene, couple, tier, buildId){
   scene.add(sky);
 
   try {
-    integrateHeroEnvironment(scene, couple, tier, buildId, skyMat);
+    integrateHeroEnvironment(scene, couple, tier, buildId, skyMat, sky);
   } catch (err) {
     console.warn('Hero environment integration failed; using canvas sky', err);
   }

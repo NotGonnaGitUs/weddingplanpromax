@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const { buildVendorPrompt } = require('./vendor-prompts');
+const { buildVendorPrompt, buildPanoramaPrompt } = require('./vendor-prompts');
 const { renderVendorSvg } = require('./fallback-render');
 
 const ROOT = path.join(__dirname, '..');
@@ -85,6 +85,21 @@ app.get('/api/vendor-visual/prompts/:seedId', (req, res) => {
     saveAs: `public/assets/vendors/${couple.id}/${v.category.toLowerCase()}.webp`,
   }));
   res.json({ seedId: couple.id, location: couple.location, prompts });
+});
+
+/** List 360° equirectangular panorama prompts for every wedding seed (for Higgsfield MCP batch generation). */
+app.get('/api/panorama/prompts', (_req, res) => {
+  const couples = require(path.join(ROOT, 'data', 'couples.json'));
+  res.json({
+    aspectRatio: '2:1',
+    note: 'Generate at 2:1 (e.g. 4096x2048). Save to saveAs; the 3D scene picks it up automatically on next load.',
+    prompts: couples.map((c) => ({
+      seedId: c.id,
+      location: c.location,
+      prompt: buildPanoramaPrompt(c),
+      saveAs: `assets/weddings/${c.id}-pano.jpg`,
+    })),
+  });
 });
 
 /** Get vendor hero image URL + metadata. */

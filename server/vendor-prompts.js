@@ -37,4 +37,15 @@ function buildVendorPrompt(vendor, couple) {
   return `${base}. Vendor: "${vendor.name}". Palette accent ${couple.palette?.accent || '#C9A267'}. Commercial wedding marketplace hero image.`;
 }
 
-module.exports = { buildVendorPrompt, CATEGORY_SCENES, VIBE_WORDS };
+function buildPanoramaPrompt(couple) {
+  const vibe = VIBE_WORDS[couple.vibe] || couple.vibe || 'destination wedding';
+  const loc = couple.location || 'destination';
+  return (
+    `Seamless 360-degree equirectangular panorama, 2:1 aspect ratio, of a destination wedding ceremony venue in ${loc}. ` +
+    `${vibe} atmosphere at golden hour, decorated floral ceremony arch in one direction, open sky and scenery all around. ` +
+    `Level horizon exactly at vertical center, continuous wrap between left and right edges, no visible seam, ` +
+    `no people, no text, photorealistic, soft warm light. Palette accent ${couple.palette?.accent || '#C9A267'}.`
+  );
+}
+
+module.exports = { buildVendorPrompt, buildPanoramaPrompt, CATEGORY_SCENES, VIBE_WORDS };
