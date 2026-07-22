@@ -11,6 +11,7 @@ export type PackageTemplateSeed = {
   budgetTotal: number
   vibe: 'beach' | 'vineyard' | 'island' | 'jungle' | 'coastal' | 'wine'
   isDefaultForVibe: boolean
+  heroImage?: string
   palette: { bg: string; accent: string; glow: string }
   inviteCopy: string
   notes?: string
@@ -27,6 +28,7 @@ export type PackageTemplateSeed = {
 export const packageTemplateSeeds: PackageTemplateSeed[] = [
   {
     key: 'priya-arjun',
+    heroImage: 'assets/weddings/priya-arjun-hero.png',
     names: 'Priya & Arjun',
     location: 'Goa, India',
     date: 'February 14, 2027',
@@ -71,6 +73,7 @@ export const packageTemplateSeeds: PackageTemplateSeed[] = [
   },
   {
     key: 'jake-emily',
+    heroImage: 'assets/weddings/jake-emily-hero.png',
     names: 'Jake & Emily',
     location: 'Tuscany, Italy',
     date: 'September 18, 2027',
@@ -125,6 +128,7 @@ export const packageTemplateSeeds: PackageTemplateSeed[] = [
   },
   {
     key: 'marcus-david',
+    heroImage: 'assets/weddings/marcus-david-hero.png',
     names: 'Marcus & David',
     location: 'Mykonos, Greece',
     date: 'June 5, 2027',
@@ -179,6 +183,7 @@ export const packageTemplateSeeds: PackageTemplateSeed[] = [
   },
   {
     key: 'sofia-mateo',
+    heroImage: 'assets/weddings/sofia-mateo-hero.png',
     names: 'Sofia & Mateo',
     location: 'Tulum, Mexico',
     date: 'November 20, 2027',
@@ -231,6 +236,7 @@ export const packageTemplateSeeds: PackageTemplateSeed[] = [
   },
   {
     key: 'aiko-wei',
+    heroImage: 'assets/weddings/aiko-wei-hero.png',
     names: 'Aiko & Wei',
     location: 'Bali, Indonesia',
     date: 'October 9, 2027',
@@ -278,6 +284,7 @@ export const packageTemplateSeeds: PackageTemplateSeed[] = [
   },
   {
     key: 'lena-sarah',
+    heroImage: 'assets/weddings/lena-sarah-hero.png',
     names: 'Lena & Sarah',
     location: 'Napa Valley, USA',
     date: 'October 23, 2027',
@@ -330,6 +337,7 @@ export const packageTemplateSeeds: PackageTemplateSeed[] = [
   },
   {
     key: 'kwame-ngozi',
+    heroImage: 'assets/weddings/kwame-ngozi-hero.png',
     names: 'Kwame & Ngozi',
     location: 'Zanzibar, Tanzania',
     date: 'July 31, 2027',

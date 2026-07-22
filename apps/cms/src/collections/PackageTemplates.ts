@@ -84,6 +84,13 @@ export const PackageTemplates: CollectionConfig = {
       ],
     },
     {
+      name: 'heroImage',
+      type: 'text',
+      admin: {
+        description: 'Path or URL for the destination hero image used by the web demo.',
+      },
+    },
+    {
       name: 'inviteCopy',
       type: 'textarea',
       required: true,

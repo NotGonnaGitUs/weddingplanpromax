@@ -121,11 +121,16 @@
   }
   .qf-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
   .qf-chip{
-    padding:7px 13px;border-radius:999px;font-size:12.5px;
+    display:inline-flex;align-items:center;gap:8px;
+    padding:5px 13px 5px 5px;border-radius:999px;font-size:12.5px;
     border:1px solid rgba(250,247,242,.18);color:rgba(250,247,242,.72);
     background:rgba(250,247,242,.05);transition:border-color .15s, color .15s, background .15s;
   }
   .qf-chip:hover{border-color:rgba(250,247,242,.4);color:var(--paper);background:rgba(250,247,242,.1);}
+  .qf-chip-thumb{
+    width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;
+    border:1px solid rgba(250,247,242,.2);
+  }
 
   @media (max-width:560px){
     .form-row{grid-template-columns:1fr;}
@@ -207,9 +212,20 @@
     padding:56px 48px;text-align:center;position:relative;
     border:1px solid rgba(0,0,0,.05);
     box-shadow:0 30px 60px -30px rgba(0,0,0,.5);
+    overflow:hidden;
   }
   .invite-card::before{
     content:"";position:absolute;inset:14px;border:1px solid var(--gold);border-radius:12px;pointer-events:none;
+    z-index:1;
+  }
+  .card-hero{
+    display:block;width:calc(100% + 96px);height:clamp(160px,28vw,220px);
+    object-fit:cover;margin:-56px -48px 24px;
+    border-radius:20px 20px 0 0;
+  }
+  .card-hero.hidden{display:none;}
+  .wedding-card .card-hero{
+    width:calc(100% + 88px);margin:-52px -44px 22px;border-radius:4px 4px 0 0;
   }
   .invite-loc{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:600;}
   .invite-names{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:clamp(34px,4.6vw,48px);margin:0 0 20px;line-height:1.1;}
@@ -620,6 +636,7 @@
   <div class="tabs-body">
     <div class="tab-panel active" id="tab-invite">
       <div class="invite-card">
+        <img class="card-hero hidden" id="inv-hero" alt="" />
         <div class="invite-loc" id="inv-loc"></div>
         <h3 class="invite-names" id="inv-names"></h3>
         <div class="invite-date" id="inv-date"></div>
@@ -639,6 +656,7 @@
         </div>
         <div class="share-layout">
           <div class="wedding-card invite-card" id="wedding-card">
+            <img class="card-hero hidden" id="wc-hero" alt="" />
             <div class="invite-loc" id="wc-loc"></div>
             <h3 class="invite-names wc-names" id="wc-names"></h3>
             <div class="invite-date" id="wc-date"></div>
@@ -698,6 +716,7 @@
   <div class="shared-card-shell">
     <div class="shared-card-mark">Marrymap</div>
     <div class="wedding-card invite-card" id="shared-wedding-card">
+      <img class="card-hero hidden" id="swc-hero" alt="" />
       <div class="invite-loc" id="swc-loc"></div>
       <h3 class="invite-names wc-names" id="swc-names"></h3>
       <div class="invite-date" id="swc-date"></div>
@@ -760,6 +779,7 @@ const FALLBACK_COUPLES = [
     vibe:'beach',
     isDefaultForVibe:true,
     locationKeywords:['goa','india'],
+    heroImage:'assets/weddings/priya-arjun-hero.png',
     palette:{ bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
     inviteCopy:'Mehndi, music, and the Arabian Sea — three days of celebration on the sands of Goa. Join us as we begin our forever.',
     notes:'Three days with our families — mehndi that feels joyful, barefoot dinner by the water, and music loud enough that everyone dances.',
@@ -781,6 +801,7 @@ const FALLBACK_COUPLES = [
     vibe:'vineyard',
     isDefaultForVibe:true,
     locationKeywords:['tuscany','italy','florence','firenze'],
+    heroImage:'assets/weddings/jake-emily-hero.png',
     palette:{ bg:'#3a2f1f', accent:'#7A8450', glow:'#C96F4A' },
     inviteCopy:'Sun-warmed hills, long tables, and wine under the Tuscan stars. Come celebrate love the way Italy does — slowly, joyfully, together.',
     notes:'Long tables, golden light, and a weekend that feels like a house party at a villa — not a ballroom.',
@@ -802,6 +823,7 @@ const FALLBACK_COUPLES = [
     vibe:'island',
     isDefaultForVibe:true,
     locationKeywords:['mykonos','greece','santorini','aegean'],
+    heroImage:'assets/weddings/marcus-david-hero.png',
     palette:{ bg:'#1f2f3a', accent:'#2E6FA3', glow:'#FF8C69' },
     inviteCopy:"Whitewashed walls, endless blue, and a sunset that never quite ends. We're saying 'I do' on the cliffs of Mykonos.",
     notes:'Sunset vows on the cliffs, seafood that keeps coming, and a dance floor that starts before the sun finishes.',
@@ -823,6 +845,7 @@ const FALLBACK_COUPLES = [
     vibe:'jungle',
     isDefaultForVibe:true,
     locationKeywords:['tulum','mexico','cancun','cancún'],
+    heroImage:'assets/weddings/sofia-mateo-hero.png',
     palette:{ bg:'#2f1f2a', accent:'#E8862E', glow:'#C4386B' },
     inviteCopy:'Marigolds, mezcal, and the hum of the jungle at dusk. Our wedding is a love letter to Tulum — join the celebration.',
     vendors:[
@@ -843,6 +866,7 @@ const FALLBACK_COUPLES = [
     vibe:'coastal',
     isDefaultForVibe:true,
     locationKeywords:['bali','indonesia','uluwatu'],
+    heroImage:'assets/weddings/aiko-wei-hero.png',
     palette:{ bg:'#242b2a', accent:'#9BAF9B', glow:'#B9A6D9' },
     inviteCopy:'Incense, ocean cliffs, and quiet ceremony as the sun dips into Bali. Come witness two families become one.',
     vendors:[
@@ -863,6 +887,7 @@ const FALLBACK_COUPLES = [
     vibe:'wine',
     isDefaultForVibe:true,
     locationKeywords:['napa','sonoma','california','wine'],
+    heroImage:'assets/weddings/lena-sarah-hero.png',
     palette:{ bg:'#2a1f22', accent:'#7A2E3C', glow:'#C4A265' },
     inviteCopy:"Vineyard rows, golden light, and a toast that's been years in the making. Join us for a Napa wedding weekend to remember.",
     vendors:[
@@ -883,6 +908,7 @@ const FALLBACK_COUPLES = [
     vibe:'beach',
     isDefaultForVibe:false,
     locationKeywords:['zanzibar','tanzania','africa'],
+    heroImage:'assets/weddings/kwame-ngozi-hero.png',
     palette:{ bg:'#1f2a2a', accent:'#E3A008', glow:'#2A7F9E' },
     inviteCopy:"Kente cloth, ocean drums, and the warmth of Zanzibar's shore. We invite you to dance us into marriage.",
     vendors:[
@@ -910,11 +936,12 @@ function getPayloadApiBase(){
 }
 
 function mapPackageTemplateDoc(doc){
+  const key = doc.key || doc.id;
   const keywords = Array.isArray(doc.locationKeywords)
     ? doc.locationKeywords.map(row => (typeof row === 'string' ? row : row?.keyword)).filter(Boolean)
     : [];
   return {
-    id: doc.key || doc.id,
+    id: key,
     names: doc.names,
     location: doc.location,
     date: doc.date,
@@ -923,6 +950,7 @@ function mapPackageTemplateDoc(doc){
     vibe: doc.vibe || 'beach',
     isDefaultForVibe: Boolean(doc.isDefaultForVibe),
     locationKeywords: keywords,
+    heroImage: doc.heroImage || (key ? `assets/weddings/${key}-hero.png` : null),
     palette: {
       bg: doc.palette?.bg || '#2a1f3d',
       accent: doc.palette?.accent || '#F2A93B',
@@ -974,6 +1002,28 @@ async function loadPackagesFromPayload(){
 }
 
 rebuildPackageIndexes();
+
+function getCoupleImage(couple){
+  if(!couple) return null;
+  if(couple.heroImage) return couple.heroImage;
+  const seedId = couple.seedId || couple.id;
+  const seed = COUPLES.find(c => c.id === seedId);
+  return seed?.heroImage || null;
+}
+
+function applyCardHero(imgEl, couple){
+  if(!imgEl) return;
+  const src = getCoupleImage(couple);
+  if(src){
+    imgEl.src = resolveAssetUrl(src);
+    imgEl.alt = `${couple.location} wedding`;
+    imgEl.classList.remove('hidden');
+  } else {
+    imgEl.removeAttribute('src');
+    imgEl.alt = '';
+    imgEl.classList.add('hidden');
+  }
+}
 
 /* =========================================================================
    HELPERS
@@ -1083,7 +1133,8 @@ function encodeSharePayload(couple){
     o: couple.notes || '',
     g: couple.guests || 0,
     a: couple.palette?.accent,
-    w: couple.palette?.glow
+    w: couple.palette?.glow,
+    i: couple.seedId || couple.id || ''
   };
   return btoa(unescape(encodeURIComponent(JSON.stringify(payload))))
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -1102,6 +1153,7 @@ function decodeSharePayload(token){
       inviteCopy: p.m || '',
       notes: p.o || '',
       guests: p.g || 0,
+      seedId: p.i || '',
       palette: { accent: p.a || '#F2A93B', glow: p.w || '#E0447C', bg: '#2a1f3d' }
     };
   } catch (_) {
@@ -1148,6 +1200,9 @@ function renderCardNames(el, names){
 function renderInvitePanels(couple){
   if(!couple) return;
 
+  applyCardHero($('#inv-hero'), couple);
+  applyCardHero($('#wc-hero'), couple);
+
   // Invite tab
   $('#inv-loc').textContent = couple.location;
   $('#inv-names').textContent = couple.names;
@@ -1185,6 +1240,7 @@ function renderInvitePanels(couple){
 
 function fillSharedCard(couple){
   if(!couple) return;
+  applyCardHero($('#swc-hero'), couple);
   renderCardNames($('#swc-names'), couple.names);
   $('#swc-date').textContent = couple.date;
   $('#swc-loc').textContent = couple.location;
@@ -1234,6 +1290,7 @@ function buildWeddingFromForm(raw){
     id: 'custom-' + Date.now(),
     names, location, date, guests, budgetTotal, vibe, notes,
     palette: { ...seed.palette },
+    heroImage: seed.heroImage,
     inviteCopy,
     vendors,
     seedId: seed.id,
@@ -1543,7 +1600,14 @@ function renderLanding(){
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'qf-chip';
-    btn.textContent = couple.location.split(',')[0];
+    if(couple.heroImage){
+      const thumb = document.createElement('img');
+      thumb.className = 'qf-chip-thumb';
+      thumb.src = resolveAssetUrl(couple.heroImage);
+      thumb.alt = couple.location;
+      btn.appendChild(thumb);
+    }
+    btn.appendChild(document.createTextNode(couple.location.split(',')[0]));
     btn.addEventListener('click', () => fillFormFromCouple(couple));
     chips.appendChild(btn);
   });
@@ -1824,6 +1888,152 @@ let sceneBuildId = 0;
 
 const SKY_URL = 'https://images.unsplash.com/photo-1519046909934-4f04d5158061?auto=format&fit=crop&w=1920&q=85';
 
+function resolveAssetUrl(url){
+  if(!url) return url;
+  if(/^https?:\/\//i.test(url) || url.startsWith('data:') || url.startsWith('blob:')) return url;
+  try {
+    return new URL(url, window.location.href).href;
+  } catch (_) {
+    return url;
+  }
+}
+
+function loadSceneTexture(url, onLoad, onError){
+  const resolved = resolveAssetUrl(url);
+  const loader = new THREE.TextureLoader();
+  const isExternal = /^https?:\/\//i.test(resolved) && !resolved.startsWith(window.location.origin);
+  if(isExternal){
+    if(typeof loader.setCrossOrigin === 'function') loader.setCrossOrigin('anonymous');
+    else loader.crossOrigin = 'anonymous';
+  }
+  loader.load(
+    resolved,
+    onLoad,
+    undefined,
+    err => {
+      console.warn('Texture load failed:', resolved, err);
+      if(onError) onError(err);
+    }
+  );
+}
+
+function applySkyTexture(skyMat, url, buildId){
+  loadSceneTexture(url, tex => {
+    try {
+      if(buildId !== sceneBuildId){ tex.dispose(); return; }
+      if(!skyMat || skyMat.map === undefined){ tex.dispose(); return; }
+      if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+      applySkyTextureFromTex(skyMat, tex, buildId);
+    } catch (err) {
+      console.warn('Sky texture apply failed; keeping canvas fallback', err);
+      try { tex.dispose(); } catch (_) {}
+    }
+  });
+}
+
+function applySkyTextureFromTex(skyMat, tex, buildId){
+  if(buildId !== sceneBuildId) return;
+  if(!skyMat || skyMat.map === undefined) return;
+  const old = skyMat.map;
+  skyMat.map = tex;
+  skyMat.color.setHex(0xffffff);
+  skyMat.needsUpdate = true;
+  if(old && old !== tex && old.isCanvasTexture) old.dispose();
+}
+
+function heroPhotoAspect(tex){
+  if(tex?.image?.width && tex?.image?.height) return tex.image.width / tex.image.height;
+  return 1.5;
+}
+
+function makeHeroPhotoMaterial(tex){
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    fog: false,
+    toneMapped: false,
+    side: THREE.FrontSide
+  });
+  if(THREE.SRGBColorSpace && mat.map) mat.map.colorSpace = THREE.SRGBColorSpace;
+  return mat;
+}
+
+function addCeremonyBackdrop(scene, tex, tier, buildId){
+  const aspect = heroPhotoAspect(tex);
+  const w = tier === 'high' ? 20 : tier === 'low' ? 13 : 16;
+  const h = w / aspect;
+  const group = new THREE.Group();
+  group.userData.buildId = buildId;
+
+  const frame = new THREE.Mesh(
+    new THREE.BoxGeometry(w + 0.45, h + 0.45, 0.16),
+    new THREE.MeshStandardMaterial({
+      color: 0xfaf7f2, roughness: 0.35, metalness: 0.08,
+      emissive: 0x221810, emissiveIntensity: 0.08
+    })
+  );
+  group.add(frame);
+
+  const photo = new THREE.Mesh(new THREE.PlaneGeometry(w, h), makeHeroPhotoMaterial(tex));
+  photo.position.z = 0.09;
+  group.add(photo);
+
+  group.position.set(0, 1.6 + h * 0.5, -9.5);
+  scene.userData.photoFrame = group;
+  group.userData.billboard = true;
+  scene.add(group);
+}
+
+function addAislePhotoEasels(scene, tex, tier, buildId){
+  const aspect = heroPhotoAspect(tex);
+  const w = tier === 'high' ? 3.4 : tier === 'low' ? 2.2 : 2.8;
+  const h = w / aspect;
+
+  [-1, 1].forEach(side => {
+    const group = new THREE.Group();
+    group.userData.buildId = buildId;
+
+    const legMat = new THREE.MeshStandardMaterial({ color: 0xc9a267, roughness: 0.55, metalness: 0.2 });
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.35, 0.08), legMat);
+    leg.position.set(0, 0.68, 0);
+    group.add(leg);
+
+    const frame = new THREE.Mesh(
+      new THREE.BoxGeometry(w + 0.18, h + 0.18, 0.08),
+      new THREE.MeshStandardMaterial({ color: 0xfaf7f2, roughness: 0.4, metalness: 0.1 })
+    );
+    frame.position.set(0, 1.35 + h * 0.5, 0);
+    group.add(frame);
+
+    const photo = new THREE.Mesh(
+      new THREE.PlaneGeometry(w, h),
+      makeHeroPhotoMaterial(tex)
+    );
+    photo.position.set(0, 1.35 + h * 0.5, 0.05);
+    group.add(photo);
+
+    group.position.set(side * 5.8, 0, 1.5);
+    group.rotation.y = side * -0.42;
+    scene.add(group);
+  });
+}
+
+function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
+  applySkyTexture(skyMat, SKY_URL, buildId);
+
+  const heroUrl = getCoupleImage(couple);
+  if(!heroUrl) return;
+
+  loadSceneTexture(heroUrl, tex => {
+    if(buildId !== sceneBuildId){ tex.dispose(); return; }
+    if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+    tex.wrapS = THREE.ClampToEdgeWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
+    scene.userData.heroTexture = tex;
+    addCeremonyBackdrop(scene, tex, tier, buildId);
+    addAislePhotoEasels(scene, tex, tier, buildId);
+  });
+}
+
 function initThree(){
   if(typeof THREE === 'undefined' || !THREE.WebGLRenderer){
     throw new Error('THREE is not available');
@@ -1968,9 +2178,9 @@ function paintSeaTexture(ctx, w, h, palette, tier){
   ctx.globalAlpha = 1;
 }
 
-function disposeMaterial(mt){
+function disposeMaterial(mt, sharedTex){
   ['map','emissiveMap','normalMap','roughnessMap','metalnessMap','alphaMap'].forEach(k => {
-    if(mt[k]) mt[k].dispose();
+    if(mt[k] && mt[k] !== sharedTex) mt[k].dispose();
   });
   mt.dispose();
 }
@@ -2454,26 +2664,9 @@ function buildBeachEnvironment(scene, couple, tier, buildId){
   scene.add(sky);
 
   try {
-    const loader = new THREE.TextureLoader();
-    if(typeof loader.setCrossOrigin === 'function') loader.setCrossOrigin('anonymous');
-    else loader.crossOrigin = 'anonymous';
-    loader.load(SKY_URL, tex => {
-      try {
-        if(buildId !== sceneBuildId){ tex.dispose(); return; }
-        if(!skyMat || skyMat.map === undefined){ tex.dispose(); return; }
-        if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-        const old = skyMat.map;
-        skyMat.map = tex;
-        skyMat.color.setHex(0xffffff);
-        skyMat.needsUpdate = true;
-        if(old && old !== tex) old.dispose();
-      } catch (err) {
-        console.warn('Sky texture apply failed; keeping canvas fallback', err);
-        try { tex.dispose(); } catch (_) {}
-      }
-    }, undefined, () => {});
+    integrateHeroEnvironment(scene, couple, tier, buildId, skyMat);
   } catch (err) {
-    console.warn('TextureLoader unavailable; using canvas sky', err);
+    console.warn('Hero environment integration failed; using canvas sky', err);
   }
 }
 
@@ -2659,13 +2852,15 @@ function buildWeddingScene(couple){
 
 function disposeScene(){
   if(!scene) return;
+  const sharedTex = scene.userData.heroTexture;
   scene.traverse(obj => {
     if(obj.geometry) obj.geometry.dispose();
     if(obj.material){
-      if(Array.isArray(obj.material)) obj.material.forEach(disposeMaterial);
-      else disposeMaterial(obj.material);
+      if(Array.isArray(obj.material)) obj.material.forEach(m => disposeMaterial(m, sharedTex));
+      else disposeMaterial(obj.material, sharedTex);
     }
   });
+  if(sharedTex) sharedTex.dispose();
   scene = null;
   confettiPoints = null;
   petalPoints = null;
@@ -2789,6 +2984,11 @@ function animateScene(now){
     scene.userData.vendorLights.forEach(entry => {
       entry.light.intensity = entry.base + Math.sin(now * entry.speed) * entry.base * 0.35;
     });
+  }
+
+  if(scene.userData.photoFrame?.userData.billboard){
+    const frame = scene.userData.photoFrame;
+    frame.lookAt(camera.position.x, frame.position.y, camera.position.z);
   }
 
   renderer.render(scene, camera);

@@ -8,8 +8,9 @@ This repo is an npm workspaces monorepo.
 
 ```
 apps/
-  web/   Interactive planning demo (static HTML + Three.js scene)
-  cms/   Payload CMS schema + Local API server (package templates, marketplace)
+  web/          Interactive planning demo (static HTML + Three.js scene)
+    assets/     Destination hero images for cards / 3D scene
+  cms/          Payload CMS schema + Local API server (package templates, marketplace)
 ```
 
 | App | Package | Role |
