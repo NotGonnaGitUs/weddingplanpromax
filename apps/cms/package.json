@@ -1,0 +1,19 @@
+{
+  "name": "@marrymap/cms",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Marrymap Payload CMS marketplace schema and payment endpoints",
+  "scripts": {
+    "generate:types": "payload generate:types"
+  },
+  "dependencies": {
+    "@payloadcms/db-mongodb": "^3.0.0",
+    "@payloadcms/richtext-lexical": "^3.0.0",
+    "payload": "^3.0.0",
+    "stripe": "^17.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}
