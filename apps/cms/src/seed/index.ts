@@ -13,5 +13,6 @@ export {
 
 export { packageTemplateSeeds } from './packageTemplates'
 export { seedPackageTemplates } from './seedPackageTemplates'
+export { seedSampleMarketplace } from './seedSampleMarketplace'
 
 export { default } from './sampleData'

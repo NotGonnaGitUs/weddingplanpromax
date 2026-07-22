@@ -15,6 +15,7 @@ import { Users } from './collections/Users'
 import { Vendors } from './collections/Vendors'
 import { Weddings } from './collections/Weddings'
 import { seedPackageTemplates } from './seed/seedPackageTemplates'
+import { seedSampleMarketplace } from './seed/seedSampleMarketplace'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -80,5 +81,9 @@ export default buildConfig({
     if (process.env.SKIP_SEED === '1') return
     const count = await seedPackageTemplates(payload)
     payload.logger.info(`Seeded ${count} package-templates for the web demo`)
+    const marketplace = await seedSampleMarketplace(payload)
+    payload.logger.info(
+      `Seeded ${marketplace.users} vendor users and ${marketplace.vendors} marketplace vendors`,
+    )
   },
 })

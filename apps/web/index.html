@@ -431,6 +431,56 @@
   }
   .vendor-row.flagged .v-name{color:#EFCFC4;}
   .v-hint{font-size:11px;color:rgba(250,247,242,.35);margin-top:2px;}
+  .vendor-section{margin-bottom:36px;}
+  .vendor-section:last-child{margin-bottom:0;}
+  .vendor-section-title{
+    font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--paper);
+    margin:0 0 6px;
+  }
+  .vendor-section-sub{
+    font-size:12.5px;color:rgba(250,247,242,.45);margin:0 0 16px;line-height:1.45;
+  }
+  .vendor-empty{
+    font-size:13.5px;color:rgba(250,247,242,.42);padding:12px 0 4px;font-style:italic;
+  }
+  .v-meta{font-size:12px;color:rgba(250,247,242,.42);margin-top:2px;}
+  .v-rating{font-size:11.5px;color:var(--gold);font-weight:600;}
+  .vendor-drawer.marketplace .vd-booked{display:none;}
+  .vendor-drawer.marketplace .vd-why-wrap{display:none;}
+
+  .history-list{display:flex;flex-direction:column;gap:10px;}
+  .history-row{
+    display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+    padding:16px 18px;border-radius:14px;cursor:pointer;
+    border:1px solid rgba(250,247,242,.12);background:rgba(250,247,242,.04);
+    transition:background .15s,border-color .15s;
+  }
+  .history-row:hover{background:rgba(250,247,242,.08);border-color:rgba(250,247,242,.28);}
+  .history-row.active{border-color:color-mix(in srgb, var(--accent) 55%, transparent);}
+  .h-names{font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin:0 0 4px;}
+  .h-meta{font-size:12.5px;color:rgba(250,247,242,.48);line-height:1.45;}
+  .h-right{text-align:right;}
+  .h-budget{font-size:15px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;}
+  .h-when{font-size:11px;color:rgba(250,247,242,.38);margin-top:4px;}
+  .landing-history{
+    margin-top:28px;text-align:left;width:100%;
+  }
+  .landing-history.hidden{display:none;}
+  .lh-label{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);margin-bottom:10px;text-align:center;
+  }
+  .lh-list{display:flex;flex-direction:column;gap:8px;}
+  .lh-row{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;text-align:left;
+    border:1px solid rgba(250,247,242,.14);background:rgba(250,247,242,.05);
+    color:rgba(250,247,242,.78);font-size:13px;transition:border-color .15s,background .15s;
+  }
+  .lh-row:hover{border-color:rgba(250,247,242,.35);background:rgba(250,247,242,.1);color:var(--paper);}
+  .lh-names{font-family:'Fraunces',serif;font-size:15px;}
+  .lh-sub{font-size:11.5px;color:rgba(250,247,242,.42);margin-top:2px;}
+  .lh-open{font-size:12px;color:var(--accent);white-space:nowrap;}
 
   .budget-row{padding:16px 2px;border-bottom:1px solid rgba(250,247,242,.08);}
   .budget-row-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
@@ -596,6 +646,11 @@
       <div class="qf-label">Try a destination</div>
       <div class="qf-chips" id="qf-chips"></div>
     </div>
+
+    <div class="landing-history hidden" id="landing-history">
+      <div class="lh-label">Your past plans</div>
+      <div class="lh-list" id="landing-history-list"></div>
+    </div>
   </div>
 </div>
 
@@ -631,6 +686,7 @@
     <button class="tab-btn" data-tab="share">Share Card</button>
     <button class="tab-btn" data-tab="vendors">Vendors</button>
     <button class="tab-btn" data-tab="budget">Budget</button>
+    <button class="tab-btn" data-tab="history">Past Plans</button>
     <button class="tab-btn wedding-tab" data-tab="wedding">Your Wedding</button>
   </div>
   <div class="tabs-body">
@@ -699,7 +755,16 @@
       </div>
     </div>
     <div class="tab-panel" id="tab-vendors">
-      <div id="vendor-list"></div>
+      <section class="vendor-section">
+        <h3 class="vendor-section-title">Your plan</h3>
+        <p class="vendor-section-sub">Vendors locked into this wedding package.</p>
+        <div id="vendor-list"></div>
+      </section>
+      <section class="vendor-section">
+        <h3 class="vendor-section-title">Marketplace</h3>
+        <p class="vendor-section-sub">Sample vendors from the Marrymap catalog.</p>
+        <div id="marketplace-list"></div>
+      </section>
     </div>
     <div class="tab-panel" id="tab-budget">
       <div id="budget-list"></div>
@@ -707,6 +772,11 @@
         <div class="bt-label">Total allocated</div>
         <div class="bt-value"><span id="budget-total-value">$0</span> <small id="budget-total-of"></small></div>
       </div>
+    </div>
+    <div class="tab-panel" id="tab-history">
+      <h3 class="vendor-section-title">Past plans</h3>
+      <p class="vendor-section-sub">Plans you’ve completed in this browser.</p>
+      <div class="history-list" id="history-list"></div>
     </div>
   </div>
 </div>
@@ -750,15 +820,17 @@
   <h3 class="vd-name" id="vd-name"></h3>
   <div class="vd-price" id="vd-price"></div>
   <p class="vd-blurb" id="vd-blurb"></p>
-  <div class="vd-section">What's included</div>
+  <div class="vd-section" id="vd-includes-label">What's included</div>
   <ul class="vd-includes" id="vd-includes"></ul>
-  <div class="vd-section">Why we picked this</div>
-  <ul class="vd-why" id="vd-why"></ul>
-  <div class="vd-section">Reviews</div>
+  <div class="vd-why-wrap">
+    <div class="vd-section">Why we picked this</div>
+    <ul class="vd-why" id="vd-why"></ul>
+  </div>
+  <div class="vd-section" id="vd-reviews-label">Reviews</div>
   <div class="vd-reviews" id="vd-reviews"></div>
-  <div class="vd-section">Style note</div>
+  <div class="vd-section" id="vd-style-label">Style note</div>
   <div class="vd-style" id="vd-style"></div>
-  <div class="vd-booked">✓ Booked for your day</div>
+  <div class="vd-booked" id="vd-booked">✓ Booked for your day</div>
 </aside>
 
 <div class="share-toast" id="share-toast" role="status" aria-live="polite"></div>
@@ -924,6 +996,21 @@ const FALLBACK_COUPLES = [
 let COUPLES = FALLBACK_COUPLES.slice();
 let VIBE_TO_SEED = {};
 let LOC_KEYWORDS = [];
+let MARKETPLACE_VENDORS = [];
+const PLAN_HISTORY_KEY = 'marrymapPlanHistory';
+const PLAN_HISTORY_MAX = 20;
+
+const CATEGORY_LABELS = {
+  travel: 'Travel',
+  venue: 'Venue',
+  caterer: 'Caterer',
+  photographer: 'Photographer',
+  florist: 'Florist',
+  music: 'Music',
+  videographer: 'Videographer',
+  bakery: 'Bakery',
+  officiant: 'Officiant',
+};
 
 function getPayloadApiBase(){
   const params = new URLSearchParams(window.location.search);
@@ -933,6 +1020,139 @@ function getPayloadApiBase(){
     window.MARRYMAP_API_URL ||
     'http://localhost:3000'
   ).replace(/\/$/, '');
+}
+
+function categoryLabel(value){
+  if(!value) return '';
+  return CATEGORY_LABELS[value] || (value.charAt(0).toUpperCase() + value.slice(1));
+}
+
+function fmtTypicalPrice(typical){
+  if(!typical) return '';
+  const min = Number(typical.minPrice);
+  const max = Number(typical.maxPrice);
+  const unit = typical.unitText || 'wedding';
+  if(Number.isFinite(min) && Number.isFinite(max) && min !== max){
+    return `${fmtMoney(min)}–${fmtMoney(max)} / ${unit}`;
+  }
+  if(Number.isFinite(min)) return `from ${fmtMoney(min)} / ${unit}`;
+  if(Number.isFinite(max)) return `up to ${fmtMoney(max)} / ${unit}`;
+  return '';
+}
+
+function mapMarketplaceVendorDoc(doc){
+  const category = categoryLabel(doc.category);
+  const typical = doc.typicalPrice || {};
+  const rating = doc.aggregateRating || {};
+  const services = (doc.services || []).map(s => s.name).filter(Boolean);
+  const amenities = (doc.amenities || [])
+    .filter(a => a && a.value !== false)
+    .map(a => a.name)
+    .filter(Boolean);
+  const area = doc.serviceAreaSummary
+    || [doc.address?.addressLocality, doc.address?.addressRegion].filter(Boolean).join(', ');
+  const priceLabel = fmtTypicalPrice(typical) || doc.priceRange || '';
+  const midPrice = Number.isFinite(Number(typical.minPrice)) && Number.isFinite(Number(typical.maxPrice))
+    ? Math.round((Number(typical.minPrice) + Number(typical.maxPrice)) / 2)
+    : Number(typical.minPrice) || Number(typical.maxPrice) || 0;
+
+  return {
+    source: 'marketplace',
+    id: doc.id,
+    slug: doc.slug,
+    name: doc.name,
+    category,
+    categoryKey: doc.category,
+    note: area || doc.description || '',
+    description: doc.description || '',
+    price: midPrice,
+    priceLabel,
+    priceRange: doc.priceRange || '',
+    area,
+    ratingValue: rating.ratingValue,
+    reviewCount: rating.reviewCount,
+    services,
+    amenities,
+    url: doc.url || '',
+  };
+}
+
+async function loadMarketplaceVendors(){
+  const base = getPayloadApiBase();
+  try{
+    const res = await fetch(`${base}/api/vendors?limit=100`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const docs = data.docs || [];
+    MARKETPLACE_VENDORS = docs.map(mapMarketplaceVendorDoc);
+    console.info(`[marrymap] Loaded ${MARKETPLACE_VENDORS.length} marketplace vendors from ${base}`);
+    return true;
+  }catch(err){
+    MARKETPLACE_VENDORS = [];
+    console.warn(`[marrymap] Marketplace vendors unavailable (${base})`, err);
+    return false;
+  }
+}
+
+function loadPlanHistory(){
+  try{
+    const raw = window.localStorage.getItem(PLAN_HISTORY_KEY);
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  }catch{
+    return [];
+  }
+}
+
+function persistPlanHistory(entries){
+  window.localStorage.setItem(PLAN_HISTORY_KEY, JSON.stringify(entries.slice(0, PLAN_HISTORY_MAX)));
+}
+
+function serializePlanForHistory(couple){
+  return {
+    id: couple.id,
+    savedAt: new Date().toISOString(),
+    names: couple.names,
+    location: couple.location,
+    date: couple.date,
+    guests: couple.guests,
+    budgetTotal: couple.budgetTotal,
+    vibe: couple.vibe,
+    notes: couple.notes || '',
+    palette: couple.palette ? { ...couple.palette } : undefined,
+    heroImage: couple.heroImage || null,
+    inviteCopy: couple.inviteCopy || '',
+    vendors: (couple.vendors || []).map(v => ({
+      category: v.category,
+      name: v.name,
+      price: v.price,
+      note: v.note || '',
+      ...(v.flag ? { flag: v.flag } : {}),
+    })),
+    seedId: couple.seedId || null,
+    tier: couple.tier || null,
+  };
+}
+
+function savePlanToHistory(couple){
+  if(!couple?.id) return;
+  const entry = serializePlanForHistory(couple);
+  const existing = loadPlanHistory().filter(p => p.id !== entry.id);
+  persistPlanHistory([entry, ...existing]);
+}
+
+function reopenPlanFromHistory(entry){
+  if(!entry) return;
+  const couple = {
+    ...entry,
+    vendors: (entry.vendors || []).map(v => ({ ...v })),
+    palette: entry.palette
+      ? { ...entry.palette }
+      : { bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
+  };
+  navigate('plan', couple);
+  activateTab('invite');
 }
 
 function mapPackageTemplateDoc(doc){
@@ -1563,6 +1783,7 @@ function navigate(to, couple){
   currentScreen = to;
   if(couple) currentCouple = couple;
 
+  if(to === 'landing'){ renderLandingHistory(); }
   if(to === 'agent'){ setPalette(currentCouple); startAgent(currentCouple); }
   if(to === 'plan'){ setPalette(currentCouple); renderPlan(currentCouple); }
   if(to === 'scene'){ setPalette(currentCouple); startScene(currentCouple); }
@@ -1613,6 +1834,7 @@ function renderLanding(){
   });
   // Sensible demo defaults
   fillFormFromCouple(COUPLES[0]);
+  renderLandingHistory();
 }
 
 $('#wedding-form').addEventListener('submit', e => {
@@ -1662,7 +1884,10 @@ function startAgent(couple){
 
   function step(){
     if(idx >= lines.length){
-      agentTimer = setTimeout(() => navigate('plan', couple), 900);
+      agentTimer = setTimeout(() => {
+        savePlanToHistory(couple);
+        navigate('plan', couple);
+      }, 900);
       return;
     }
     const line = lines[idx++];
@@ -1688,14 +1913,63 @@ function stopAgent(){
 /* =========================================================================
    VENDOR DRAWER
    ========================================================================= */
+function openMarketplaceVendorDetail(vendor){
+  const drawer = $('#vendor-drawer');
+  drawer.classList.add('marketplace');
+  $('#vd-cat').textContent = vendor.category;
+  $('#vd-name').textContent = vendor.name;
+  $('#vd-price').textContent = vendor.priceLabel || vendor.priceRange || 'Ask for quote';
+  $('#vd-blurb').textContent = vendor.description || 'Marketplace vendor listing.';
+  const includes = vendor.services.length
+    ? vendor.services
+    : ['Contact this vendor for a custom package quote.'];
+  $('#vd-includes-label').textContent = 'Services';
+  $('#vd-includes').innerHTML = includes.map(i => `<li>${i}</li>`).join('');
+  $('#vd-why').innerHTML = '';
+  if(vendor.ratingValue != null){
+    const stars = '★'.repeat(Math.round(Number(vendor.ratingValue) || 0)).padEnd(5, '☆');
+    const count = vendor.reviewCount != null ? `${vendor.reviewCount} reviews` : 'Marketplace rating';
+    $('#vd-reviews-label').textContent = 'Rating';
+    $('#vd-reviews').innerHTML = `
+      <div class="vd-review">
+        <div class="vd-review-stars">${stars} ${Number(vendor.ratingValue).toFixed(1)}</div>
+        <p class="vd-review-quote">${count}</p>
+        <div class="vd-review-by">${vendor.area || 'Marrymap marketplace'}</div>
+      </div>`;
+  } else {
+    $('#vd-reviews-label').textContent = 'Rating';
+    $('#vd-reviews').innerHTML = `<div class="vd-review"><p class="vd-review-quote">No ratings yet.</p></div>`;
+  }
+  $('#vd-style-label').textContent = 'Details';
+  const detailBits = [
+    vendor.area ? `Serves ${vendor.area}` : '',
+    vendor.amenities.length ? vendor.amenities.slice(0, 4).join(' · ') : '',
+    vendor.url || '',
+  ].filter(Boolean);
+  $('#vd-style').textContent = detailBits.join(' — ') || 'Browse this vendor in the Marrymap marketplace.';
+  $('#vd-booked').textContent = 'Marketplace listing';
+  $('#vendor-backdrop').classList.add('open');
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  vendorDrawerOpen = true;
+}
+
 function openVendorDetail(vendor, couple){
+  if(vendor?.source === 'marketplace'){
+    openMarketplaceVendorDetail(vendor);
+    return;
+  }
   const d = vendorDetail(vendor, couple);
+  const drawer = $('#vendor-drawer');
+  drawer.classList.remove('marketplace');
   $('#vd-cat').textContent = d.category;
   $('#vd-name').textContent = d.name;
   $('#vd-price').textContent = fmtMoney(d.price);
   $('#vd-blurb').textContent = d.blurb;
+  $('#vd-includes-label').textContent = "What's included";
   $('#vd-includes').innerHTML = d.includes.map(i => `<li>${i}</li>`).join('');
   $('#vd-why').innerHTML = d.why.map(r => `<li>${r}</li>`).join('');
+  $('#vd-reviews-label').textContent = 'Reviews';
   $('#vd-reviews').innerHTML = d.reviews.map(r => `
     <div class="vd-review">
       <div class="vd-review-stars">${r.stars}</div>
@@ -1703,10 +1977,12 @@ function openVendorDetail(vendor, couple){
       <div class="vd-review-by">${r.by}</div>
     </div>
   `).join('');
+  $('#vd-style-label').textContent = 'Style note';
   $('#vd-style').textContent = d.style;
+  $('#vd-booked').textContent = '✓ Booked for your day';
   $('#vendor-backdrop').classList.add('open');
-  $('#vendor-drawer').classList.add('open');
-  $('#vendor-drawer').setAttribute('aria-hidden', 'false');
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
   vendorDrawerOpen = true;
 }
 
@@ -1723,9 +1999,110 @@ $('#vendor-backdrop').addEventListener('click', closeVendorDetail);
 /* =========================================================================
    PLAN
    ========================================================================= */
+function renderMarketplaceList(){
+  const list = $('#marketplace-list');
+  if(!list) return;
+  list.innerHTML = '';
+  if(!MARKETPLACE_VENDORS.length){
+    list.innerHTML = `<div class="vendor-empty">Marketplace vendors unavailable — start the CMS or run the seed.</div>`;
+    return;
+  }
+  MARKETPLACE_VENDORS.forEach(v => {
+    const rating = v.ratingValue != null
+      ? `<span class="v-rating">★ ${Number(v.ratingValue).toFixed(1)}${v.reviewCount != null ? ` · ${v.reviewCount}` : ''}</span>`
+      : '';
+    const row = document.createElement('div');
+    row.className = 'vendor-row';
+    row.innerHTML = `
+      <div class="v-cat">${v.category}</div>
+      <div>
+        <div class="v-name">${v.name}</div>
+        <div class="v-note">${v.note || v.description || ''}</div>
+        <div class="v-meta">${v.area || ''}</div>
+        <div class="v-hint">Click for services →</div>
+      </div>
+      <div class="v-right">
+        <span class="v-price">${v.priceLabel || v.priceRange || 'Quote'}</span>
+        ${rating}
+        <span class="v-status">Marketplace</span>
+      </div>
+    `;
+    row.addEventListener('click', () => openVendorDetail(v, currentCouple));
+    list.appendChild(row);
+  });
+}
+
+function formatHistoryWhen(iso){
+  if(!iso) return '';
+  try{
+    return new Date(iso).toLocaleString(undefined, {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: 'numeric', minute: '2-digit',
+    });
+  }catch{
+    return iso;
+  }
+}
+
+function renderHistoryList(activeId){
+  const list = $('#history-list');
+  if(!list) return;
+  const history = loadPlanHistory();
+  list.innerHTML = '';
+  if(!history.length){
+    list.innerHTML = `<div class="vendor-empty">No past plans yet — finish a plan to save it here.</div>`;
+    return;
+  }
+  history.forEach(entry => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'history-row' + (entry.id === activeId ? ' active' : '');
+    row.innerHTML = `
+      <div>
+        <div class="h-names">${entry.names}</div>
+        <div class="h-meta">${entry.location} · ${entry.date} · ${entry.guests} guests</div>
+      </div>
+      <div class="h-right">
+        <div class="h-budget">${fmtMoney(entry.budgetTotal)}</div>
+        <div class="h-when">${formatHistoryWhen(entry.savedAt)}</div>
+      </div>
+    `;
+    row.addEventListener('click', () => reopenPlanFromHistory(entry));
+    list.appendChild(row);
+  });
+}
+
+function renderLandingHistory(){
+  const wrap = $('#landing-history');
+  const list = $('#landing-history-list');
+  if(!wrap || !list) return;
+  const history = loadPlanHistory();
+  if(!history.length){
+    wrap.classList.add('hidden');
+    list.innerHTML = '';
+    return;
+  }
+  wrap.classList.remove('hidden');
+  list.innerHTML = '';
+  history.slice(0, 5).forEach(entry => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'lh-row';
+    row.innerHTML = `
+      <div>
+        <div class="lh-names">${entry.names}</div>
+        <div class="lh-sub">${entry.location} · ${entry.date}</div>
+      </div>
+      <span class="lh-open">Open →</span>
+    `;
+    row.addEventListener('click', () => reopenPlanFromHistory(entry));
+    list.appendChild(row);
+  });
+}
+
 function renderPlan(couple){
   $('#plan-title').textContent = couple.names;
-  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier} tier`;
+  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier || 'mid'} tier`;
 
   renderInvitePanels(couple);
 
@@ -1750,6 +2127,9 @@ function renderPlan(couple){
     row.addEventListener('click', () => openVendorDetail(v, couple));
     vendorList.appendChild(row);
   });
+
+  renderMarketplaceList();
+  renderHistoryList(couple.id);
 
   const budgetList = $('#budget-list');
   budgetList.innerHTML = '';
@@ -1786,6 +2166,8 @@ function activateTab(name){
   $$('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
   if(name === 'budget') animateBudget();
   if(name === 'share' && currentCouple) renderInvitePanels(currentCouple);
+  if(name === 'history') renderHistoryList(currentCouple?.id);
+  if(name === 'vendors') renderMarketplaceList();
 }
 
 function animateBudget(){
@@ -2999,7 +3381,7 @@ function animateScene(now){
    INIT
    ========================================================================= */
 async function initApp(){
-  await loadPackagesFromPayload();
+  await Promise.all([loadPackagesFromPayload(), loadMarketplaceVendors()]);
   renderLanding();
   if(!openSharedCardFromHash()){
     navigate('landing');

@@ -53,6 +53,28 @@ async function main() {
         return
       }
 
+      if (url.pathname === '/api/vendors' || url.pathname === '/api/vendors/') {
+        const limit = Math.min(100, Math.max(1, Number(url.searchParams.get('limit') || 100)))
+        const category = url.searchParams.get('category')
+        const where: Record<string, unknown> = {
+          and: [{ isActive: { equals: true } }],
+        }
+        if (category) {
+          ;(where.and as unknown[]).push({ category: { equals: category } })
+        }
+        const result = await payload.find({
+          collection: 'vendors',
+          where,
+          limit,
+          depth: 0,
+          sort: 'name',
+          overrideAccess: true,
+          draft: false,
+        })
+        sendJson(res, 200, result)
+        return
+      }
+
       sendJson(res, 404, { errors: [{ message: `Route not found: ${url.pathname}` }] })
     } catch (error) {
       payload.logger.error({ err: error }, 'API request failed')
@@ -65,6 +87,7 @@ async function main() {
   server.listen(PORT, () => {
     payload.logger.info(`Payload Local API listening on http://localhost:${PORT}`)
     payload.logger.info(`Package templates: GET /api/package-templates`)
+    payload.logger.info(`Vendors: GET /api/vendors`)
   })
 }
 
