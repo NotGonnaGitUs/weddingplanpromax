@@ -26,11 +26,11 @@
   .italic-display{font-family:'Fraunces',serif;font-style:italic;}
   button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none;color:inherit;}
   a{color:inherit;}
+  input,select{font-family:'Inter',sans-serif;}
 
   .screen{position:fixed;inset:0;}
   .hidden{display:none !important;}
 
-  /* ---------- shared bits ---------- */
   .back-btn{
     position:absolute;top:28px;left:28px;z-index:50;
     display:flex;align-items:center;gap:8px;
@@ -52,54 +52,70 @@
 
   /* ================= LANDING ================= */
   #landing{
-    display:flex;flex-direction:column;align-items:center;
-    padding:6vh 6vw 5vh;overflow-y:auto;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:5vh 5vw;overflow-y:auto;
     background:
-      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(224,68,124,.10), transparent 60%),
-      radial-gradient(ellipse 900px 500px at 85% 110%, rgba(46,111,163,.10), transparent 60%),
-      var(--ink);
+      radial-gradient(ellipse 800px 420px at 20% 0%, rgba(201,162,103,.14), transparent 55%),
+      radial-gradient(ellipse 700px 480px at 90% 100%, rgba(181,98,75,.10), transparent 55%),
+      linear-gradient(165deg, #1C1B2E 0%, #242038 48%, #1a2430 100%);
   }
-  .landing-head{text-align:center;max-width:640px;margin-bottom:4.5vh;}
+  .landing-shell{width:min(560px,100%);text-align:center;}
   .landing-mark{
-    font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;
+    font-family:'Fraunces',serif;font-style:italic;font-size:clamp(42px,7vw,64px);
+    color:var(--paper);margin:0 0 10px;line-height:1;letter-spacing:-.02em;
   }
-  .landing-title{font-size:clamp(40px,6vw,68px);font-style:italic;font-weight:500;line-height:1.02;margin:0 0 14px;color:var(--paper);}
-  .landing-sub{font-size:15px;color:rgba(250,247,242,.62);line-height:1.6;margin:0;font-weight:300;}
+  .landing-sub{
+    font-size:15px;color:rgba(250,247,242,.62);line-height:1.55;margin:0 0 28px;font-weight:300;
+  }
 
-  .couple-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:18px;max-width:1180px;width:100%;
+  .wedding-form{
+    text-align:left;background:var(--paper);color:var(--ink);
+    border-radius:20px;padding:28px 26px 24px;
+    box-shadow:0 30px 60px -28px rgba(0,0,0,.55);
+    border:1px solid rgba(250,247,242,.08);
   }
-  .couple-card{
-    position:relative;background:var(--paper);color:var(--ink);
-    border-radius:16px;padding:24px 22px 22px;overflow:hidden;
-    border:1px solid rgba(0,0,0,.06);
-    transition:box-shadow .25s ease, transform .05s linear;
-    box-shadow:0 10px 24px -14px rgba(0,0,0,.5);
-    will-change:transform;
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+  .form-row.full{grid-template-columns:1fr;}
+  .field label{
+    display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(28,27,46,.48);font-weight:600;margin-bottom:7px;
   }
-  .couple-card:hover{box-shadow:0 22px 40px -16px rgba(0,0,0,.55);}
-  .couple-card::before{
-    content:"";position:absolute;top:0;left:0;right:0;height:4px;
-    background:linear-gradient(90deg, var(--c-accent), var(--c-glow));
+  .field input,.field select{
+    width:100%;padding:12px 13px;border-radius:10px;
+    border:1px solid rgba(28,27,46,.12);background:#fff;
+    color:var(--ink);font-size:14.5px;outline:none;
+    transition:border-color .15s, box-shadow .15s;
   }
-  .couple-card .cc-loc{
-    font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--c-accent);
-    font-weight:600;margin-bottom:10px;
+  .field input:focus,.field select:focus{
+    border-color:color-mix(in srgb, var(--accent) 70%, #1C1B2E);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
   }
-  .couple-card .cc-names{
-    font-family:'Fraunces',serif;font-style:italic;font-size:24px;line-height:1.18;
-    margin:0 0 10px;color:var(--ink);
+  .field input::placeholder{color:rgba(28,27,46,.35);}
+  .form-actions{margin-top:6px;}
+  .form-submit{
+    width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--ink);color:var(--paper);font-weight:600;font-size:14.5px;
+    padding:15px 22px;border-radius:999px;margin-top:8px;
+    transition:transform .18s ease, background .18s ease;
   }
-  .couple-card .cc-date{font-size:12.5px;color:rgba(28,27,46,.55);margin-bottom:22px;}
-  .couple-card .cc-arrow{
-    position:absolute;bottom:20px;right:20px;font-size:19px;color:var(--c-accent);
-    transition:transform .2s ease;
+  .form-submit:hover{transform:translateY(-2px);background:#2a2840;}
+
+  .quick-fills{margin-top:22px;text-align:center;}
+  .qf-label{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);margin-bottom:10px;
   }
-  .couple-card:hover .cc-arrow{transform:translateX(4px);}
-  .couple-card .cc-dot{
-    position:absolute;bottom:22px;left:22px;width:8px;height:8px;border-radius:50%;
-    background:var(--c-glow);box-shadow:0 0 12px 2px var(--c-glow);
+  .qf-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .qf-chip{
+    padding:7px 13px;border-radius:999px;font-size:12.5px;
+    border:1px solid rgba(250,247,242,.18);color:rgba(250,247,242,.72);
+    background:rgba(250,247,242,.05);transition:border-color .15s, color .15s, background .15s;
+  }
+  .qf-chip:hover{border-color:rgba(250,247,242,.4);color:var(--paper);background:rgba(250,247,242,.1);}
+
+  @media (max-width:560px){
+    .form-row{grid-template-columns:1fr;}
+    .wedding-form{padding:22px 18px;}
   }
 
   /* ================= AGENT ================= */
@@ -128,6 +144,8 @@
     font-size:13.5px;line-height:1.9;
   }
   .terminal-body .line{display:flex;gap:10px;opacity:0;animation:lineIn .35s ease forwards;}
+  .terminal-body .line.clickable{cursor:pointer;border-radius:6px;margin:0 -8px;padding:0 8px;}
+  .terminal-body .line.clickable:hover{background:rgba(28,27,46,.05);}
   @keyframes lineIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
   .terminal-body .icon{width:16px;flex-shrink:0;text-align:center;}
   .line.ink .icon, .line.ink .text{color:rgba(28,27,46,.55);}
@@ -170,7 +188,6 @@
   .tab-panel{display:none;width:100%;max-width:760px;padding-top:38px;}
   .tab-panel.active{display:block;}
 
-  /* invite */
   .invite-card{
     background:var(--paper);color:var(--ink);border-radius:20px;
     padding:56px 48px;text-align:center;position:relative;
@@ -192,11 +209,12 @@
   }
   .cta-btn:hover{transform:translateY(-2px);}
 
-  /* vendors */
   .vendor-row{
     display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;
     padding:18px 4px;border-bottom:1px solid rgba(250,247,242,.09);
+    cursor:pointer;border-radius:10px;transition:background .15s;
   }
+  .vendor-row:hover{background:rgba(250,247,242,.04);}
   .vendor-row:first-child{padding-top:4px;}
   .v-cat{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(250,247,242,.42);font-weight:600;}
   .v-name{font-family:'Fraunces',serif;font-size:17px;color:var(--paper);margin-bottom:4px;}
@@ -209,8 +227,8 @@
     padding:3px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;margin-bottom:2px;
   }
   .vendor-row.flagged .v-name{color:#EFCFC4;}
+  .v-hint{font-size:11px;color:rgba(250,247,242,.35);margin-top:2px;}
 
-  /* budget */
   .budget-row{padding:16px 2px;border-bottom:1px solid rgba(250,247,242,.08);}
   .budget-row-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
   .b-label{font-size:13.5px;color:rgba(250,247,242,.7);}
@@ -233,6 +251,38 @@
   .budget-total .bt-value{font-family:'Fraunces',serif;font-size:30px;color:var(--paper);font-variant-numeric:tabular-nums;}
   .budget-total .bt-value small{font-size:15px;color:rgba(250,247,242,.4);font-family:'Inter',sans-serif;}
 
+  /* Vendor detail drawer */
+  .vendor-backdrop{
+    position:fixed;inset:0;background:rgba(12,11,20,.55);z-index:80;
+    opacity:0;pointer-events:none;transition:opacity .22s ease;
+  }
+  .vendor-backdrop.open{opacity:1;pointer-events:auto;}
+  .vendor-drawer{
+    position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);z-index:90;
+    background:var(--paper);color:var(--ink);
+    transform:translateX(104%);transition:transform .28s cubic-bezier(.22,.8,.28,1);
+    box-shadow:-24px 0 60px -30px rgba(0,0,0,.55);
+    display:flex;flex-direction:column;padding:28px 28px 32px;
+  }
+  .vendor-drawer.open{transform:translateX(0);}
+  .vd-close{
+    align-self:flex-end;width:36px;height:36px;border-radius:50%;
+    border:1px solid rgba(28,27,46,.12);font-size:18px;color:rgba(28,27,46,.55);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .vd-close:hover{background:rgba(28,27,46,.05);color:var(--ink);}
+  .vd-cat{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:12px 0 8px;}
+  .vd-name{font-family:'Fraunces',serif;font-style:italic;font-size:30px;margin:0 0 8px;line-height:1.15;}
+  .vd-price{font-size:22px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;margin-bottom:18px;}
+  .vd-blurb{font-size:14.5px;line-height:1.65;color:rgba(28,27,46,.72);margin:0 0 20px;font-weight:300;}
+  .vd-section{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,27,46,.42);font-weight:600;margin:0 0 10px;}
+  .vd-includes{margin:0 0 22px;padding:0 0 0 18px;color:rgba(28,27,46,.78);font-size:14px;line-height:1.7;}
+  .vd-style{
+    background:var(--paper-dim);border-radius:12px;padding:14px 16px;
+    font-size:13.5px;line-height:1.55;color:rgba(28,27,46,.7);font-style:italic;
+  }
+  .vd-booked{margin-top:auto;padding-top:20px;font-size:12.5px;color:var(--accent);font-weight:600;}
+
   /* ================= SCENE ================= */
   #scene{background:#000;}
   #scene-canvas{position:absolute;inset:0;}
@@ -248,6 +298,9 @@
   .scene-overlay .so-loc{
     margin-top:10px;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.75);
   }
+  .scene-tier{
+    margin-top:8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);
+  }
 
   ::-webkit-scrollbar{width:8px;}
   ::-webkit-scrollbar-thumb{background:rgba(250,247,242,.15);border-radius:4px;}
@@ -257,16 +310,68 @@
 
 <!-- ================= LANDING ================= -->
 <div id="landing" class="screen">
-  <div class="landing-head">
-    <div class="landing-mark">Marrymap</div>
-    <h1 class="landing-title">Seven weddings.<br>One agent.</h1>
-    <p class="landing-sub">Pick a couple to watch the Marrymap agent shop the marketplace, book vendors, and build the wedding — live.</p>
+  <div class="landing-shell">
+    <h1 class="landing-mark">Marrymap</h1>
+    <p class="landing-sub">Tell us the wedding. Watch the agent shop the marketplace, book vendors, and build the day — live.</p>
+
+    <form class="wedding-form" id="wedding-form" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="f-p1">Partner 1</label>
+          <input id="f-p1" name="partner1" type="text" placeholder="Priya" required autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label for="f-p2">Partner 2</label>
+          <input id="f-p2" name="partner2" type="text" placeholder="Arjun" required autocomplete="given-name">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="field">
+          <label for="f-loc">Destination</label>
+          <input id="f-loc" name="location" type="text" placeholder="Goa, India" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="f-date">Wedding date</label>
+          <input id="f-date" name="date" type="text" placeholder="February 14, 2027" required>
+        </div>
+        <div class="field">
+          <label for="f-guests">Guests</label>
+          <input id="f-guests" name="guests" type="number" min="10" max="500" placeholder="80" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="f-budget">Budget (USD)</label>
+          <input id="f-budget" name="budget" type="number" min="5000" max="500000" step="1000" placeholder="42000" required>
+        </div>
+        <div class="field">
+          <label for="f-vibe">Vibe</label>
+          <select id="f-vibe" name="vibe">
+            <option value="beach">Beach</option>
+            <option value="vineyard">Vineyard</option>
+            <option value="island">Island</option>
+            <option value="jungle">Jungle</option>
+            <option value="coastal">Coastal</option>
+            <option value="wine">Wine country</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="form-submit">Let the agent shop →</button>
+      </div>
+    </form>
+
+    <div class="quick-fills">
+      <div class="qf-label">Try a destination</div>
+      <div class="qf-chips" id="qf-chips"></div>
+    </div>
   </div>
-  <div class="couple-grid" id="couple-grid"></div>
 </div>
 
 <!-- ================= AGENT ================= -->
-<div id="agent" class="screen">
+<div id="agent" class="screen hidden">
   <button class="back-btn" data-back>← Back</button>
   <div class="agent-glow"></div>
   <div class="terminal">
@@ -283,7 +388,7 @@
 </div>
 
 <!-- ================= PLAN ================= -->
-<div id="plan" class="screen">
+<div id="plan" class="screen hidden">
   <button class="back-btn" data-back>← Back</button>
   <div class="plan-header">
     <div>
@@ -322,19 +427,35 @@
 </div>
 
 <!-- ================= SCENE ================= -->
-<div id="scene" class="screen">
+<div id="scene" class="screen hidden">
   <div id="scene-canvas"></div>
   <div class="scene-overlay" id="scene-overlay">
     <p class="so-names" id="scene-names"></p>
     <div class="so-loc" id="scene-loc"></div>
+    <div class="scene-tier" id="scene-tier"></div>
   </div>
   <button class="back-btn" data-back>← Back to plan</button>
   <div class="esc-hint"><span class="kbd">esc</span>return</div>
 </div>
 
+<!-- Vendor detail -->
+<div class="vendor-backdrop" id="vendor-backdrop"></div>
+<aside class="vendor-drawer" id="vendor-drawer" aria-hidden="true">
+  <button class="vd-close" id="vd-close" aria-label="Close">×</button>
+  <div class="vd-cat" id="vd-cat"></div>
+  <h3 class="vd-name" id="vd-name"></h3>
+  <div class="vd-price" id="vd-price"></div>
+  <p class="vd-blurb" id="vd-blurb"></p>
+  <div class="vd-section">What's included</div>
+  <ul class="vd-includes" id="vd-includes"></ul>
+  <div class="vd-section">Style note</div>
+  <div class="vd-style" id="vd-style"></div>
+  <div class="vd-booked">✓ Booked by your Marrymap agent</div>
+</aside>
+
 <script>
 /* =========================================================================
-   DATA
+   SEED DATA
    ========================================================================= */
 const COUPLES = [
   {
@@ -344,6 +465,7 @@ const COUPLES = [
     date:'February 14, 2027',
     guests:62,
     budgetTotal:42000,
+    vibe:'beach',
     palette:{ bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
     inviteCopy:'Mehndi, music, and the Arabian Sea — three days of celebration on the sands of Goa. Join us as we begin our forever.',
     vendors:[
@@ -361,6 +483,7 @@ const COUPLES = [
     date:'September 18, 2027',
     guests:80,
     budgetTotal:48000,
+    vibe:'vineyard',
     palette:{ bg:'#3a2f1f', accent:'#7A8450', glow:'#C96F4A' },
     inviteCopy:'Sun-warmed hills, long tables, and wine under the Tuscan stars. Come celebrate love the way Italy does — slowly, joyfully, together.',
     vendors:[
@@ -378,6 +501,7 @@ const COUPLES = [
     date:'June 5, 2027',
     guests:70,
     budgetTotal:50000,
+    vibe:'island',
     palette:{ bg:'#1f2f3a', accent:'#2E6FA3', glow:'#FF8C69' },
     inviteCopy:"Whitewashed walls, endless blue, and a sunset that never quite ends. We're saying 'I do' on the cliffs of Mykonos.",
     vendors:[
@@ -395,6 +519,7 @@ const COUPLES = [
     date:'November 20, 2027',
     guests:90,
     budgetTotal:38000,
+    vibe:'jungle',
     palette:{ bg:'#2f1f2a', accent:'#E8862E', glow:'#C4386B' },
     inviteCopy:'Marigolds, mezcal, and the hum of the jungle at dusk. Our wedding is a love letter to Tulum — join the celebration.',
     vendors:[
@@ -412,6 +537,7 @@ const COUPLES = [
     date:'October 9, 2027',
     guests:56,
     budgetTotal:34000,
+    vibe:'coastal',
     palette:{ bg:'#242b2a', accent:'#9BAF9B', glow:'#B9A6D9' },
     inviteCopy:'Incense, ocean cliffs, and quiet ceremony as the sun dips into Bali. Come witness two families become one.',
     vendors:[
@@ -429,6 +555,7 @@ const COUPLES = [
     date:'October 23, 2027',
     guests:68,
     budgetTotal:46000,
+    vibe:'wine',
     palette:{ bg:'#2a1f22', accent:'#7A2E3C', glow:'#C4A265' },
     inviteCopy:"Vineyard rows, golden light, and a toast that's been years in the making. Join us for a Napa wedding weekend to remember.",
     vendors:[
@@ -446,6 +573,7 @@ const COUPLES = [
     date:'July 31, 2027',
     guests:75,
     budgetTotal:40000,
+    vibe:'beach',
     palette:{ bg:'#1f2a2a', accent:'#E3A008', glow:'#2A7F9E' },
     inviteCopy:"Kente cloth, ocean drums, and the warmth of Zanzibar's shore. We invite you to dance us into marriage.",
     vendors:[
@@ -456,6 +584,21 @@ const COUPLES = [
       {category:'Music',   name:'Taarab Ensemble + DJ',            price:3300,  note:'Ceremony taarab, reception DJ'},
     ]
   },
+];
+
+const VIBE_TO_SEED = {
+  beach:'priya-arjun', vineyard:'jake-emily', island:'marcus-david',
+  jungle:'sofia-mateo', coastal:'aiko-wei', wine:'lena-sarah'
+};
+
+const LOC_KEYWORDS = [
+  {keys:['goa','india'], id:'priya-arjun'},
+  {keys:['tuscany','italy','florence','firenze'], id:'jake-emily'},
+  {keys:['mykonos','greece','santorini','aegean'], id:'marcus-david'},
+  {keys:['tulum','mexico','cancun','cancún'], id:'sofia-mateo'},
+  {keys:['bali','indonesia','uluwatu'], id:'aiko-wei'},
+  {keys:['napa','sonoma','california','wine'], id:'lena-sarah'},
+  {keys:['zanzibar','tanzania','africa'], id:'kwame-ngozi'},
 ];
 
 /* =========================================================================
@@ -479,12 +622,135 @@ function darkenHexToNum(hex, factor){
   const c = hexToRgb(hex);
   return rgbToHexNum(c.r*factor, c.g*factor, c.b*factor);
 }
+function numToHex(n){
+  return '#' + n.toString(16).padStart(6,'0');
+}
+
+function getBudgetTier(budgetTotal, guests){
+  const perGuest = budgetTotal / Math.max(guests, 1);
+  if(budgetTotal >= 55000 || perGuest >= 750) return 'high';
+  if(budgetTotal <= 28000 || perGuest < 420) return 'low';
+  return 'mid';
+}
+
+function findSeed(location, vibe){
+  const loc = (location || '').toLowerCase();
+  for(const row of LOC_KEYWORDS){
+    if(row.keys.some(k => loc.includes(k))) return COUPLES.find(c => c.id === row.id);
+  }
+  const vibeId = VIBE_TO_SEED[vibe] || 'priya-arjun';
+  return COUPLES.find(c => c.id === vibeId) || COUPLES[0];
+}
+
+function scaleVendors(vendors, guests, budgetTotal){
+  const sum = vendors.reduce((s,v) => s + v.price, 0) || 1;
+  const scaled = vendors.map(v => {
+    let price = Math.round((v.price / sum) * budgetTotal / 50) * 50;
+    price = Math.max(500, price);
+    let note = (v.note || '').replace(/\d+\s*guests?/i, `${guests} guests`);
+    if(!/\d+\s*guests?/i.test(note) && v.category === 'Travel'){
+      note = `${guests} guests · ${note}`;
+    }
+    return { ...v, price, note };
+  });
+  let diff = budgetTotal - scaled.reduce((s,v) => s + v.price, 0);
+  scaled[1].price = Math.max(500, scaled[1].price + diff);
+  return scaled;
+}
+
+function buildWeddingFromForm(raw){
+  const p1 = (raw.partner1 || 'Partner One').trim();
+  const p2 = (raw.partner2 || 'Partner Two').trim();
+  const names = `${p1} & ${p2}`;
+  const location = (raw.location || 'Somewhere Beautiful').trim();
+  const date = (raw.date || 'Soon').trim();
+  const guests = Math.max(10, parseInt(raw.guests, 10) || 80);
+  const budgetTotal = Math.max(5000, parseInt(raw.budget, 10) || 40000);
+  const vibe = raw.vibe || 'beach';
+  const seed = findSeed(location, vibe);
+  const vendors = scaleVendors(seed.vendors, guests, budgetTotal);
+  const inviteCopy = seed.inviteCopy
+    .replace(new RegExp(seed.names.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g'), names)
+    .replace(new RegExp(seed.location.split(',')[0], 'gi'), location.split(',')[0]);
+
+  return {
+    id: 'custom-' + Date.now(),
+    names, location, date, guests, budgetTotal, vibe,
+    palette: { ...seed.palette },
+    inviteCopy,
+    vendors,
+    seedId: seed.id,
+    tier: getBudgetTier(budgetTotal, guests)
+  };
+}
+
+/* =========================================================================
+   VENDOR DETAIL CONTENT
+   ========================================================================= */
+const CATEGORY_INCLUDES = {
+  Travel: [
+    'Round-trip group airport transfers',
+    'Welcome bags + local SIM cards on arrival',
+    'Dedicated guest logistics coordinator',
+    'Premium coach / charter upgrades for longer hops'
+  ],
+  Venue: [
+    'Ceremony + reception site buyout window',
+    'Tables, chairs, basic lighting package',
+    'On-site coordinator for timeline run-of-show',
+    'Sunset / golden-hour ceremony hold'
+  ],
+  Catering: [
+    'Seated or station meal for all guests',
+    'Cake cutting + late-night snack option',
+    'Bar service window (beer/wine + signature cocktail)',
+    'Dietary accommodations for common restrictions'
+  ],
+  Flowers: [
+    'Ceremony arch / altar floral focal',
+    'Aisle accents + head-table arrangement',
+    'Personal flowers (bouquets / boutonnieres)',
+    'Setup + same-day strike included'
+  ],
+  Music: [
+    'Ceremony processional + recessional cues',
+    'Cocktail hour playlist or live set',
+    'Reception DJ with wireless mics',
+    'Sound check + backup playlist contingency'
+  ]
+};
+
+const CATEGORY_BLURBS = {
+  Travel: 'Gets every guest from airport to aisle without a spreadsheet meltdown.',
+  Venue: 'The physical stage for vows, dinner, and the first dance — locked and styled.',
+  Catering: 'The meal people will actually remember — paced for celebration, not cafeteria.',
+  Flowers: 'Color, scent, and structure that photograph like a magazine spread.',
+  Music: 'The emotional arc of the day, from hush to dance floor.'
+};
+
+function vendorDetail(vendor, couple){
+  const cat = vendor.category;
+  const includes = (CATEGORY_INCLUDES[cat] || CATEGORY_INCLUDES.Venue).slice(0, couple.tier === 'high' ? 4 : couple.tier === 'low' ? 2 : 3);
+  const tierNote = couple.tier === 'high'
+    ? 'Premium tier — upgraded finishes and longer service windows.'
+    : couple.tier === 'low'
+      ? 'Essential package — clean, complete, no fluff.'
+      : 'Signature package — balanced polish for the guest count.';
+  const style = `For ${couple.location}: ${vendor.note}. ${tierNote} Palette leans ${couple.palette.accent} with ${couple.palette.glow} accents.`;
+  return {
+    ...vendor,
+    blurb: CATEGORY_BLURBS[cat] || 'Booked and confirmed by your Marrymap agent.',
+    includes,
+    style
+  };
+}
 
 /* =========================================================================
    NAVIGATION
    ========================================================================= */
 let currentScreen = 'landing';
 let currentCouple = null;
+let vendorDrawerOpen = false;
 const BACK_MAP = { agent:'landing', plan:'landing', scene:'plan' };
 
 function setPalette(couple){
@@ -495,6 +761,7 @@ function setPalette(couple){
 }
 
 function navigate(to, couple){
+  if(vendorDrawerOpen) closeVendorDetail();
   if(currentScreen === 'agent' && to !== 'agent') stopAgent();
   if(currentScreen === 'scene' && to !== 'scene') stopScene();
 
@@ -509,6 +776,7 @@ function navigate(to, couple){
 }
 
 function goBack(){
+  if(vendorDrawerOpen){ closeVendorDetail(); return; }
   const target = BACK_MAP[currentScreen];
   if(target) navigate(target, currentCouple);
 }
@@ -519,34 +787,39 @@ document.addEventListener('keydown', e => {
 $$('[data-back]').forEach(btn => btn.addEventListener('click', goBack));
 
 /* =========================================================================
-   LANDING
+   LANDING FORM
    ========================================================================= */
-function renderLanding(){
-  const grid = $('#couple-grid');
-  grid.innerHTML = '';
-  COUPLES.forEach(couple => {
-    const card = document.createElement('div');
-    card.className = 'couple-card';
-    card.style.setProperty('--c-accent', couple.palette.accent);
-    card.style.setProperty('--c-glow', couple.palette.glow);
-    card.innerHTML = `
-      <div class="cc-loc">${couple.location}</div>
-      <h3 class="cc-names">${couple.names}</h3>
-      <div class="cc-date">${couple.date} · ${couple.guests} guests</div>
-      <div class="cc-dot"></div>
-      <div class="cc-arrow">→</div>
-    `;
-    card.addEventListener('click', () => navigate('agent', couple));
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left)/r.width - 0.5;
-      const py = (e.clientY - r.top)/r.height - 0.5;
-      card.style.transform = `perspective(700px) rotateX(${(-py*7).toFixed(2)}deg) rotateY(${(px*9).toFixed(2)}deg) translateY(-4px)`;
-    });
-    card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-    grid.appendChild(card);
-  });
+function fillFormFromCouple(couple){
+  $('#f-p1').value = couple.names.split('&')[0].trim();
+  $('#f-p2').value = (couple.names.split('&')[1] || '').trim();
+  $('#f-loc').value = couple.location;
+  $('#f-date').value = couple.date;
+  $('#f-guests').value = couple.guests;
+  $('#f-budget').value = couple.budgetTotal;
+  $('#f-vibe').value = couple.vibe || 'beach';
 }
+
+function renderLanding(){
+  const chips = $('#qf-chips');
+  chips.innerHTML = '';
+  COUPLES.forEach(couple => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'qf-chip';
+    btn.textContent = couple.location.split(',')[0];
+    btn.addEventListener('click', () => fillFormFromCouple(couple));
+    chips.appendChild(btn);
+  });
+  // Sensible demo defaults
+  fillFormFromCouple(COUPLES[0]);
+}
+
+$('#wedding-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const wedding = buildWeddingFromForm(Object.fromEntries(fd.entries()));
+  navigate('agent', wedding);
+});
 
 /* =========================================================================
    AGENT SEQUENCE
@@ -556,16 +829,16 @@ let agentTimer = null;
 function buildAgentLines(couple){
   const lines = [];
   lines.push({icon:'✦', cls:'ink', text:`Searching marketplace: ${couple.location.split(',')[0]}, ${couple.guests} guests, $${shortK(couple.budgetTotal)}…`});
-  couple.vendors.forEach(v => {
+  couple.vendors.forEach((v, i) => {
     if(v.flag){
       lines.push({icon:'⚑', cls:'clay', text:`${v.category} — quoted high · negotiating…`});
-      lines.push({icon:'✓', cls:'accent', text:`${v.category} — locked at ${fmtMoney(v.price)} (${v.name})`});
+      lines.push({icon:'✓', cls:'accent', text:`${v.category} — locked at ${fmtMoney(v.price)} (${v.name})`, vendorIndex:i});
     } else {
-      lines.push({icon:'✓', cls:'accent', text:`${v.category} — ${v.name} · ${fmtMoney(v.price)}`});
+      lines.push({icon:'✓', cls:'accent', text:`${v.category} — ${v.name} · ${fmtMoney(v.price)}`, vendorIndex:i});
     }
   });
   const total = couple.vendors.reduce((s,v) => s + v.price, 0);
-  lines.push({icon:'✦', cls:'ink', text:`Plan ready — ${fmtMoney(total)} of ${fmtMoney(couple.budgetTotal)} allocated`});
+  lines.push({icon:'✦', cls:'ink', text:`Plan ready — ${fmtMoney(total)} of ${fmtMoney(couple.budgetTotal)} allocated · ${couple.tier} tier`});
   return lines;
 }
 
@@ -587,8 +860,12 @@ function startAgent(couple){
     }
     const line = lines[idx++];
     const div = document.createElement('div');
-    div.className = 'line ' + line.cls;
+    div.className = 'line ' + line.cls + (line.vendorIndex != null ? ' clickable' : '');
     div.innerHTML = `<span class="icon">${line.icon}</span><span class="text">${line.text}</span>`;
+    if(line.vendorIndex != null){
+      div.title = 'View vendor details';
+      div.addEventListener('click', () => openVendorDetail(couple.vendors[line.vendorIndex], couple));
+    }
     body.insertBefore(div, cursor);
     body.scrollTop = body.scrollHeight;
     agentTimer = setTimeout(step, 500 + Math.random()*200);
@@ -602,19 +879,44 @@ function stopAgent(){
 }
 
 /* =========================================================================
-   PLAN (Invite / Vendors / Budget / Your Wedding)
+   VENDOR DRAWER
+   ========================================================================= */
+function openVendorDetail(vendor, couple){
+  const d = vendorDetail(vendor, couple);
+  $('#vd-cat').textContent = d.category;
+  $('#vd-name').textContent = d.name;
+  $('#vd-price').textContent = fmtMoney(d.price);
+  $('#vd-blurb').textContent = d.blurb;
+  $('#vd-includes').innerHTML = d.includes.map(i => `<li>${i}</li>`).join('');
+  $('#vd-style').textContent = d.style;
+  $('#vendor-backdrop').classList.add('open');
+  $('#vendor-drawer').classList.add('open');
+  $('#vendor-drawer').setAttribute('aria-hidden', 'false');
+  vendorDrawerOpen = true;
+}
+
+function closeVendorDetail(){
+  $('#vendor-backdrop').classList.remove('open');
+  $('#vendor-drawer').classList.remove('open');
+  $('#vendor-drawer').setAttribute('aria-hidden', 'true');
+  vendorDrawerOpen = false;
+}
+
+$('#vd-close').addEventListener('click', closeVendorDetail);
+$('#vendor-backdrop').addEventListener('click', closeVendorDetail);
+
+/* =========================================================================
+   PLAN
    ========================================================================= */
 function renderPlan(couple){
   $('#plan-title').textContent = couple.names;
-  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests`;
+  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier} tier`;
 
-  // Invite
   $('#inv-loc').textContent = couple.location;
   $('#inv-names').textContent = couple.names;
   $('#inv-date').textContent = couple.date;
   $('#inv-copy').textContent = couple.inviteCopy;
 
-  // Vendors
   const vendorList = $('#vendor-list');
   vendorList.innerHTML = '';
   couple.vendors.forEach(v => {
@@ -625,6 +927,7 @@ function renderPlan(couple){
       <div>
         <div class="v-name">${v.name}</div>
         <div class="v-note">${v.note}</div>
+        <div class="v-hint">Click for what's included →</div>
       </div>
       <div class="v-right">
         ${v.flag ? `<span class="v-flag">⚑ ${v.flag}</span>` : ''}
@@ -632,10 +935,10 @@ function renderPlan(couple){
         <span class="v-status">✓ Booked by your agent</span>
       </div>
     `;
+    row.addEventListener('click', () => openVendorDetail(v, couple));
     vendorList.appendChild(row);
   });
 
-  // Budget
   const budgetList = $('#budget-list');
   budgetList.innerHTML = '';
   couple.vendors.forEach(v => {
@@ -717,7 +1020,11 @@ const CAM_END   = { x:0, y:2.3, z:6 };
 const TARGET    = { x:0, y:1.4, z:-2 };
 const FLY_MS = 2600;
 let confettiPoints = null;
+let petalPoints = null;
 let seaMesh = null;
+let sceneBuildId = 0;
+
+const SKY_URL = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80';
 
 function initThree(){
   renderer = new THREE.WebGLRenderer({ antialias:true });
@@ -733,29 +1040,94 @@ function initThree(){
   });
 }
 
+function makeCanvasTexture(draw, w=512, h=512){
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const tex = new THREE.CanvasTexture(c);
+  if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function paintSkyFallback(ctx, w, h, palette, tier){
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  const top = tier === 'high' ? mixColor(palette.bg, '#ffb070', 0.35) : mixColor(palette.bg, '#000000', 0.2);
+  const mid = mixColor(palette.glow, palette.bg, 0.45);
+  const sea = mixColor('#1a3a4a', palette.accent, 0.15);
+  g.addColorStop(0, numToHex(top));
+  g.addColorStop(0.45, numToHex(mid));
+  g.addColorStop(0.62, numToHex(mixColor(palette.accent, '#ffd0a0', 0.4)));
+  g.addColorStop(0.68, numToHex(sea));
+  g.addColorStop(1, numToHex(mixColor(sea, '#0a1520', 0.5)));
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+  // soft clouds
+  ctx.globalAlpha = tier === 'high' ? 0.18 : 0.1;
+  ctx.fillStyle = '#fff8f0';
+  for(let i=0;i<8;i++){
+    const x = (i*97 % w), y = 40 + (i*53 % 120), r = 40 + (i%3)*30;
+    ctx.beginPath(); ctx.ellipse(x, y, r, r*0.45, 0, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function paintSandTexture(ctx, w, h, palette){
+  const base = mixColor('#DCC79A', palette.accent, 0.1);
+  ctx.fillStyle = numToHex(base);
+  ctx.fillRect(0, 0, w, h);
+  for(let i=0;i<5000;i++){
+    const shade = 180 + Math.random()*60;
+    ctx.fillStyle = `rgba(${shade},${shade-20},${shade-50},${0.08+Math.random()*0.12})`;
+    ctx.fillRect(Math.random()*w, Math.random()*h, 1 + Math.random()*2, 1 + Math.random()*2);
+  }
+}
+
+function disposeMaterial(mt){
+  ['map','emissiveMap','normalMap','roughnessMap','metalnessMap','alphaMap'].forEach(k => {
+    if(mt[k]) mt[k].dispose();
+  });
+  mt.dispose();
+}
+
 function buildWeddingScene(couple){
+  const buildId = ++sceneBuildId;
+  const tier = couple.tier || getBudgetTier(couple.budgetTotal, couple.guests);
+  couple.tier = tier;
+
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 300);
 
-  const bgNum = darkenHexToNum(couple.palette.bg, 0.75);
+  const bgDark = tier === 'high' ? 0.55 : tier === 'low' ? 0.85 : 0.72;
+  const bgNum = darkenHexToNum(couple.palette.bg, bgDark);
   scene.background = new THREE.Color(bgNum);
-  scene.fog = new THREE.Fog(bgNum, 18, 70);
+  scene.fog = new THREE.Fog(bgNum, tier === 'high' ? 32 : 40, tier === 'high' ? 120 : 100);
 
-  // lights
-  const dir = new THREE.DirectionalLight(0xffdcab, 1.3);
+  // lights — richer at high tier
+  const dir = new THREE.DirectionalLight(0xffdcab, tier === 'high' ? 1.55 : tier === 'low' ? 1.0 : 1.3);
   dir.position.set(6, 12, 6);
   scene.add(dir);
-  const amb = new THREE.AmbientLight(0x555070, 0.75);
+  const amb = new THREE.AmbientLight(0x555070, tier === 'high' ? 0.9 : 0.7);
   scene.add(amb);
-  const glowLight = new THREE.PointLight(couple.palette.glow, 3.2, 12, 2);
+  const glowLight = new THREE.PointLight(couple.palette.glow, tier === 'high' ? 4.2 : 2.6, 14, 2);
   glowLight.position.set(0, 3.4, -2);
   scene.add(glowLight);
+  if(tier === 'high'){
+    const goldFill = new THREE.PointLight(0xffd699, 1.8, 18, 2);
+    goldFill.position.set(-3, 4, 2);
+    scene.add(goldFill);
+  }
 
-  // ground (sand)
+  // ground sand texture
+  const sandTex = makeCanvasTexture((ctx,w,h) => paintSandTexture(ctx,w,h, couple.palette), 512, 512);
+  sandTex.wrapS = sandTex.wrapT = THREE.RepeatWrapping;
+  sandTex.repeat.set(tier === 'high' ? 10 : 7, tier === 'high' ? 10 : 7);
   const sandColor = mixColor('#DCC79A', couple.palette.accent, 0.08);
   const ground = new THREE.Mesh(
     new THREE.CircleGeometry(42, 64),
-    new THREE.MeshStandardMaterial({ color: sandColor, roughness:1 })
+    new THREE.MeshStandardMaterial({
+      color: sandColor, map: sandTex, roughness: tier === 'high' ? 0.85 : 1, metalness: tier === 'high' ? 0.08 : 0
+    })
   );
   ground.rotation.x = -Math.PI/2;
   scene.add(ground);
@@ -763,59 +1135,124 @@ function buildWeddingScene(couple){
   // sea
   const seaColor = mixColor('#1F3F52', couple.palette.bg, 0.3);
   const seaGeo = new THREE.PlaneGeometry(300, 140, 40, 12);
-  const seaMat = new THREE.MeshStandardMaterial({ color: seaColor, roughness:0.6, metalness:0.1 });
+  const seaMat = new THREE.MeshStandardMaterial({
+    color: seaColor, roughness:0.55, metalness: tier === 'high' ? 0.25 : 0.1
+  });
   seaMesh = new THREE.Mesh(seaGeo, seaMat);
   seaMesh.rotation.x = -Math.PI/2;
   seaMesh.position.set(0, -0.04, -70);
   seaMesh.userData.basePositions = seaGeo.attributes.position.array.slice();
   scene.add(seaMesh);
 
-  // arch (half torus, legs on ground)
-  const archR = 2.3;
+  // sky / backdrop cylinder (photo + canvas fallback)
+  const skyFallback = makeCanvasTexture((ctx,w,h) => paintSkyFallback(ctx,w,h, couple.palette, tier), 1024, 512);
+  const skyTint = tier === 'high'
+    ? mixColor('#ffffff', couple.palette.accent, 0.12)
+    : mixColor('#c8c0b8', couple.palette.bg, 0.25);
+  const skyMat = new THREE.MeshBasicMaterial({
+    map: skyFallback,
+    color: skyTint,
+    side: THREE.BackSide,
+    fog: true
+  });
+  const sky = new THREE.Mesh(new THREE.CylinderGeometry(58, 58, 48, 48, 1, true), skyMat);
+  sky.position.y = 16;
+  scene.add(sky);
+
+  // try loading photographic sky
+  const loader = new THREE.TextureLoader();
+  loader.setCrossOrigin('anonymous');
+  loader.load(SKY_URL, tex => {
+    if(buildId !== sceneBuildId){ tex.dispose(); return; }
+    if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+    const old = skyMat.map;
+    skyMat.map = tex;
+    skyMat.needsUpdate = true;
+    if(old) old.dispose();
+  }, undefined, () => { /* keep canvas fallback */ });
+
+  // arch — scale + ornament by tier
+  const archR = tier === 'high' ? 2.55 : tier === 'low' ? 2.0 : 2.3;
   const archGroup = new THREE.Group();
-  const archMat = new THREE.MeshStandardMaterial({ color: couple.palette.accent, emissive: couple.palette.accent, emissiveIntensity:0.25, roughness:0.4, metalness:0.3 });
-  const arch = new THREE.Mesh(new THREE.TorusGeometry(archR, 0.13, 16, 48, Math.PI), archMat);
+  const archEmissive = tier === 'high' ? 0.45 : tier === 'low' ? 0.12 : 0.25;
+  const archMat = new THREE.MeshStandardMaterial({
+    color: couple.palette.accent,
+    emissive: couple.palette.accent,
+    emissiveIntensity: archEmissive,
+    roughness: tier === 'high' ? 0.28 : 0.5,
+    metalness: tier === 'high' ? 0.55 : 0.25
+  });
+  const arch = new THREE.Mesh(new THREE.TorusGeometry(archR, tier === 'high' ? 0.16 : 0.12, 16, 48, Math.PI), archMat);
   archGroup.add(arch);
 
-  // flower spheres along the arch
-  const flowerMat = new THREE.MeshStandardMaterial({ color: couple.palette.glow, emissive: couple.palette.glow, emissiveIntensity:0.9, roughness:0.5 });
-  const flowerThetas = [0.05, 0.32, 0.6, 0.88, Math.PI-0.88, Math.PI-0.6, Math.PI-0.32, Math.PI-0.05];
-  flowerThetas.forEach(t => {
+  // secondary micro-arch at high tier
+  if(tier === 'high'){
+    const arch2 = new THREE.Mesh(
+      new THREE.TorusGeometry(archR * 0.78, 0.07, 12, 40, Math.PI),
+      new THREE.MeshStandardMaterial({
+        color: 0xC9A267, emissive: 0xC9A267, emissiveIntensity: 0.35, roughness: 0.3, metalness: 0.7
+      })
+    );
+    arch2.position.z = 0.15;
+    archGroup.add(arch2);
+  }
+
+  const flowerCount = tier === 'high' ? 14 : tier === 'low' ? 5 : 8;
+  const flowerMat = new THREE.MeshStandardMaterial({
+    color: couple.palette.glow,
+    emissive: couple.palette.glow,
+    emissiveIntensity: tier === 'high' ? 1.2 : 0.7,
+    roughness: 0.5
+  });
+  for(let i=0; i<flowerCount; i++){
+    const t = (i / (flowerCount - 1 || 1)) * Math.PI;
     const fx = archR * Math.cos(t);
     const fy = archR * Math.sin(t);
-    const s = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), flowerMat);
-    s.position.set(fx, fy, 0);
+    const s = new THREE.Mesh(new THREE.SphereGeometry(tier === 'high' ? 0.18 : 0.14, 12, 12), flowerMat);
+    s.position.set(fx, fy, (i%2 ? 0.08 : -0.05));
     archGroup.add(s);
-  });
+  }
   archGroup.position.set(0, 0, -2);
   scene.add(archGroup);
 
-  // chairs (InstancedMesh, two rows flanking the aisle)
-  const chairMat = new THREE.MeshStandardMaterial({ color:0xF3EEE3, roughness:0.85 });
-  const chairGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  const chairCount = 24;
+  // chairs
+  const chairCount = tier === 'high' ? 32 : tier === 'low' ? 16 : 24;
+  const chairMat = new THREE.MeshStandardMaterial({
+    color: tier === 'high' ? 0xFFF8EE : 0xE8E2D6,
+    roughness: tier === 'high' ? 0.55 : 0.9,
+    metalness: tier === 'high' ? 0.15 : 0
+  });
+  const chairGeo = new THREE.BoxGeometry(
+    tier === 'high' ? 0.48 : 0.5,
+    tier === 'high' ? 0.62 : 0.5,
+    tier === 'high' ? 0.48 : 0.5
+  );
   const chairs = new THREE.InstancedMesh(chairGeo, chairMat, chairCount);
   const m = new THREE.Matrix4();
   for(let i=0; i<chairCount; i++){
     const side = i % 2 === 0 ? -1 : 1;
     const row = Math.floor(i/2);
-    const x = side * 4;
-    const z = 8 - row * 1.3;
-    m.makeTranslation(x, 0.25, z);
+    const x = side * (tier === 'high' ? 3.7 : 4);
+    const z = 8 - row * (tier === 'high' ? 1.15 : 1.3);
+    m.makeTranslation(x, tier === 'high' ? 0.31 : 0.25, z);
     chairs.setMatrixAt(i, m);
   }
   scene.add(chairs);
 
-  // string lights (two sagging arcs from back to arch)
-  const lightGeo = new THREE.SphereGeometry(0.055, 8, 8);
-  const lightMat = new THREE.MeshStandardMaterial({ color:0xffe0a0, emissive:0xffcf7d, emissiveIntensity:1.4 });
+  // string lights
+  const bulbCount = tier === 'high' ? 22 : tier === 'low' ? 8 : 15;
+  const lightGeo = new THREE.SphereGeometry(tier === 'high' ? 0.07 : 0.05, 8, 8);
+  const lightMat = new THREE.MeshStandardMaterial({
+    color:0xffe0a0, emissive:0xffcf7d,
+    emissiveIntensity: tier === 'high' ? 2.0 : tier === 'low' ? 0.9 : 1.4
+  });
   const stringLights = new THREE.Group();
   [-1, 1].forEach(side => {
-    for(let i=0; i<15; i++){
-      const t = i/14;
+    for(let i=0; i<bulbCount; i++){
+      const t = i/(bulbCount-1 || 1);
       const x = side * (4 - 2*t);
       const z = 8 - t*10;
-      const y = 3.6 - Math.sin(t*Math.PI)*1.1;
+      const y = 3.6 - Math.sin(t*Math.PI)*(tier === 'high' ? 1.25 : 1.0);
       const bulb = new THREE.Mesh(lightGeo, lightMat);
       bulb.position.set(x, y, z);
       stringLights.add(bulb);
@@ -824,7 +1261,7 @@ function buildWeddingScene(couple){
   scene.add(stringLights);
 
   // confetti
-  const confettiCount = 160;
+  const confettiCount = tier === 'high' ? 280 : tier === 'low' ? 60 : 160;
   const posArr = new Float32Array(confettiCount * 3);
   const velArr = new Float32Array(confettiCount);
   const phaseArr = new Float32Array(confettiCount);
@@ -838,14 +1275,32 @@ function buildWeddingScene(couple){
   const confettiGeo = new THREE.BufferGeometry();
   confettiGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
   const confettiMat = new THREE.PointsMaterial({
-    color: couple.palette.glow, size:0.09, transparent:true, opacity:0.85,
+    color: couple.palette.glow, size: tier === 'high' ? 0.11 : 0.08,
+    transparent:true, opacity: tier === 'high' ? 0.95 : 0.8,
     blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true
   });
   confettiPoints = new THREE.Points(confettiGeo, confettiMat);
   confettiPoints.userData = { vel:velArr, phase:phaseArr };
   scene.add(confettiPoints);
 
-  // camera init
+  // aisle petals — high tier only
+  petalPoints = null;
+  if(tier === 'high'){
+    const petalN = 120;
+    const pPos = new Float32Array(petalN * 3);
+    for(let i=0;i<petalN;i++){
+      pPos[i*3+0] = (Math.random()-0.5) * 1.4;
+      pPos[i*3+1] = 0.04;
+      pPos[i*3+2] = -1.5 + Math.random() * 9;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+    petalPoints = new THREE.Points(pGeo, new THREE.PointsMaterial({
+      color: couple.palette.accent, size:0.12, transparent:true, opacity:0.85, depthWrite:false
+    }));
+    scene.add(petalPoints);
+  }
+
   camera.position.set(CAM_START.x, CAM_START.y, CAM_START.z);
   camera.lookAt(TARGET.x, TARGET.y, TARGET.z);
 
@@ -859,11 +1314,14 @@ function disposeScene(){
   scene.traverse(obj => {
     if(obj.geometry) obj.geometry.dispose();
     if(obj.material){
-      if(Array.isArray(obj.material)) obj.material.forEach(mt => mt.dispose());
-      else obj.material.dispose();
+      if(Array.isArray(obj.material)) obj.material.forEach(disposeMaterial);
+      else disposeMaterial(obj.material);
     }
   });
   scene = null;
+  confettiPoints = null;
+  petalPoints = null;
+  seaMesh = null;
 }
 
 function startScene(couple){
@@ -873,6 +1331,8 @@ function startScene(couple){
 
   $('#scene-names').textContent = couple.names;
   $('#scene-loc').textContent = `${couple.location} · ${couple.date}`;
+  const tierLabel = { low:'Intimate setting', mid:'Signature celebration', high:'Grand celebration' };
+  $('#scene-tier').textContent = tierLabel[couple.tier] || '';
   const overlay = $('#scene-overlay');
   overlay.classList.remove('show');
   requestAnimationFrame(() => overlay.classList.add('show'));
@@ -909,7 +1369,6 @@ function animateScene(now){
     camera.lookAt(TARGET.x, TARGET.y, TARGET.z);
   }
 
-  // confetti drift
   if(confettiPoints){
     const posAttr = confettiPoints.geometry.attributes.position;
     const vel = confettiPoints.userData.vel;
@@ -923,7 +1382,6 @@ function animateScene(now){
     posAttr.needsUpdate = true;
   }
 
-  // subtle sea wave
   if(seaMesh){
     const posAttr = seaMesh.geometry.attributes.position;
     const base = seaMesh.userData.basePositions;
