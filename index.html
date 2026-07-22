@@ -923,7 +923,7 @@ function applyCardHero(imgEl, couple){
   if(!imgEl) return;
   const src = getCoupleImage(couple);
   if(src){
-    imgEl.src = src;
+    imgEl.src = resolveAssetUrl(src);
     imgEl.alt = `${couple.location} wedding`;
     imgEl.classList.remove('hidden');
   } else {
@@ -1521,7 +1521,7 @@ function renderLanding(){
     if(couple.heroImage){
       const thumb = document.createElement('img');
       thumb.className = 'qf-chip-thumb';
-      thumb.src = couple.heroImage;
+      thumb.src = resolveAssetUrl(couple.heroImage);
       thumb.alt = couple.location;
       btn.appendChild(thumb);
     }
@@ -1806,11 +1806,33 @@ let sceneBuildId = 0;
 
 const SKY_URL = 'https://images.unsplash.com/photo-1519046909934-4f04d5158061?auto=format&fit=crop&w=1920&q=85';
 
+function resolveAssetUrl(url){
+  if(!url) return url;
+  if(/^https?:\/\//i.test(url) || url.startsWith('data:') || url.startsWith('blob:')) return url;
+  try {
+    return new URL(url, window.location.href).href;
+  } catch (_) {
+    return url;
+  }
+}
+
 function loadSceneTexture(url, onLoad, onError){
+  const resolved = resolveAssetUrl(url);
   const loader = new THREE.TextureLoader();
-  if(typeof loader.setCrossOrigin === 'function') loader.setCrossOrigin('anonymous');
-  else loader.crossOrigin = 'anonymous';
-  loader.load(url, onLoad, undefined, onError || (() => {}));
+  const isExternal = /^https?:\/\//i.test(resolved) && !resolved.startsWith(window.location.origin);
+  if(isExternal){
+    if(typeof loader.setCrossOrigin === 'function') loader.setCrossOrigin('anonymous');
+    else loader.crossOrigin = 'anonymous';
+  }
+  loader.load(
+    resolved,
+    onLoad,
+    undefined,
+    err => {
+      console.warn('Texture load failed:', resolved, err);
+      if(onError) onError(err);
+    }
+  );
 }
 
 function applySkyTexture(skyMat, url, buildId){
@@ -1837,80 +1859,96 @@ function applySkyTextureFromTex(skyMat, tex, buildId){
   if(old && old !== tex && old.isCanvasTexture) old.dispose();
 }
 
-function addPanoramaBackdrop(scene, tex, tier, buildId){
-  const radius = 56;
-  const height = tier === 'high' ? 30 : 24;
-  const geo = new THREE.CylinderGeometry(radius, radius, height, 64, 1, true, -Math.PI * 0.72, Math.PI * 1.44);
-  const mat = new THREE.MeshBasicMaterial({
-    map: tex,
-    side: THREE.BackSide,
-    fog: true,
-    transparent: true,
-    opacity: tier === 'high' ? 0.88 : 0.72,
-    depthWrite: false
-  });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(0, height * 0.45, -6);
-  mesh.userData.buildId = buildId;
-  scene.add(mesh);
+function heroPhotoAspect(tex){
+  if(tex?.image?.width && tex?.image?.height) return tex.image.width / tex.image.height;
+  return 1.5;
 }
 
-function addHorizonPhotoPlane(scene, tex, tier, buildId){
-  const w = tier === 'high' ? 100 : 80;
-  const h = tier === 'high' ? 22 : 18;
+function makeHeroPhotoMaterial(tex){
   const mat = new THREE.MeshBasicMaterial({
     map: tex,
-    transparent: true,
-    opacity: tier === 'high' ? 0.42 : 0.3,
-    fog: true,
-    depthWrite: false
+    fog: false,
+    toneMapped: false,
+    side: THREE.FrontSide
   });
-  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
-  mesh.position.set(0, tier === 'high' ? 8 : 6.5, -42);
-  mesh.rotation.x = -0.08;
-  mesh.userData.buildId = buildId;
-  scene.add(mesh);
+  if(THREE.SRGBColorSpace && mat.map) mat.map.colorSpace = THREE.SRGBColorSpace;
+  return mat;
 }
 
-function addCeremonyPhotoFrame(scene, tex, tier, buildId){
-  const w = tier === 'high' ? 7 : tier === 'low' ? 4.8 : 5.8;
-  const h = w * 0.56;
-  const frameGroup = new THREE.Group();
+function addCeremonyBackdrop(scene, tex, tier, buildId){
+  const aspect = heroPhotoAspect(tex);
+  const w = tier === 'high' ? 20 : tier === 'low' ? 13 : 16;
+  const h = w / aspect;
+  const group = new THREE.Group();
+  group.userData.buildId = buildId;
+
   const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(w + 0.2, h + 0.2, 0.12),
+    new THREE.BoxGeometry(w + 0.45, h + 0.45, 0.16),
     new THREE.MeshStandardMaterial({
-      color: 0xfaf7f2, roughness: 0.4, metalness: 0.12,
+      color: 0xfaf7f2, roughness: 0.35, metalness: 0.08,
       emissive: 0x221810, emissiveIntensity: 0.08
     })
   );
-  frameGroup.add(frame);
-  const photo = new THREE.Mesh(
-    new THREE.PlaneGeometry(w, h),
-    new THREE.MeshBasicMaterial({ map: tex, side: THREE.FrontSide })
-  );
-  photo.position.z = 0.07;
-  frameGroup.add(photo);
-  frameGroup.position.set(0, 2.8 + h * 0.5, -14);
-  frameGroup.userData.billboard = true;
-  frameGroup.userData.buildId = buildId;
-  scene.userData.photoFrame = frameGroup;
-  scene.add(frameGroup);
+  group.add(frame);
+
+  const photo = new THREE.Mesh(new THREE.PlaneGeometry(w, h), makeHeroPhotoMaterial(tex));
+  photo.position.z = 0.09;
+  group.add(photo);
+
+  group.position.set(0, 1.6 + h * 0.5, -9.5);
+  scene.userData.photoFrame = group;
+  group.userData.billboard = true;
+  scene.add(group);
+}
+
+function addAislePhotoEasels(scene, tex, tier, buildId){
+  const aspect = heroPhotoAspect(tex);
+  const w = tier === 'high' ? 3.4 : tier === 'low' ? 2.2 : 2.8;
+  const h = w / aspect;
+
+  [-1, 1].forEach(side => {
+    const group = new THREE.Group();
+    group.userData.buildId = buildId;
+
+    const legMat = new THREE.MeshStandardMaterial({ color: 0xc9a267, roughness: 0.55, metalness: 0.2 });
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.35, 0.08), legMat);
+    leg.position.set(0, 0.68, 0);
+    group.add(leg);
+
+    const frame = new THREE.Mesh(
+      new THREE.BoxGeometry(w + 0.18, h + 0.18, 0.08),
+      new THREE.MeshStandardMaterial({ color: 0xfaf7f2, roughness: 0.4, metalness: 0.1 })
+    );
+    frame.position.set(0, 1.35 + h * 0.5, 0);
+    group.add(frame);
+
+    const photo = new THREE.Mesh(
+      new THREE.PlaneGeometry(w, h),
+      makeHeroPhotoMaterial(tex)
+    );
+    photo.position.set(0, 1.35 + h * 0.5, 0.05);
+    group.add(photo);
+
+    group.position.set(side * 5.8, 0, 1.5);
+    group.rotation.y = side * -0.42;
+    scene.add(group);
+  });
 }
 
 function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
-  const url = getCoupleImage(couple) || SKY_URL;
-  loadSceneTexture(url, tex => {
+  applySkyTexture(skyMat, SKY_URL, buildId);
+
+  const heroUrl = getCoupleImage(couple);
+  if(!heroUrl) return;
+
+  loadSceneTexture(heroUrl, tex => {
     if(buildId !== sceneBuildId){ tex.dispose(); return; }
     if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
     tex.wrapS = THREE.ClampToEdgeWrapping;
     tex.wrapT = THREE.ClampToEdgeWrapping;
     scene.userData.heroTexture = tex;
-    applySkyTextureFromTex(skyMat, tex, buildId);
-    addPanoramaBackdrop(scene, tex, tier, buildId);
-    addHorizonPhotoPlane(scene, tex, tier, buildId);
-    addCeremonyPhotoFrame(scene, tex, tier, buildId);
-  }, () => {
-    if(url !== SKY_URL) applySkyTexture(skyMat, SKY_URL, buildId);
+    addCeremonyBackdrop(scene, tex, tier, buildId);
+    addAislePhotoEasels(scene, tex, tier, buildId);
   });
 }
 
