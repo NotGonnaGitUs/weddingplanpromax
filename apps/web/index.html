@@ -748,7 +748,8 @@
 /* =========================================================================
    SEED DATA
    ========================================================================= */
-const COUPLES = [
+/* Fallback only if Payload CMS is unreachable — prefer live /api/package-templates */
+const FALLBACK_COUPLES = [
   {
     id:'priya-arjun',
     names:'Priya & Arjun',
@@ -757,6 +758,8 @@ const COUPLES = [
     guests:62,
     budgetTotal:42000,
     vibe:'beach',
+    isDefaultForVibe:true,
+    locationKeywords:['goa','india'],
     palette:{ bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
     inviteCopy:'Mehndi, music, and the Arabian Sea — three days of celebration on the sands of Goa. Join us as we begin our forever.',
     notes:'Three days with our families — mehndi that feels joyful, barefoot dinner by the water, and music loud enough that everyone dances.',
@@ -776,6 +779,8 @@ const COUPLES = [
     guests:80,
     budgetTotal:48000,
     vibe:'vineyard',
+    isDefaultForVibe:true,
+    locationKeywords:['tuscany','italy','florence','firenze'],
     palette:{ bg:'#3a2f1f', accent:'#7A8450', glow:'#C96F4A' },
     inviteCopy:'Sun-warmed hills, long tables, and wine under the Tuscan stars. Come celebrate love the way Italy does — slowly, joyfully, together.',
     notes:'Long tables, golden light, and a weekend that feels like a house party at a villa — not a ballroom.',
@@ -795,6 +800,8 @@ const COUPLES = [
     guests:70,
     budgetTotal:50000,
     vibe:'island',
+    isDefaultForVibe:true,
+    locationKeywords:['mykonos','greece','santorini','aegean'],
     palette:{ bg:'#1f2f3a', accent:'#2E6FA3', glow:'#FF8C69' },
     inviteCopy:"Whitewashed walls, endless blue, and a sunset that never quite ends. We're saying 'I do' on the cliffs of Mykonos.",
     notes:'Sunset vows on the cliffs, seafood that keeps coming, and a dance floor that starts before the sun finishes.',
@@ -814,6 +821,8 @@ const COUPLES = [
     guests:90,
     budgetTotal:38000,
     vibe:'jungle',
+    isDefaultForVibe:true,
+    locationKeywords:['tulum','mexico','cancun','cancún'],
     palette:{ bg:'#2f1f2a', accent:'#E8862E', glow:'#C4386B' },
     inviteCopy:'Marigolds, mezcal, and the hum of the jungle at dusk. Our wedding is a love letter to Tulum — join the celebration.',
     vendors:[
@@ -832,6 +841,8 @@ const COUPLES = [
     guests:56,
     budgetTotal:34000,
     vibe:'coastal',
+    isDefaultForVibe:true,
+    locationKeywords:['bali','indonesia','uluwatu'],
     palette:{ bg:'#242b2a', accent:'#9BAF9B', glow:'#B9A6D9' },
     inviteCopy:'Incense, ocean cliffs, and quiet ceremony as the sun dips into Bali. Come witness two families become one.',
     vendors:[
@@ -850,6 +861,8 @@ const COUPLES = [
     guests:68,
     budgetTotal:46000,
     vibe:'wine',
+    isDefaultForVibe:true,
+    locationKeywords:['napa','sonoma','california','wine'],
     palette:{ bg:'#2a1f22', accent:'#7A2E3C', glow:'#C4A265' },
     inviteCopy:"Vineyard rows, golden light, and a toast that's been years in the making. Join us for a Napa wedding weekend to remember.",
     vendors:[
@@ -868,6 +881,8 @@ const COUPLES = [
     guests:75,
     budgetTotal:40000,
     vibe:'beach',
+    isDefaultForVibe:false,
+    locationKeywords:['zanzibar','tanzania','africa'],
     palette:{ bg:'#1f2a2a', accent:'#E3A008', glow:'#2A7F9E' },
     inviteCopy:"Kente cloth, ocean drums, and the warmth of Zanzibar's shore. We invite you to dance us into marriage.",
     vendors:[
@@ -880,20 +895,85 @@ const COUPLES = [
   },
 ];
 
-const VIBE_TO_SEED = {
-  beach:'priya-arjun', vineyard:'jake-emily', island:'marcus-david',
-  jungle:'sofia-mateo', coastal:'aiko-wei', wine:'lena-sarah'
-};
+let COUPLES = FALLBACK_COUPLES.slice();
+let VIBE_TO_SEED = {};
+let LOC_KEYWORDS = [];
 
-const LOC_KEYWORDS = [
-  {keys:['goa','india'], id:'priya-arjun'},
-  {keys:['tuscany','italy','florence','firenze'], id:'jake-emily'},
-  {keys:['mykonos','greece','santorini','aegean'], id:'marcus-david'},
-  {keys:['tulum','mexico','cancun','cancún'], id:'sofia-mateo'},
-  {keys:['bali','indonesia','uluwatu'], id:'aiko-wei'},
-  {keys:['napa','sonoma','california','wine'], id:'lena-sarah'},
-  {keys:['zanzibar','tanzania','africa'], id:'kwame-ngozi'},
-];
+function getPayloadApiBase(){
+  const params = new URLSearchParams(window.location.search);
+  return (
+    params.get('api') ||
+    window.localStorage.getItem('marrymapApiUrl') ||
+    window.MARRYMAP_API_URL ||
+    'http://localhost:3000'
+  ).replace(/\/$/, '');
+}
+
+function mapPackageTemplateDoc(doc){
+  const keywords = Array.isArray(doc.locationKeywords)
+    ? doc.locationKeywords.map(row => (typeof row === 'string' ? row : row?.keyword)).filter(Boolean)
+    : [];
+  return {
+    id: doc.key || doc.id,
+    names: doc.names,
+    location: doc.location,
+    date: doc.date,
+    guests: Number(doc.guests) || 80,
+    budgetTotal: Number(doc.budgetTotal) || 40000,
+    vibe: doc.vibe || 'beach',
+    isDefaultForVibe: Boolean(doc.isDefaultForVibe),
+    locationKeywords: keywords,
+    palette: {
+      bg: doc.palette?.bg || '#2a1f3d',
+      accent: doc.palette?.accent || '#F2A93B',
+      glow: doc.palette?.glow || '#E0447C',
+    },
+    inviteCopy: doc.inviteCopy || '',
+    notes: doc.notes || '',
+    vendors: (doc.vendors || []).map(v => ({
+      category: v.category,
+      name: v.name,
+      price: Number(v.price) || 0,
+      note: v.note || '',
+      ...(v.flag ? { flag: v.flag } : {}),
+    })),
+  };
+}
+
+function rebuildPackageIndexes(){
+  VIBE_TO_SEED = {};
+  LOC_KEYWORDS = [];
+  COUPLES.forEach(couple => {
+    if(couple.isDefaultForVibe || !VIBE_TO_SEED[couple.vibe]){
+      VIBE_TO_SEED[couple.vibe] = couple.id;
+    }
+    if(couple.locationKeywords?.length){
+      LOC_KEYWORDS.push({ keys: couple.locationKeywords.slice(), id: couple.id });
+    }
+  });
+}
+
+async function loadPackagesFromPayload(){
+  const base = getPayloadApiBase();
+  try{
+    const res = await fetch(`${base}/api/package-templates?limit=100`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const docs = data.docs || [];
+    if(!docs.length) throw new Error('No package-templates returned');
+    COUPLES = docs.map(mapPackageTemplateDoc);
+    rebuildPackageIndexes();
+    console.info(`[marrymap] Loaded ${COUPLES.length} packages from Payload at ${base}`);
+    return true;
+  }catch(err){
+    COUPLES = FALLBACK_COUPLES.slice();
+    rebuildPackageIndexes();
+    console.warn(`[marrymap] Payload unavailable (${base}); using embedded fallback`, err);
+    return false;
+  }
+}
+
+rebuildPackageIndexes();
 
 /* =========================================================================
    HELPERS
@@ -2718,10 +2798,14 @@ function animateScene(now){
 /* =========================================================================
    INIT
    ========================================================================= */
-renderLanding();
-if(!openSharedCardFromHash()){
-  navigate('landing');
+async function initApp(){
+  await loadPackagesFromPayload();
+  renderLanding();
+  if(!openSharedCardFromHash()){
+    navigate('landing');
+  }
 }
+initApp();
 </script>
 </body>
 </html>

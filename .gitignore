@@ -14,6 +14,12 @@ build/
 *.tsbuildinfo
 apps/cms/src/payload-types.ts
 
+# Local Payload SQLite / uploads
+apps/cms/data/
+*.db
+*.db-*
+media/
+
 # OS / editor
 .DS_Store
 .idea/

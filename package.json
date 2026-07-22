@@ -7,8 +7,11 @@
     "apps/*"
   ],
   "scripts": {
+    "dev": "npm run dev:cms & npm run dev:web",
     "dev:web": "npm run dev -w @marrymap/web",
-    "dev:cms": "npm run generate:types -w @marrymap/cms",
+    "dev:cms": "npm run dev -w @marrymap/cms",
+    "start:cms": "npm run start -w @marrymap/cms",
+    "seed": "npm run seed -w @marrymap/cms",
     "generate:types": "npm run generate:types -w @marrymap/cms"
   },
   "engines": {
