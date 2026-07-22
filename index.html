@@ -1785,35 +1785,107 @@ function makeCanvasTexture(draw, w=512, h=512){
 
 function paintSkyFallback(ctx, w, h, palette, tier){
   const g = ctx.createLinearGradient(0, 0, 0, h);
-  const top = tier === 'high' ? mixColor(palette.bg, '#ffb070', 0.35) : mixColor(palette.bg, '#000000', 0.2);
-  const mid = mixColor(palette.glow, palette.bg, 0.45);
-  const sea = mixColor('#1a3a4a', palette.accent, 0.15);
-  g.addColorStop(0, numToHex(top));
-  g.addColorStop(0.45, numToHex(mid));
-  g.addColorStop(0.62, numToHex(mixColor(palette.accent, '#ffd0a0', 0.4)));
-  g.addColorStop(0.68, numToHex(sea));
-  g.addColorStop(1, numToHex(mixColor(sea, '#0a1520', 0.5)));
+  const skyTop = mixColor('#5eb0e8', palette.bg, 0.08);
+  const skyMid = mixColor('#9fd4f0', palette.glow, 0.18);
+  const sunset = mixColor('#ffb878', palette.accent, 0.35);
+  const horizon = mixColor('#ffd9b0', palette.glow, 0.22);
+  const seaLine = mixColor('#3a9ec4', palette.accent, 0.12);
+  g.addColorStop(0, numToHex(skyTop));
+  g.addColorStop(0.38, numToHex(skyMid));
+  g.addColorStop(0.58, numToHex(sunset));
+  g.addColorStop(0.72, numToHex(horizon));
+  g.addColorStop(0.82, numToHex(seaLine));
+  g.addColorStop(1, numToHex(mixColor('#1a6a8a', palette.bg, 0.15)));
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, w, h);
-  // soft clouds
-  ctx.globalAlpha = tier === 'high' ? 0.18 : 0.1;
-  ctx.fillStyle = '#fff8f0';
-  for(let i=0;i<8;i++){
-    const x = (i*97 % w), y = 40 + (i*53 % 120), r = 40 + (i%3)*30;
-    ctx.beginPath(); ctx.ellipse(x, y, r, r*0.45, 0, 0, Math.PI*2); ctx.fill();
+
+  const sunX = w * 0.72, sunY = h * 0.58;
+  const sunG = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, tier === 'high' ? 140 : 100);
+  sunG.addColorStop(0, 'rgba(255,248,220,0.95)');
+  sunG.addColorStop(0.25, 'rgba(255,210,140,0.55)');
+  sunG.addColorStop(0.55, 'rgba(255,170,90,0.12)');
+  sunG.addColorStop(1, 'rgba(255,170,90,0)');
+  ctx.fillStyle = sunG;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.globalAlpha = tier === 'high' ? 0.22 : 0.14;
+  ctx.fillStyle = '#fffaf5';
+  for(let i=0; i<10; i++){
+    const x = (i * 113 % (w + 80)) - 40;
+    const y = 28 + (i * 47 % 90);
+    const r = 36 + (i % 4) * 22;
+    ctx.beginPath();
+    ctx.ellipse(x, y, r, r * 0.38, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 0.08;
+  ctx.fillStyle = '#ffffff';
+  for(let i=0; i<6; i++){
+    const x = (i * 167 % w), y = 60 + (i * 31 % 70), r = 55 + i * 8;
+    ctx.beginPath();
+    ctx.ellipse(x, y, r, r * 0.3, 0, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.globalAlpha = 1;
 }
 
 function paintSandTexture(ctx, w, h, palette){
-  const base = mixColor('#DCC79A', palette.accent, 0.1);
-  ctx.fillStyle = numToHex(base);
+  const cx = w * 0.5, cy = h * 0.62;
+  const rg = ctx.createRadialGradient(cx, cy, w * 0.05, cx, cy, w * 0.72);
+  const warm = mixColor('#F0D9A8', palette.accent, 0.06);
+  const mid = mixColor('#E8CF98', palette.glow, 0.04);
+  const edge = mixColor('#D4BC88', palette.bg, 0.08);
+  rg.addColorStop(0, numToHex(warm));
+  rg.addColorStop(0.55, numToHex(mid));
+  rg.addColorStop(1, numToHex(edge));
+  ctx.fillStyle = rg;
   ctx.fillRect(0, 0, w, h);
-  for(let i=0;i<5000;i++){
-    const shade = 180 + Math.random()*60;
-    ctx.fillStyle = `rgba(${shade},${shade-20},${shade-50},${0.08+Math.random()*0.12})`;
-    ctx.fillRect(Math.random()*w, Math.random()*h, 1 + Math.random()*2, 1 + Math.random()*2);
+
+  const wet = ctx.createLinearGradient(0, h * 0.08, 0, h * 0.38);
+  wet.addColorStop(0, 'rgba(90,130,150,0.28)');
+  wet.addColorStop(0.45, 'rgba(110,150,165,0.12)');
+  wet.addColorStop(1, 'rgba(110,150,165,0)');
+  ctx.fillStyle = wet;
+  ctx.fillRect(0, 0, w, h * 0.42);
+
+  for(let i=0; i<3500; i++){
+    const shade = 195 + Math.random() * 45;
+    ctx.fillStyle = `rgba(${shade},${shade - 18},${shade - 55},${0.04 + Math.random() * 0.08})`;
+    ctx.fillRect(Math.random() * w, Math.random() * h, 1 + Math.random() * 1.5, 1 + Math.random() * 1.5);
   }
+  for(let i=0; i<120; i++){
+    ctx.fillStyle = `rgba(255,250,240,${0.06 + Math.random() * 0.1})`;
+    const sx = Math.random() * w, sy = Math.random() * h;
+    ctx.beginPath();
+    ctx.ellipse(sx, sy, 2 + Math.random() * 3, 1 + Math.random() * 2, Math.random(), 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function paintSeaTexture(ctx, w, h, palette, tier){
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  const shallow = mixColor('#5ec8e8', palette.glow, 0.12);
+  const mid = mixColor('#2a9ec4', palette.accent, 0.1);
+  const deep = mixColor('#145878', palette.bg, 0.2);
+  g.addColorStop(0, numToHex(shallow));
+  g.addColorStop(0.35, numToHex(mid));
+  g.addColorStop(1, numToHex(deep));
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.globalAlpha = tier === 'high' ? 0.18 : 0.1;
+  for(let i=0; i<80; i++){
+    const y = Math.random() * h;
+    ctx.strokeStyle = `rgba(255,255,255,${0.15 + Math.random() * 0.25})`;
+    ctx.lineWidth = 1 + Math.random() * 2;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    for(let x=0; x<=w; x+=40){
+      ctx.lineTo(x, y + Math.sin(x * 0.02 + i) * 3);
+    }
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
 }
 
 function disposeMaterial(mt){
@@ -2177,76 +2249,130 @@ function addTravelWelcome(scene, couple, vendor, tier){
   scene.add(group);
 }
 
-function buildWeddingScene(couple){
-  const buildId = ++sceneBuildId;
-  const tier = couple.tier || getBudgetTier(couple.budgetTotal, couple.guests);
-  couple.tier = tier;
-
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 300);
-
-  const bgDark = tier === 'high' ? 0.55 : tier === 'low' ? 0.85 : 0.72;
-  const bgNum = darkenHexToNum(couple.palette.bg, bgDark);
-  scene.background = new THREE.Color(bgNum);
-  scene.fog = new THREE.Fog(bgNum, tier === 'high' ? 32 : 40, tier === 'high' ? 120 : 100);
-
-  // lights — richer at high tier
-  const dir = new THREE.DirectionalLight(0xffdcab, tier === 'high' ? 1.55 : tier === 'low' ? 1.0 : 1.3);
-  dir.position.set(6, 12, 6);
-  scene.add(dir);
-  const amb = new THREE.AmbientLight(0x555070, tier === 'high' ? 0.9 : 0.7);
-  scene.add(amb);
-  const glowLight = new THREE.PointLight(couple.palette.glow, tier === 'high' ? 4.2 : 2.6, 14, 2);
-  glowLight.position.set(0, 3.4, -2);
-  scene.add(glowLight);
-  if(tier === 'high'){
-    const goldFill = new THREE.PointLight(0xffd699, 1.8, 18, 2);
-    goldFill.position.set(-3, 4, 2);
-    scene.add(goldFill);
-  }
-
-  // ground sand texture
-  const sandTex = makeCanvasTexture((ctx,w,h) => paintSandTexture(ctx,w,h, couple.palette), 512, 512);
+function buildBeachEnvironment(scene, couple, tier, buildId){
+  const sandTex = makeCanvasTexture((ctx, w, h) => paintSandTexture(ctx, w, h, couple.palette), 1024, 1024);
   sandTex.wrapS = sandTex.wrapT = THREE.RepeatWrapping;
-  sandTex.repeat.set(tier === 'high' ? 10 : 7, tier === 'high' ? 10 : 7);
-  const sandColor = mixColor('#DCC79A', couple.palette.accent, 0.08);
+  sandTex.repeat.set(tier === 'high' ? 8 : 6, tier === 'high' ? 8 : 6);
+  const sandColor = mixColor('#EDD9A8', couple.palette.accent, 0.05);
   const ground = new THREE.Mesh(
-    new THREE.CircleGeometry(42, 64),
+    new THREE.CircleGeometry(42, 96),
     new THREE.MeshStandardMaterial({
-      color: sandColor, map: sandTex, roughness: tier === 'high' ? 0.85 : 1, metalness: tier === 'high' ? 0.08 : 0
+      color: sandColor,
+      map: sandTex,
+      roughness: tier === 'high' ? 0.92 : 0.98,
+      metalness: 0.02
     })
   );
-  ground.rotation.x = -Math.PI/2;
+  ground.rotation.x = -Math.PI / 2;
   scene.add(ground);
 
-  // sea
-  const seaColor = mixColor('#1F3F52', couple.palette.bg, 0.3);
-  const seaGeo = new THREE.PlaneGeometry(300, 140, 40, 12);
+  const wetSand = new THREE.Mesh(
+    new THREE.PlaneGeometry(72, 14, 1, 1),
+    new THREE.MeshStandardMaterial({
+      color: mixColor('#B8A078', couple.palette.bg, 0.15),
+      roughness: 0.55,
+      metalness: 0.12,
+      transparent: true,
+      opacity: 0.72
+    })
+  );
+  wetSand.rotation.x = -Math.PI / 2;
+  wetSand.position.set(0, 0.015, -22);
+  scene.add(wetSand);
+
+  const seaTex = makeCanvasTexture((ctx, w, h) => paintSeaTexture(ctx, w, h, couple.palette, tier), 1024, 512);
+  seaTex.wrapS = seaTex.wrapT = THREE.RepeatWrapping;
+  seaTex.repeat.set(3, 2);
+
+  const shallowGeo = new THREE.PlaneGeometry(110, 28, 56, 20);
+  const shallowMat = new THREE.MeshStandardMaterial({
+    color: mixColor('#48c8e8', couple.palette.glow, 0.1),
+    map: seaTex,
+    roughness: 0.15,
+    metalness: 0.35,
+    transparent: true,
+    opacity: tier === 'high' ? 0.82 : 0.72,
+    emissive: mixColor('#2088a8', couple.palette.accent, 0.08),
+    emissiveIntensity: tier === 'high' ? 0.18 : 0.1
+  });
+  shallowSeaMesh = new THREE.Mesh(shallowGeo, shallowMat);
+  shallowSeaMesh.rotation.x = -Math.PI / 2;
+  shallowSeaMesh.position.set(0, 0.025, -32);
+  shallowSeaMesh.userData.basePositions = shallowGeo.attributes.position.array.slice();
+  shallowSeaMesh.userData.waveScale = tier === 'high' ? 0.22 : 0.14;
+  scene.add(shallowSeaMesh);
+
+  const seaGeo = new THREE.PlaneGeometry(320, 90, 64, 24);
   const seaMat = new THREE.MeshStandardMaterial({
-    color: seaColor, roughness:0.55, metalness: tier === 'high' ? 0.25 : 0.1
+    color: mixColor('#1a6888', couple.palette.bg, 0.12),
+    map: seaTex,
+    roughness: 0.2,
+    metalness: tier === 'high' ? 0.45 : 0.28,
+    emissive: mixColor('#0a4868', couple.palette.accent, 0.06),
+    emissiveIntensity: 0.08
   });
   seaMesh = new THREE.Mesh(seaGeo, seaMat);
-  seaMesh.rotation.x = -Math.PI/2;
-  seaMesh.position.set(0, -0.04, -70);
+  seaMesh.rotation.x = -Math.PI / 2;
+  seaMesh.position.set(0, -0.02, -62);
   seaMesh.userData.basePositions = seaGeo.attributes.position.array.slice();
+  seaMesh.userData.waveScale = tier === 'high' ? 0.35 : 0.22;
   scene.add(seaMesh);
 
-  // sky / backdrop cylinder (photo + canvas fallback)
-  const skyFallback = makeCanvasTexture((ctx,w,h) => paintSkyFallback(ctx,w,h, couple.palette, tier), 1024, 512);
-  const skyTint = tier === 'high'
-    ? mixColor('#ffffff', couple.palette.accent, 0.12)
-    : mixColor('#c8c0b8', couple.palette.bg, 0.25);
+  const foamN = tier === 'high' ? 220 : 140;
+  const foamPos = new Float32Array(foamN * 3);
+  const foamPhase = new Float32Array(foamN);
+  for(let i=0; i<foamN; i++){
+    const t = i / foamN;
+    foamPos[i*3+0] = -34 + t * 68 + (Math.random() - 0.5) * 2.5;
+    foamPos[i*3+1] = 0.06 + Math.random() * 0.04;
+    foamPos[i*3+2] = -14 - Math.random() * 5;
+    foamPhase[i] = Math.random() * Math.PI * 2;
+  }
+  const foamGeo = new THREE.BufferGeometry();
+  foamGeo.setAttribute('position', new THREE.BufferAttribute(foamPos, 3));
+  foamPoints = new THREE.Points(foamGeo, new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: tier === 'high' ? 0.14 : 0.1,
+    transparent: true,
+    opacity: tier === 'high' ? 0.88 : 0.72,
+    depthWrite: false,
+    sizeAttenuation: true
+  }));
+  foamPoints.userData.phase = foamPhase;
+  foamPoints.userData.basePositions = foamPos.slice();
+  scene.add(foamPoints);
+
+  [-38, 38].forEach(sx => {
+    const dune = new THREE.Mesh(
+      new THREE.SphereGeometry(tier === 'high' ? 3.2 : 2.4, 16, 12),
+      new THREE.MeshStandardMaterial({
+        color: mixColor('#DCC898', couple.palette.accent, 0.06),
+        roughness: 1,
+        metalness: 0
+      })
+    );
+    dune.scale.set(1.8, 0.35, 1.2);
+    dune.position.set(sx, 0.15, -8);
+    scene.add(dune);
+    const grass = new THREE.Mesh(
+      new THREE.ConeGeometry(0.35, 0.9, 6),
+      new THREE.MeshStandardMaterial({ color: mixColor('#6a8a58', couple.palette.accent, 0.08), roughness: 1 })
+    );
+    grass.position.set(sx * 1.05, 0.45, -6);
+    scene.add(grass);
+  });
+
+  const skyFallback = makeCanvasTexture((ctx, w, h) => paintSkyFallback(ctx, w, h, couple.palette, tier), 1536, 768);
   const skyMat = new THREE.MeshBasicMaterial({
     map: skyFallback,
-    color: skyTint,
+    color: 0xffffff,
     side: THREE.BackSide,
     fog: true
   });
-  const sky = new THREE.Mesh(new THREE.CylinderGeometry(58, 58, 48, 48, 1, true), skyMat);
-  sky.position.y = 16;
+  const sky = new THREE.Mesh(new THREE.CylinderGeometry(62, 62, 52, 56, 1, true), skyMat);
+  sky.position.y = 14;
   scene.add(sky);
 
-  // try loading photographic sky — never let CORS/network failures break the scene
   try {
     const loader = new THREE.TextureLoader();
     if(typeof loader.setCrossOrigin === 'function') loader.setCrossOrigin('anonymous');
@@ -2258,16 +2384,57 @@ function buildWeddingScene(couple){
         if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
         const old = skyMat.map;
         skyMat.map = tex;
+        skyMat.color.setHex(0xffffff);
         skyMat.needsUpdate = true;
         if(old && old !== tex) old.dispose();
       } catch (err) {
         console.warn('Sky texture apply failed; keeping canvas fallback', err);
         try { tex.dispose(); } catch (_) {}
       }
-    }, undefined, () => { /* keep canvas fallback */ });
+    }, undefined, () => {});
   } catch (err) {
     console.warn('TextureLoader unavailable; using canvas sky', err);
   }
+}
+
+function buildWeddingScene(couple){
+  const buildId = ++sceneBuildId;
+  const tier = couple.tier || getBudgetTier(couple.budgetTotal, couple.guests);
+  couple.tier = tier;
+
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 300);
+
+  const skyBg = mixColor('#8ecae6', couple.palette.bg, 0.12);
+  const fogColor = mixColor('#c8dce8', couple.palette.glow, 0.08);
+  scene.background = new THREE.Color(skyBg);
+  scene.fog = new THREE.Fog(fogColor, tier === 'high' ? 28 : 34, tier === 'high' ? 110 : 92);
+
+  // lights — golden-hour beach
+  const hemi = new THREE.HemisphereLight(
+    mixColor('#87CEEB', couple.palette.glow, 0.15),
+    mixColor('#E8D4A8', couple.palette.accent, 0.12),
+    tier === 'high' ? 0.85 : 0.65
+  );
+  scene.add(hemi);
+  const dir = new THREE.DirectionalLight(0xffc896, tier === 'high' ? 1.65 : tier === 'low' ? 1.05 : 1.35);
+  dir.position.set(8, 7, 10);
+  scene.add(dir);
+  const sunGlow = new THREE.DirectionalLight(0xffe8c8, tier === 'high' ? 0.55 : 0.35);
+  sunGlow.position.set(-12, 4, -18);
+  scene.add(sunGlow);
+  const amb = new THREE.AmbientLight(0x8898a8, tier === 'high' ? 0.55 : 0.42);
+  scene.add(amb);
+  const glowLight = new THREE.PointLight(couple.palette.glow, tier === 'high' ? 2.8 : 1.6, 14, 2);
+  glowLight.position.set(0, 3.4, -2);
+  scene.add(glowLight);
+  if(tier === 'high'){
+    const goldFill = new THREE.PointLight(0xffd699, 1.4, 18, 2);
+    goldFill.position.set(-3, 4, 2);
+    scene.add(goldFill);
+  }
+
+  buildBeachEnvironment(scene, couple, tier, buildId);
 
   // arch — scale + ornament by tier
   const archR = tier === 'high' ? 2.55 : tier === 'low' ? 2.0 : 2.3;
@@ -2423,6 +2590,8 @@ function disposeScene(){
   confettiPoints = null;
   petalPoints = null;
   seaMesh = null;
+  shallowSeaMesh = null;
+  foamPoints = null;
 }
 
 function startScene(couple){
@@ -2502,11 +2671,38 @@ function animateScene(now){
   if(seaMesh){
     const posAttr = seaMesh.geometry.attributes.position;
     const base = seaMesh.userData.basePositions;
+    const wave = seaMesh.userData.waveScale || 0.25;
     for(let i=0; i<posAttr.count; i++){
       const bx = base[i*3+0], by = base[i*3+1];
-      posAttr.array[i*3+2] = Math.sin(bx*0.06 + now*0.0006) * 0.5 + Math.cos(by*0.05 + now*0.0004) * 0.3;
+      posAttr.array[i*3+2] = Math.sin(bx * 0.04 + now * 0.0005) * wave + Math.cos(by * 0.035 + now * 0.00035) * wave * 0.6;
     }
     posAttr.needsUpdate = true;
+    seaMesh.geometry.computeVertexNormals();
+  }
+
+  if(shallowSeaMesh){
+    const posAttr = shallowSeaMesh.geometry.attributes.position;
+    const base = shallowSeaMesh.userData.basePositions;
+    const wave = shallowSeaMesh.userData.waveScale || 0.15;
+    for(let i=0; i<posAttr.count; i++){
+      const bx = base[i*3+0], by = base[i*3+1];
+      posAttr.array[i*3+2] = Math.sin(bx * 0.07 + now * 0.0008) * wave + Math.cos(by * 0.06 + now * 0.00055) * wave * 0.5;
+    }
+    posAttr.needsUpdate = true;
+    shallowSeaMesh.geometry.computeVertexNormals();
+  }
+
+  if(foamPoints){
+    const posAttr = foamPoints.geometry.attributes.position;
+    const base = foamPoints.userData.basePositions;
+    const phase = foamPoints.userData.phase;
+    for(let i=0; i<phase.length; i++){
+      posAttr.array[i*3+0] = base[i*3+0] + Math.sin(now * 0.0012 + phase[i]) * 0.25;
+      posAttr.array[i*3+1] = base[i*3+1];
+      posAttr.array[i*3+2] = base[i*3+2] + Math.cos(now * 0.001 + phase[i]) * 0.12;
+    }
+    posAttr.needsUpdate = true;
+    foamPoints.material.opacity = 0.65 + Math.sin(now * 0.002) * 0.12;
   }
 
   if(scene.userData.vendorLights){
