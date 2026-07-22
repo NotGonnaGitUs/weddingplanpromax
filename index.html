@@ -413,7 +413,7 @@
   .wedding-card.invite-card::after{display:none;}
 
   .vendor-row{
-    display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;
+    display:grid;grid-template-columns:88px 1fr auto;gap:18px;align-items:center;
     padding:18px 4px;border-bottom:1px solid rgba(250,247,242,.09);
     cursor:pointer;border-radius:10px;transition:background .15s;
   }
@@ -502,6 +502,38 @@
   }
   .vd-review-by{font-size:11.5px;color:rgba(28,27,46,.45);}
   .vd-booked{margin-top:auto;padding-top:22px;font-size:12.5px;color:var(--accent);font-weight:600;}
+
+  .vd-hero-wrap{
+    margin:-28px -28px 20px -28px;border-radius:0;overflow:hidden;position:relative;
+    background:linear-gradient(135deg, var(--ink-soft), var(--pbg));
+    min-height:168px;flex-shrink:0;
+  }
+  .vd-hero-img{width:100%;height:168px;object-fit:cover;display:block;opacity:0;transition:opacity .45s ease;}
+  .vd-hero-img.loaded{opacity:1;}
+  .vd-hero-loading{background:linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;}
+  @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .vd-hero-badge{
+    position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:999px;
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+    background:rgba(28,27,46,.72);color:rgba(250,247,242,.85);backdrop-filter:blur(6px);
+  }
+  .vd-hero-badge[data-source="higgsfield"]{background:color-mix(in srgb, var(--accent) 85%, #1C1B2E);color:var(--ink);}
+  .vd-3d-wrap{
+    height:140px;flex:0 0 140px;border-radius:14px;margin:0 0 18px;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 80%, rgba(201,162,103,.15), transparent 60%),
+               linear-gradient(180deg, rgba(28,27,46,.06), rgba(28,27,46,.02));
+    border:1px solid rgba(28,27,46,.08);
+  }
+  .vd-3d-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,27,46,.42);font-weight:600;margin:-8px 0 8px;}
+  .vendor-row .v-thumb{
+    width:88px;height:56px;border-radius:10px;object-fit:cover;
+    background:linear-gradient(135deg, var(--pbg), var(--ink-soft));
+    border:1px solid rgba(250,247,242,.12);
+  }
+  @media (max-width:560px){
+    .vendor-row{grid-template-columns:64px 1fr auto;}
+    .vendor-row .v-thumb{width:64px;height:48px;}
+  }
 
   /* ================= SCENE ================= */
   #scene{background:#000;}
@@ -746,6 +778,12 @@
 <div class="vendor-backdrop" id="vendor-backdrop"></div>
 <aside class="vendor-drawer" id="vendor-drawer" aria-hidden="true">
   <button class="vd-close" id="vd-close" aria-label="Close">×</button>
+  <div class="vd-hero-wrap">
+    <img class="vd-hero-img vd-hero-loading" id="vd-hero-img" alt="" width="640" height="168">
+    <span class="vd-hero-badge" id="vd-hero-badge">Loading…</span>
+  </div>
+  <div class="vd-3d-label">3D vendor preview</div>
+  <div class="vd-3d-wrap" id="vd-3d-mount"></div>
   <div class="vd-cat" id="vd-cat"></div>
   <h3 class="vd-name" id="vd-name"></h3>
   <div class="vd-price" id="vd-price"></div>
@@ -1606,7 +1644,7 @@ function stopAgent(){
 /* =========================================================================
    VENDOR DRAWER
    ========================================================================= */
-function openVendorDetail(vendor, couple){
+async function openVendorDetail(vendor, couple){
   const d = vendorDetail(vendor, couple);
   $('#vd-cat').textContent = d.category;
   $('#vd-name').textContent = d.name;
@@ -1626,6 +1664,18 @@ function openVendorDetail(vendor, couple){
   $('#vendor-drawer').classList.add('open');
   $('#vendor-drawer').setAttribute('aria-hidden', 'false');
   vendorDrawerOpen = true;
+
+  const heroImg = $('#vd-hero-img');
+  heroImg.classList.add('vd-hero-loading');
+  heroImg.classList.remove('loaded');
+  if(window.Vendor3D) Vendor3D.show($('#vd-3d-mount'), d.category, couple.palette);
+  if(window.VendorVisuals){
+    const visual = await VendorVisuals.loadHeroImage(heroImg, $('#vd-hero-badge'), couple.seedId, d.category, couple, vendor);
+    heroImg.onload = () => { heroImg.classList.remove('vd-hero-loading'); heroImg.classList.add('loaded'); };
+    if(heroImg.complete && heroImg.src) heroImg.classList.add('loaded');
+    if(visual?.prompt && !couple.vendorVisuals) couple.vendorVisuals = {};
+    if(visual?.prompt) couple.vendorVisuals[d.category] = visual;
+  }
 }
 
 function closeVendorDetail(){
@@ -1633,6 +1683,7 @@ function closeVendorDetail(){
   $('#vendor-drawer').classList.remove('open');
   $('#vendor-drawer').setAttribute('aria-hidden', 'true');
   vendorDrawerOpen = false;
+  if(window.Vendor3D) Vendor3D.stop();
 }
 
 $('#vd-close').addEventListener('click', closeVendorDetail);
@@ -1652,12 +1703,15 @@ function renderPlan(couple){
   couple.vendors.forEach(v => {
     const row = document.createElement('div');
     row.className = 'vendor-row' + (v.flag ? ' flagged' : '');
+    const thumb = document.createElement('img');
+    thumb.className = 'v-thumb';
+    thumb.alt = v.category;
     row.innerHTML = `
-      <div class="v-cat">${v.category}</div>
       <div>
+        <div class="v-cat">${v.category}</div>
         <div class="v-name">${v.name}</div>
         <div class="v-note">${v.note}</div>
-        <div class="v-hint">Click for what's included →</div>
+        <div class="v-hint">Click for vendor page →</div>
       </div>
       <div class="v-right">
         ${v.flag ? `<span class="v-flag">⚑ ${v.flag}</span>` : ''}
@@ -1665,9 +1719,17 @@ function renderPlan(couple){
         <span class="v-status">✓ Booked for your day</span>
       </div>
     `;
+    row.insertBefore(thumb, row.firstChild);
+    if(window.VendorVisuals){
+      VendorVisuals.fetchVisual(couple.seedId, v.category, couple, v).then(data => {
+        if(data?.url) thumb.src = data.url;
+      });
+    }
     row.addEventListener('click', () => openVendorDetail(v, couple));
     vendorList.appendChild(row);
   });
+
+  if(window.VendorVisuals) VendorVisuals.prefetchForCouple(couple);
 
   const budgetList = $('#budget-list');
   budgetList.innerHTML = '';
@@ -2921,5 +2983,8 @@ if(!openSharedCardFromHash()){
   navigate('landing');
 }
 </script>
+<script>window.MARRYMAP_API = window.location.port === '3847' ? '' : 'http://localhost:3847';</script>
+<script src="public/js/vendor-3d.js"></script>
+<script src="public/js/vendor-pages.js"></script>
 </body>
 </html>
