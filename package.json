@@ -1,0 +1,26 @@
+{
+  "name": "weddingplanpromax",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NotGonnaGitUs/weddingplanpromax.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NotGonnaGitUs/weddingplanpromax/issues"
+  },
+  "homepage": "https://github.com/NotGonnaGitUs/weddingplanpromax#readme",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}

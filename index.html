@@ -413,7 +413,7 @@
   .wedding-card.invite-card::after{display:none;}
 
   .vendor-row{
-    display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;
+    display:grid;grid-template-columns:88px 1fr auto;gap:18px;align-items:center;
     padding:18px 4px;border-bottom:1px solid rgba(250,247,242,.09);
     cursor:pointer;border-radius:10px;transition:background .15s;
   }
@@ -502,6 +502,38 @@
   }
   .vd-review-by{font-size:11.5px;color:rgba(28,27,46,.45);}
   .vd-booked{margin-top:auto;padding-top:22px;font-size:12.5px;color:var(--accent);font-weight:600;}
+
+  .vd-hero-wrap{
+    margin:-28px -28px 20px -28px;border-radius:0;overflow:hidden;position:relative;
+    background:linear-gradient(135deg, var(--ink-soft), var(--pbg));
+    min-height:168px;flex-shrink:0;
+  }
+  .vd-hero-img{width:100%;height:168px;object-fit:cover;display:block;opacity:0;transition:opacity .45s ease;}
+  .vd-hero-img.loaded{opacity:1;}
+  .vd-hero-loading{background:linear-gradient(90deg, rgba(255,255,255,.04) 25%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;}
+  @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+  .vd-hero-badge{
+    position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:999px;
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+    background:rgba(28,27,46,.72);color:rgba(250,247,242,.85);backdrop-filter:blur(6px);
+  }
+  .vd-hero-badge[data-source="higgsfield"]{background:color-mix(in srgb, var(--accent) 85%, #1C1B2E);color:var(--ink);}
+  .vd-3d-wrap{
+    height:140px;flex:0 0 140px;border-radius:14px;margin:0 0 18px;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 80%, rgba(201,162,103,.15), transparent 60%),
+               linear-gradient(180deg, rgba(28,27,46,.06), rgba(28,27,46,.02));
+    border:1px solid rgba(28,27,46,.08);
+  }
+  .vd-3d-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(28,27,46,.42);font-weight:600;margin:-8px 0 8px;}
+  .vendor-row .v-thumb{
+    width:88px;height:56px;border-radius:10px;object-fit:cover;
+    background:linear-gradient(135deg, var(--pbg), var(--ink-soft));
+    border:1px solid rgba(250,247,242,.12);
+  }
+  @media (max-width:560px){
+    .vendor-row{grid-template-columns:64px 1fr auto;}
+    .vendor-row .v-thumb{width:64px;height:48px;}
+  }
 
   /* ================= SCENE ================= */
   #scene{background:#000;}
@@ -746,6 +778,12 @@
 <div class="vendor-backdrop" id="vendor-backdrop"></div>
 <aside class="vendor-drawer" id="vendor-drawer" aria-hidden="true">
   <button class="vd-close" id="vd-close" aria-label="Close">×</button>
+  <div class="vd-hero-wrap">
+    <img class="vd-hero-img vd-hero-loading" id="vd-hero-img" alt="" width="640" height="168">
+    <span class="vd-hero-badge" id="vd-hero-badge">Loading…</span>
+  </div>
+  <div class="vd-3d-label">3D vendor preview</div>
+  <div class="vd-3d-wrap" id="vd-3d-mount"></div>
   <div class="vd-cat" id="vd-cat"></div>
   <h3 class="vd-name" id="vd-name"></h3>
   <div class="vd-price" id="vd-price"></div>
@@ -1606,7 +1644,7 @@ function stopAgent(){
 /* =========================================================================
    VENDOR DRAWER
    ========================================================================= */
-function openVendorDetail(vendor, couple){
+async function openVendorDetail(vendor, couple){
   const d = vendorDetail(vendor, couple);
   $('#vd-cat').textContent = d.category;
   $('#vd-name').textContent = d.name;
@@ -1626,6 +1664,18 @@ function openVendorDetail(vendor, couple){
   $('#vendor-drawer').classList.add('open');
   $('#vendor-drawer').setAttribute('aria-hidden', 'false');
   vendorDrawerOpen = true;
+
+  const heroImg = $('#vd-hero-img');
+  heroImg.classList.add('vd-hero-loading');
+  heroImg.classList.remove('loaded');
+  if(window.Vendor3D) Vendor3D.show($('#vd-3d-mount'), d.category, couple.palette);
+  if(window.VendorVisuals){
+    const visual = await VendorVisuals.loadHeroImage(heroImg, $('#vd-hero-badge'), couple.seedId, d.category, couple, vendor);
+    heroImg.onload = () => { heroImg.classList.remove('vd-hero-loading'); heroImg.classList.add('loaded'); };
+    if(heroImg.complete && heroImg.src) heroImg.classList.add('loaded');
+    if(visual?.prompt && !couple.vendorVisuals) couple.vendorVisuals = {};
+    if(visual?.prompt) couple.vendorVisuals[d.category] = visual;
+  }
 }
 
 function closeVendorDetail(){
@@ -1633,6 +1683,7 @@ function closeVendorDetail(){
   $('#vendor-drawer').classList.remove('open');
   $('#vendor-drawer').setAttribute('aria-hidden', 'true');
   vendorDrawerOpen = false;
+  if(window.Vendor3D) Vendor3D.stop();
 }
 
 $('#vd-close').addEventListener('click', closeVendorDetail);
@@ -1652,12 +1703,15 @@ function renderPlan(couple){
   couple.vendors.forEach(v => {
     const row = document.createElement('div');
     row.className = 'vendor-row' + (v.flag ? ' flagged' : '');
+    const thumb = document.createElement('img');
+    thumb.className = 'v-thumb';
+    thumb.alt = v.category;
     row.innerHTML = `
-      <div class="v-cat">${v.category}</div>
       <div>
+        <div class="v-cat">${v.category}</div>
         <div class="v-name">${v.name}</div>
         <div class="v-note">${v.note}</div>
-        <div class="v-hint">Click for what's included →</div>
+        <div class="v-hint">Click for vendor page →</div>
       </div>
       <div class="v-right">
         ${v.flag ? `<span class="v-flag">⚑ ${v.flag}</span>` : ''}
@@ -1665,9 +1719,17 @@ function renderPlan(couple){
         <span class="v-status">✓ Booked for your day</span>
       </div>
     `;
+    row.insertBefore(thumb, row.firstChild);
+    if(window.VendorVisuals){
+      VendorVisuals.fetchVisual(couple.seedId, v.category, couple, v).then(data => {
+        if(data?.url) thumb.src = data.url;
+      });
+    }
     row.addEventListener('click', () => openVendorDetail(v, couple));
     vendorList.appendChild(row);
   });
+
+  if(window.VendorVisuals) VendorVisuals.prefetchForCouple(couple);
 
   const budgetList = $('#budget-list');
   budgetList.innerHTML = '';
@@ -1875,6 +1937,39 @@ function makeHeroPhotoMaterial(tex){
   return mat;
 }
 
+function makeFeatheredHeroTexture(tex){
+  const img = tex.image;
+  if(!img || !img.width) return tex;
+  const w = 1024;
+  const h = Math.max(64, Math.round(w * (img.height / img.width)));
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(img, 0, 0, w, h);
+
+  // Fade the photo's bottom and sides so it melts into the 3D sand instead of
+  // ending in a hard framed edge.
+  ctx.globalCompositeOperation = 'destination-in';
+  const vMask = ctx.createLinearGradient(0, 0, 0, h);
+  vMask.addColorStop(0, 'rgba(0,0,0,1)');
+  vMask.addColorStop(0.78, 'rgba(0,0,0,1)');
+  vMask.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = vMask;
+  ctx.fillRect(0, 0, w, h);
+  const hMask = ctx.createLinearGradient(0, 0, w, 0);
+  hMask.addColorStop(0, 'rgba(0,0,0,0)');
+  hMask.addColorStop(0.09, 'rgba(0,0,0,1)');
+  hMask.addColorStop(0.91, 'rgba(0,0,0,1)');
+  hMask.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = hMask;
+  ctx.fillRect(0, 0, w, h);
+
+  const out = new THREE.CanvasTexture(c);
+  if(THREE.SRGBColorSpace) out.colorSpace = THREE.SRGBColorSpace;
+  out.needsUpdate = true;
+  return out;
+}
+
 function addCeremonyBackdrop(scene, tex, tier, buildId){
   const aspect = heroPhotoAspect(tex);
   const w = tier === 'high' ? 20 : tier === 'low' ? 13 : 16;
@@ -1882,20 +1977,21 @@ function addCeremonyBackdrop(scene, tex, tier, buildId){
   const group = new THREE.Group();
   group.userData.buildId = buildId;
 
-  const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(w + 0.45, h + 0.45, 0.16),
-    new THREE.MeshStandardMaterial({
-      color: 0xfaf7f2, roughness: 0.35, metalness: 0.08,
-      emissive: 0x221810, emissiveIntensity: 0.08
+  const photo = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({
+      map: makeFeatheredHeroTexture(tex),
+      transparent: true,
+      depthWrite: false,
+      fog: false,
+      toneMapped: false,
+      side: THREE.FrontSide
     })
   );
-  group.add(frame);
-
-  const photo = new THREE.Mesh(new THREE.PlaneGeometry(w, h), makeHeroPhotoMaterial(tex));
-  photo.position.z = 0.09;
   group.add(photo);
 
-  group.position.set(0, 1.6 + h * 0.5, -9.5);
+  // Sink the fade zone into the sand so photo-beach blends into scene-beach.
+  group.position.set(0, h * 0.5 - 0.6, -9.5);
   scene.userData.photoFrame = group;
   group.userData.billboard = true;
   scene.add(group);
@@ -1935,20 +2031,111 @@ function addAislePhotoEasels(scene, tex, tier, buildId){
   });
 }
 
-function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
-  applySkyTexture(skyMat, SKY_URL, buildId);
+function makeHeroPanoramaTexture(tex, palette, tier){
+  const img = tex.image;
+  return makeCanvasTexture((ctx, w, h) => {
+    paintSkyFallback(ctx, w, h, palette, tier);
+    if(!img || !img.width) return;
 
+    // Wrap the destination photo around the horizon band, mirror-tiled so the
+    // cylinder seam never shows, then feather its top edge into the painted sky.
+    const bandH = Math.round(h * 0.66);
+    const bandY = h - bandH;
+    const band = document.createElement('canvas');
+    band.width = w; band.height = bandH;
+    const bctx = band.getContext('2d');
+
+    const tileW = Math.max(64, Math.round(bandH * (img.width / img.height)));
+    const tiles = Math.ceil(w / tileW) + 1;
+    for(let i = 0; i < tiles; i++){
+      bctx.save();
+      bctx.translate(i * tileW + (i % 2 ? tileW : 0), 0);
+      if(i % 2) bctx.scale(-1, 1);
+      bctx.drawImage(img, 0, 0, tileW, bandH);
+      bctx.restore();
+    }
+    bctx.globalCompositeOperation = 'destination-in';
+    const mask = bctx.createLinearGradient(0, 0, 0, bandH);
+    mask.addColorStop(0, 'rgba(0,0,0,0)');
+    mask.addColorStop(0.34, 'rgba(0,0,0,1)');
+    mask.addColorStop(1, 'rgba(0,0,0,1)');
+    bctx.fillStyle = mask;
+    bctx.fillRect(0, 0, w, bandH);
+
+    ctx.drawImage(band, 0, bandY);
+  }, 4096, 1024);
+}
+
+async function firstExistingUrl(urls){
+  for(const u of urls){
+    try {
+      const r = await fetch(resolveAssetUrl(u), { method: 'HEAD' });
+      if(r.ok) return u;
+    } catch (_) {}
+  }
+  return null;
+}
+
+function addPanoramaSphere(scene, tex, buildId){
+  // Inverted sphere inside the sky cylinder: a true equirectangular skybox,
+  // full coverage overhead and behind — the venue photo in every direction.
+  const geo = new THREE.SphereGeometry(58, 64, 40);
+  geo.scale(-1, 1, 1);
+  const mat = new THREE.MeshBasicMaterial({ map: tex, fog: false, toneMapped: false });
+  const dome = new THREE.Mesh(geo, mat);
+  dome.position.y = 6;
+  dome.rotation.y = Math.PI; // panorama center faces the opening camera
+  dome.userData.buildId = buildId;
+  scene.add(dome);
+  return dome;
+}
+
+function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat, skyMesh){
   const heroUrl = getCoupleImage(couple);
-  if(!heroUrl) return;
+  if(!heroUrl){
+    applySkyTexture(skyMat, SKY_URL, buildId);
+    return;
+  }
 
-  loadSceneTexture(heroUrl, tex => {
-    if(buildId !== sceneBuildId){ tex.dispose(); return; }
-    if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-    tex.wrapS = THREE.ClampToEdgeWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    scene.userData.heroTexture = tex;
-    addCeremonyBackdrop(scene, tex, tier, buildId);
-    addAislePhotoEasels(scene, tex, tier, buildId);
+  const useHeroFallback = () => {
+    loadSceneTexture(heroUrl, tex => {
+      if(buildId !== sceneBuildId){ tex.dispose(); return; }
+      if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+      tex.wrapS = THREE.ClampToEdgeWrapping;
+      tex.wrapT = THREE.ClampToEdgeWrapping;
+      scene.userData.heroTexture = tex;
+
+      // The destination image becomes the world: guests stand inside it.
+      applySkyTextureFromTex(skyMat, makeHeroPanoramaTexture(tex, couple.palette, tier), buildId);
+
+      addCeremonyBackdrop(scene, tex, tier, buildId);
+      addAislePhotoEasels(scene, tex, tier, buildId);
+    }, () => applySkyTexture(skyMat, SKY_URL, buildId));
+  };
+
+  // Prefer a true 360° equirectangular panorama when one has been generated
+  // (assets/weddings/<seed>-pano.jpg|png|webp — see /api/panorama/prompts).
+  const base = heroUrl.replace(/-hero\.(png|jpe?g|webp)$/i, '');
+  const panoCandidates = [`${base}-pano.jpg`, `${base}-pano.png`, `${base}-pano.webp`];
+
+  firstExistingUrl(panoCandidates).then(panoUrl => {
+    if(buildId !== sceneBuildId) return;
+    if(!panoUrl){ useHeroFallback(); return; }
+
+    loadSceneTexture(panoUrl, tex => {
+      if(buildId !== sceneBuildId){ tex.dispose(); return; }
+      if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+      addPanoramaSphere(scene, tex, buildId);
+      if(skyMesh) skyMesh.visible = false;
+
+      // Still dress the aisle with the flat hero on easels for foreground detail.
+      loadSceneTexture(heroUrl, htex => {
+        if(buildId !== sceneBuildId){ htex.dispose(); return; }
+        if(THREE.SRGBColorSpace) htex.colorSpace = THREE.SRGBColorSpace;
+        scene.userData.heroTexture = htex;
+        addAislePhotoEasels(scene, htex, tier, buildId);
+      });
+    }, useHeroFallback);
   });
 }
 
@@ -2582,7 +2769,7 @@ function buildBeachEnvironment(scene, couple, tier, buildId){
   scene.add(sky);
 
   try {
-    integrateHeroEnvironment(scene, couple, tier, buildId, skyMat);
+    integrateHeroEnvironment(scene, couple, tier, buildId, skyMat, sky);
   } catch (err) {
     console.warn('Hero environment integration failed; using canvas sky', err);
   }
@@ -2921,5 +3108,8 @@ if(!openSharedCardFromHash()){
   navigate('landing');
 }
 </script>
+<script>window.MARRYMAP_API = window.location.port === '3847' ? '' : 'http://localhost:3847';</script>
+<script src="public/js/vendor-3d.js"></script>
+<script src="public/js/vendor-pages.js"></script>
 </body>
 </html>
