@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marrymap — Your AI Wedding Agent</title>
+<title>Marrymap — Plan your special day</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -516,7 +516,7 @@
 <div id="landing" class="screen">
   <div class="landing-shell">
     <h1 class="landing-mark">Marrymap</h1>
-    <p class="landing-sub">Write the bones of the day. The agent shops the marketplace, books vendors, and builds it live.</p>
+    <p class="landing-sub">It's your special day. Tell us how you imagine it — we'll find the vendors, book every detail, and bring your wedding to life.</p>
 
     <form class="wedding-form" id="wedding-form" novalidate>
       <div class="form-row">
@@ -572,7 +572,7 @@
         </div>
       </div>
       <div class="form-actions">
-        <button type="submit" class="form-submit">Let the agent shop →</button>
+        <button type="submit" class="form-submit">Start planning your day →</button>
       </div>
     </form>
 
@@ -590,7 +590,7 @@
   <div class="terminal">
     <div class="terminal-head">
       <div>
-        <div class="th-label">Marrymap Agent</div>
+        <div class="th-label">Planning your day</div>
         <div class="th-couple" id="agent-couple-name"></div>
       </div>
       <div class="terminal-dots"><span></span><span></span><span></span></div>
@@ -608,7 +608,7 @@
       <h2 class="ph-title" id="plan-title"></h2>
       <div class="ph-sub" id="plan-sub"></div>
     </div>
-    <button class="rerun-btn" id="rerun-btn">↻ Re-run agent</button>
+    <button class="rerun-btn" id="rerun-btn">↻ Plan again</button>
   </div>
   <div class="tabs-nav">
     <button class="tab-btn active" data-tab="invite">Invite</button>
@@ -733,13 +733,13 @@
   <p class="vd-blurb" id="vd-blurb"></p>
   <div class="vd-section">What's included</div>
   <ul class="vd-includes" id="vd-includes"></ul>
-  <div class="vd-section">Why your agent picked this</div>
+  <div class="vd-section">Why we picked this</div>
   <ul class="vd-why" id="vd-why"></ul>
   <div class="vd-section">Reviews</div>
   <div class="vd-reviews" id="vd-reviews"></div>
   <div class="vd-section">Style note</div>
   <div class="vd-style" id="vd-style"></div>
-  <div class="vd-booked">✓ Booked by your Marrymap agent</div>
+  <div class="vd-booked">✓ Booked for your day</div>
 </aside>
 
 <div class="share-toast" id="share-toast" role="status" aria-live="polite"></div>
@@ -1341,7 +1341,7 @@ function buildWhyReasons(vendor, couple){
   const cat = vendor.category;
   const reasons = [];
 
-  reasons.push(`Best marketplace fit for ${couple.guests} guests in ${place} without overcrowding the day.`);
+  reasons.push(`Best fit for ${couple.guests} guests in ${place} — keeps the day feeling intimate, not crowded.`);
 
   if(couple.tier === 'high'){
     reasons.push('Elevated service windows and finishes that match your budget tier.');
@@ -1392,7 +1392,7 @@ function vendorDetail(vendor, couple){
   const why = buildWhyReasons(vendor, couple);
   return {
     ...vendor,
-    blurb: CATEGORY_BLURBS[cat] || 'Booked and confirmed by your Marrymap agent.',
+    blurb: CATEGORY_BLURBS[cat] || 'Booked and confirmed for your wedding day.',
     includes,
     why,
     reviews: buildReviews(vendor, couple),
@@ -1486,7 +1486,7 @@ let agentTimer = null;
 function buildAgentLines(couple){
   const lines = [];
   const place = placeName(couple);
-  lines.push({icon:'✦', cls:'ink', text:`Searching marketplace: ${place}, ${couple.guests} guests, $${shortK(couple.budgetTotal)}…`});
+  lines.push({icon:'✦', cls:'ink', text:`Finding the perfect vendors in ${place} — ${couple.guests} guests, ${fmtMoney(couple.budgetTotal)} budget…`});
   if(couple.notes){
     lines.push({icon:'✦', cls:'ink', text:`Reading your notes — “${truncateNotes(couple.notes, 96)}” … shaping picks around that.`});
   }
@@ -1501,7 +1501,7 @@ function buildAgentLines(couple){
     }
   });
   const total = couple.vendors.reduce((s,v) => s + v.price, 0);
-  lines.push({icon:'✦', cls:'ink', text:`Plan ready — ${fmtMoney(total)} of ${fmtMoney(couple.budgetTotal)} allocated · ${couple.tier} tier`});
+  lines.push({icon:'✦', cls:'ink', text:`Your wedding plan is ready — ${fmtMoney(total)} of ${fmtMoney(couple.budgetTotal)} allocated · ${couple.tier} tier`});
   return lines;
 }
 
@@ -1600,7 +1600,7 @@ function renderPlan(couple){
       <div class="v-right">
         ${v.flag ? `<span class="v-flag">⚑ ${v.flag}</span>` : ''}
         <span class="v-price">${fmtMoney(v.price)}</span>
-        <span class="v-status">✓ Booked by your agent</span>
+        <span class="v-status">✓ Booked for your day</span>
       </div>
     `;
     row.addEventListener('click', () => openVendorDetail(v, couple));
@@ -1622,7 +1622,7 @@ function renderPlan(couple){
       ${v.flag ? `
         <div class="budget-flag-note">
           <span class="spark">${sparkBars()}</span>
-          <span>⚑ ${v.flag} — agent negotiating a lower rate</span>
+          <span>⚑ ${v.flag} — working on a better rate for you</span>
         </div>` : ''}
     `;
     budgetList.appendChild(row);
