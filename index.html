@@ -234,6 +234,168 @@
   }
   .cta-btn:hover{transform:translateY(-2px);}
 
+  /* ================= SHARE CARD ================= */
+  .share-section{max-width:820px;margin:0 auto;}
+  .share-intro{
+    text-align:center;margin-bottom:32px;
+  }
+  .share-intro h3{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(22px,2.8vw,28px);color:var(--paper);margin:0 0 10px;
+  }
+  .share-intro p{
+    font-size:14px;line-height:1.6;color:rgba(250,247,242,.55);margin:0;max-width:480px;margin-inline:auto;
+  }
+  .share-layout{
+    display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:start;
+  }
+  @media (max-width:720px){
+    .share-layout{grid-template-columns:1fr;}
+  }
+  .wedding-card{
+    position:relative;background:var(--paper);color:var(--ink);
+    border-radius:4px;padding:52px 44px 48px;text-align:center;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.6) inset,
+      0 40px 80px -36px rgba(0,0,0,.55),
+      0 0 0 1px rgba(0,0,0,.04);
+    overflow:hidden;
+    transform:rotate(-0.4deg);
+    transition:transform .35s ease;
+  }
+  .wedding-card:hover{transform:rotate(0deg);}
+  .wedding-card::before{
+    content:"";position:absolute;inset:10px;
+    border:1px solid color-mix(in srgb, var(--gold) 55%, transparent);
+    pointer-events:none;
+  }
+  .wedding-card::after{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wc-flourish{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:22px;font-weight:600;
+  }
+  .wc-flourish::before,.wc-flourish::after{
+    content:"✦";margin:0 10px;font-size:9px;opacity:.7;
+  }
+  .wc-save{
+    font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:rgba(28,27,46,.42);margin-bottom:14px;font-weight:600;
+  }
+  .wc-names{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(36px,5vw,52px);line-height:1.08;margin:0 0 8px;
+    letter-spacing:-.01em;
+  }
+  .wc-ampersand{
+    display:block;font-size:.42em;color:var(--accent);margin:6px 0;font-weight:400;
+  }
+  .wc-divider{
+    width:64px;height:1px;margin:22px auto;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .wc-details{
+    font-size:13.5px;line-height:1.85;color:rgba(28,27,46,.62);font-weight:300;
+  }
+  .wc-details strong{
+    display:block;font-family:'Fraunces',serif;font-style:italic;
+    font-size:17px;color:var(--ink);font-weight:500;margin-bottom:2px;
+  }
+  .wc-message{
+    margin-top:24px;padding-top:22px;
+    border-top:1px solid rgba(28,27,46,.08);
+    font-size:15px;line-height:1.75;color:rgba(28,27,46,.72);
+    font-weight:300;font-style:italic;max-width:420px;margin-inline:auto;
+  }
+  .wc-footer{
+    margin-top:28px;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(28,27,46,.35);font-weight:600;
+  }
+  .share-actions{
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .share-actions-label{
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);font-weight:600;margin-bottom:4px;
+  }
+  .share-btn{
+    display:flex;align-items:center;gap:10px;width:100%;
+    padding:13px 16px;border-radius:12px;text-align:left;
+    background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.14);
+    color:var(--paper);font-size:13.5px;font-weight:500;
+    transition:background .18s,border-color .18s,transform .18s;
+  }
+  .share-btn:hover{
+    background:rgba(250,247,242,.12);border-color:rgba(250,247,242,.28);
+    transform:translateX(2px);
+  }
+  .share-btn.primary{
+    background:var(--accent);color:var(--ink);border-color:transparent;
+    font-weight:600;justify-content:center;
+  }
+  .share-btn.primary:hover{background:color-mix(in srgb, var(--accent) 88%, #fff);transform:translateY(-1px);}
+  .share-btn .sb-icon{
+    width:32px;height:32px;border-radius:8px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(250,247,242,.08);font-size:15px;
+  }
+  .share-btn.primary .sb-icon{background:rgba(28,27,46,.12);}
+  .share-btn .sb-text{display:flex;flex-direction:column;gap:2px;}
+  .share-btn .sb-sub{font-size:11px;color:rgba(250,247,242,.45);font-weight:400;}
+  .share-btn.primary .sb-sub{color:rgba(28,27,46,.55);}
+  .share-preview-box{
+    margin-top:18px;padding:14px 16px;border-radius:12px;
+    background:rgba(250,247,242,.04);border:1px solid rgba(250,247,242,.1);
+  }
+  .share-preview-label{
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(250,247,242,.38);margin-bottom:8px;font-weight:600;
+  }
+  .share-preview-text{
+    font-size:12px;line-height:1.65;color:rgba(250,247,242,.55);
+    font-style:italic;word-break:break-word;
+  }
+  .share-toast{
+    position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+    padding:12px 22px;border-radius:999px;z-index:200;
+    background:var(--paper);color:var(--ink);font-size:13px;font-weight:600;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.5);
+    opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.22,.8,.28,1), opacity .35s ease;
+  }
+  .share-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+  /* Standalone shared card view */
+  #shared-card{
+    display:flex;align-items:center;justify-content:center;
+    padding:6vh 5vw;overflow-y:auto;
+    background:
+      radial-gradient(ellipse 700px 400px at 30% 0%, rgba(201,162,103,.12), transparent 55%),
+      radial-gradient(ellipse 600px 420px at 90% 100%, rgba(181,98,75,.08), transparent 55%),
+      linear-gradient(165deg, #1C1B2E 0%, #242038 48%, #1a2430 100%);
+  }
+  .shared-card-shell{width:min(480px,100%);}
+  .shared-card-mark{
+    text-align:center;font-family:'Fraunces',serif;font-style:italic;
+    font-size:14px;color:rgba(250,247,242,.45);margin-bottom:24px;letter-spacing:.04em;
+  }
+  .shared-card-shell .wedding-card{transform:none;}
+  .shared-card-cta{
+    display:block;width:100%;margin-top:24px;text-align:center;
+    font-size:13px;color:rgba(250,247,242,.5);text-decoration:none;
+    padding:12px;border-radius:999px;border:1px solid rgba(250,247,242,.14);
+    transition:color .2s,border-color .2s;
+  }
+  .shared-card-cta:hover{color:var(--paper);border-color:rgba(250,247,242,.35);}
+
+  .wedding-card.invite-card{
+    transform:none;text-align:center;
+  }
+  .wedding-card.invite-card:hover{transform:none;}
+  .wedding-card.invite-card::before{inset:14px;border-radius:12px;}
+  .wedding-card.invite-card::after{display:none;}
+
   .vendor-row{
     display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;
     padding:18px 4px;border-bottom:1px solid rgba(250,247,242,.09);
@@ -450,6 +612,7 @@
   </div>
   <div class="tabs-nav">
     <button class="tab-btn active" data-tab="invite">Invite</button>
+    <button class="tab-btn" data-tab="share">Share Card</button>
     <button class="tab-btn" data-tab="vendors">Vendors</button>
     <button class="tab-btn" data-tab="budget">Budget</button>
     <button class="tab-btn wedding-tab" data-tab="wedding">Your Wedding</button>
@@ -468,6 +631,55 @@
         <button class="cta-btn" data-go-scene>Go to your wedding →</button>
       </div>
     </div>
+    <div class="tab-panel" id="tab-share">
+      <div class="share-section">
+        <div class="share-intro">
+          <h3>Send your wedding card</h3>
+          <p>A save-the-date card your friends can open anywhere — share by text, email, or link.</p>
+        </div>
+        <div class="share-layout">
+          <div class="wedding-card invite-card" id="wedding-card">
+            <div class="invite-loc" id="wc-loc"></div>
+            <h3 class="invite-names wc-names" id="wc-names"></h3>
+            <div class="invite-date" id="wc-date"></div>
+            <div class="invite-date" id="wc-guests"></div>
+            <p class="invite-copy" id="wc-copy"></p>
+            <div class="invite-notes hidden" id="wc-notes">
+              <span class="invite-notes-label">From your notes</span>
+              <span id="wc-notes-text"></span>
+            </div>
+          </div>
+          <div class="share-actions">
+            <div class="share-actions-label">Share with friends</div>
+            <button type="button" class="share-btn primary" id="share-native">
+              <span class="sb-icon">↗</span>
+              <span class="sb-text">
+                <span>Share card</span>
+                <span class="sb-sub">Messages, WhatsApp, email…</span>
+              </span>
+            </button>
+            <button type="button" class="share-btn" id="share-copy-link">
+              <span class="sb-icon">🔗</span>
+              <span class="sb-text">
+                <span>Copy link</span>
+                <span class="sb-sub">Friends open your card in the browser</span>
+              </span>
+            </button>
+            <button type="button" class="share-btn" id="share-copy-message">
+              <span class="sb-icon">✉</span>
+              <span class="sb-text">
+                <span>Copy message</span>
+                <span class="sb-sub">Ready-to-send invite text</span>
+              </span>
+            </button>
+            <div class="share-preview-box">
+              <div class="share-preview-label">Preview message</div>
+              <div class="share-preview-text" id="share-preview"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="tab-panel" id="tab-vendors">
       <div id="vendor-list"></div>
     </div>
@@ -478,6 +690,24 @@
         <div class="bt-value"><span id="budget-total-value">$0</span> <small id="budget-total-of"></small></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ================= SHARED CARD (link opens here) ================= -->
+<div id="shared-card" class="screen hidden">
+  <div class="shared-card-shell">
+    <div class="shared-card-mark">Marrymap</div>
+    <div class="wedding-card invite-card" id="shared-wedding-card">
+      <div class="invite-loc" id="swc-loc"></div>
+      <h3 class="invite-names wc-names" id="swc-names"></h3>
+      <div class="invite-date" id="swc-date"></div>
+      <p class="invite-copy" id="swc-copy"></p>
+      <div class="invite-notes hidden" id="swc-notes">
+        <span class="invite-notes-label">From your notes</span>
+        <span id="swc-notes-text"></span>
+      </div>
+    </div>
+    <a class="shared-card-cta" href="#" id="shared-plan-link">Plan your own wedding with Marrymap →</a>
   </div>
 </div>
 
@@ -511,6 +741,8 @@
   <div class="vd-style" id="vd-style"></div>
   <div class="vd-booked">✓ Booked by your Marrymap agent</div>
 </aside>
+
+<div class="share-toast" id="share-toast" role="status" aria-live="polite"></div>
 
 <script>
 /* =========================================================================
@@ -744,6 +976,162 @@ function truncateNotes(s, n=90){
   const t = sanitizeNotes(s);
   if(t.length <= n) return t;
   return t.slice(0, n - 1).replace(/\s+\S*$/, '').trimEnd() + '…';
+}
+
+function splitCoupleNames(names){
+  const parts = String(names || '').split('&').map(s => s.trim()).filter(Boolean);
+  if(parts.length >= 2) return { first: parts[0], second: parts.slice(1).join(' & ') };
+  return { first: names || 'Partner One', second: 'Partner Two' };
+}
+
+function cardMessage(couple){
+  const place = couple.location || 'Somewhere beautiful';
+  const msg = couple.inviteCopy || `Join us as we celebrate our wedding in ${place}.`;
+  let text = `${couple.names} · ${couple.date}\n${place}`;
+  if(couple.guests) text += `\n${couple.guests} guests`;
+  text += `\n\n${msg}`;
+  if(couple.notes) text += `\n\n${couple.notes}`;
+  return text;
+}
+
+function encodeSharePayload(couple){
+  const payload = {
+    n: couple.names,
+    d: couple.date,
+    l: couple.location,
+    m: couple.inviteCopy,
+    o: couple.notes || '',
+    g: couple.guests || 0,
+    a: couple.palette?.accent,
+    w: couple.palette?.glow
+  };
+  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function decodeSharePayload(token){
+  try {
+    const padded = token.replace(/-/g, '+').replace(/_/g, '/');
+    const json = decodeURIComponent(escape(atob(padded)));
+    const p = JSON.parse(json);
+    if(!p.n) return null;
+    return {
+      names: p.n,
+      date: p.d || '',
+      location: p.l || '',
+      inviteCopy: p.m || '',
+      notes: p.o || '',
+      guests: p.g || 0,
+      palette: { accent: p.a || '#F2A93B', glow: p.w || '#E0447C', bg: '#2a1f3d' }
+    };
+  } catch (_) {
+    return null;
+  }
+}
+
+function buildShareUrl(couple){
+  const base = window.location.href.split('#')[0].split('?')[0];
+  return `${base}#card=${encodeSharePayload(couple)}`;
+}
+
+function showShareToast(msg){
+  const el = $('#share-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(showShareToast._t);
+  showShareToast._t = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+async function copyText(text){
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (_) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }
+}
+
+function renderCardNames(el, names){
+  if(!el) return;
+  const { first, second } = splitCoupleNames(names);
+  el.innerHTML = `${first}<span class="wc-ampersand">&</span>${second}`;
+}
+
+function renderInvitePanels(couple){
+  if(!couple) return;
+
+  // Invite tab
+  $('#inv-loc').textContent = couple.location;
+  $('#inv-names').textContent = couple.names;
+  $('#inv-date').textContent = couple.date;
+  $('#inv-copy').textContent = couple.inviteCopy;
+  const notesEl = $('#inv-notes');
+  const notesText = $('#inv-notes-text');
+  if(couple.notes){
+    notesText.textContent = couple.notes;
+    notesEl.classList.remove('hidden');
+  } else {
+    notesText.textContent = '';
+    notesEl.classList.add('hidden');
+  }
+
+  // Share card — same wedding details
+  $('#wc-loc').textContent = couple.location;
+  renderCardNames($('#wc-names'), couple.names);
+  $('#wc-date').textContent = couple.date;
+  $('#wc-copy').textContent = couple.inviteCopy;
+  $('#wc-guests').textContent = couple.guests ? `${couple.guests} guests` : '';
+
+  const wcNotes = $('#wc-notes');
+  const wcNotesText = $('#wc-notes-text');
+  if(couple.notes){
+    wcNotesText.textContent = couple.notes;
+    wcNotes.classList.remove('hidden');
+  } else {
+    wcNotesText.textContent = '';
+    wcNotes.classList.add('hidden');
+  }
+
+  $('#share-preview').textContent = cardMessage(couple);
+}
+
+function fillSharedCard(couple){
+  if(!couple) return;
+  renderCardNames($('#swc-names'), couple.names);
+  $('#swc-date').textContent = couple.date;
+  $('#swc-loc').textContent = couple.location;
+  $('#swc-copy').textContent = couple.inviteCopy;
+  const swcNotes = $('#swc-notes');
+  const swcNotesText = $('#swc-notes-text');
+  if(couple.notes){
+    swcNotesText.textContent = couple.notes;
+    swcNotes.classList.remove('hidden');
+  } else {
+    swcNotesText.textContent = '';
+    swcNotes.classList.add('hidden');
+  }
+  if(couple.palette) setPalette(couple);
+}
+
+function openSharedCardFromHash(){
+  const hash = window.location.hash || '';
+  const match = hash.match(/^#card=([A-Za-z0-9_-]+)/);
+  if(!match) return false;
+  const couple = decodeSharePayload(match[1]);
+  if(!couple) return false;
+  $$('.screen').forEach(s => s.classList.add('hidden'));
+  $('#shared-card').classList.remove('hidden');
+  currentScreen = 'shared-card';
+  fillSharedCard(couple);
+  return true;
 }
 
 function buildWeddingFromForm(raw){
@@ -1019,7 +1407,7 @@ function vendorDetail(vendor, couple){
 let currentScreen = 'landing';
 let currentCouple = null;
 let vendorDrawerOpen = false;
-const BACK_MAP = { agent:'landing', plan:'landing', scene:'plan' };
+const BACK_MAP = { agent:'landing', plan:'landing', scene:'plan', 'shared-card':'landing' };
 
 function setPalette(couple){
   const root = document.body.style;
@@ -1195,19 +1583,7 @@ function renderPlan(couple){
   $('#plan-title').textContent = couple.names;
   $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier} tier`;
 
-  $('#inv-loc').textContent = couple.location;
-  $('#inv-names').textContent = couple.names;
-  $('#inv-date').textContent = couple.date;
-  $('#inv-copy').textContent = couple.inviteCopy;
-  const notesEl = $('#inv-notes');
-  const notesText = $('#inv-notes-text');
-  if(couple.notes){
-    notesText.textContent = couple.notes;
-    notesEl.classList.remove('hidden');
-  } else {
-    notesText.textContent = '';
-    notesEl.classList.add('hidden');
-  }
+  renderInvitePanels(couple);
 
   const vendorList = $('#vendor-list');
   vendorList.innerHTML = '';
@@ -1265,6 +1641,7 @@ function activateTab(name){
   $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   $$('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
   if(name === 'budget') animateBudget();
+  if(name === 'share' && currentCouple) renderInvitePanels(currentCouple);
 }
 
 function animateBudget(){
@@ -1301,6 +1678,53 @@ $$('[data-go-scene]').forEach(btn => btn.addEventListener('click', () => navigat
 $('#rerun-btn').addEventListener('click', () => navigate('agent', currentCouple));
 
 /* =========================================================================
+   SHARE CARD
+   ========================================================================= */
+$('#share-copy-link').addEventListener('click', async () => {
+  if(!currentCouple) return;
+  const ok = await copyText(buildShareUrl(currentCouple));
+  showShareToast(ok ? 'Link copied — send it to your friends!' : 'Could not copy link');
+});
+
+$('#share-copy-message').addEventListener('click', async () => {
+  if(!currentCouple) return;
+  const text = cardMessage(currentCouple) + '\n\n' + buildShareUrl(currentCouple);
+  const ok = await copyText(text);
+  showShareToast(ok ? 'Invite message copied!' : 'Could not copy message');
+});
+
+$('#share-native').addEventListener('click', async () => {
+  if(!currentCouple) return;
+  const url = buildShareUrl(currentCouple);
+  const text = cardMessage(currentCouple);
+  if(navigator.share){
+    try {
+      await navigator.share({
+        title: `${currentCouple.names} — Save the Date`,
+        text,
+        url
+      });
+      return;
+    } catch (err) {
+      if(err.name === 'AbortError') return;
+    }
+  }
+  const ok = await copyText(text + '\n\n' + url);
+  showShareToast(ok ? 'Copied — paste into Messages or email' : 'Could not share');
+});
+
+$('#shared-plan-link').addEventListener('click', e => {
+  e.preventDefault();
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+  navigate('landing');
+});
+
+window.addEventListener('hashchange', () => {
+  if(openSharedCardFromHash()) return;
+  if(currentScreen === 'shared-card') navigate('landing');
+});
+
+/* =========================================================================
    THREE.JS WEDDING SCENE
    ========================================================================= */
 let renderer, scene, camera;
@@ -1314,9 +1738,11 @@ const FLY_MS = 2600;
 let confettiPoints = null;
 let petalPoints = null;
 let seaMesh = null;
+let shallowSeaMesh = null;
+let foamPoints = null;
 let sceneBuildId = 0;
 
-const SKY_URL = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80';
+const SKY_URL = 'https://images.unsplash.com/photo-1519046909934-4f04d5158061?auto=format&fit=crop&w=1920&q=85';
 
 function initThree(){
   if(typeof THREE === 'undefined' || !THREE.WebGLRenderer){
@@ -1326,6 +1752,10 @@ function initThree(){
   renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false, powerPreference:'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
+  if(THREE.ACESFilmicToneMapping){
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+  }
   canvasHost.innerHTML = '';
   canvasHost.appendChild(renderer.domElement);
   window.addEventListener('resize', () => {
@@ -1391,6 +1821,360 @@ function disposeMaterial(mt){
     if(mt[k]) mt[k].dispose();
   });
   mt.dispose();
+}
+
+function vendorText(v){
+  return `${v.name || ''} ${v.note || ''}`.toLowerCase();
+}
+
+function vendorHas(v, ...keys){
+  const t = vendorText(v);
+  return keys.some(k => t.includes(k.toLowerCase()));
+}
+
+function addVendorSceneElements(scene, couple, tier){
+  const byCat = {};
+  (couple.vendors || []).forEach(v => { byCat[v.category] = v; });
+  scene.userData.vendorLights = [];
+
+  if(byCat.Music) addMusicSetup(scene, couple, byCat.Music, tier);
+  if(byCat.Flowers) addFlowerDecor(scene, couple, byCat.Flowers, tier);
+  if(byCat.Catering) addCateringSetup(scene, couple, byCat.Catering, tier);
+  if(byCat.Venue) addVenueFeatures(scene, couple, byCat.Venue, tier);
+  if(byCat.Travel) addTravelWelcome(scene, couple, byCat.Travel, tier);
+}
+
+function addMusicSetup(scene, couple, vendor, tier){
+  const group = new THREE.Group();
+  group.position.set(5.2, 0, 6.5);
+  group.rotation.y = -0.55;
+  const accent = couple.palette.accent;
+  const glow = couple.palette.glow;
+  const isDJ = vendorHas(vendor, 'dj');
+  const isLive = vendorHas(vendor, 'quartet', 'string', 'trio', 'mariachi', 'gamelan', 'bouzouki', 'taarab', 'ensemble', 'dhol');
+
+  if(isDJ){
+    const deck = new THREE.Mesh(
+      new THREE.BoxGeometry(1.35, 0.78, 0.72),
+      new THREE.MeshStandardMaterial({ color:0x1a1824, roughness:0.55, metalness:0.35 })
+    );
+    deck.position.y = 0.39;
+    group.add(deck);
+    const laptop = new THREE.Mesh(
+      new THREE.BoxGeometry(0.42, 0.03, 0.28),
+      new THREE.MeshStandardMaterial({ color:0x2a3040, emissive:accent, emissiveIntensity:0.35 })
+    );
+    laptop.position.set(0, 0.8, 0.05);
+    group.add(laptop);
+    [-0.55, 0.55].forEach(sx => {
+      const spk = new THREE.Mesh(
+        new THREE.BoxGeometry(0.28, 1.05, 0.28),
+        new THREE.MeshStandardMaterial({ color:0x111018, roughness:0.45, metalness:0.5 })
+      );
+      spk.position.set(sx, 0.52, -0.35);
+      group.add(spk);
+      const cone = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.11, 0.07, 0.08, 12),
+        new THREE.MeshStandardMaterial({ color:0x22202a, emissive:glow, emissiveIntensity:0.25 })
+      );
+      cone.position.set(sx, 1.08, -0.35);
+      group.add(cone);
+    });
+    if(vendorHas(vendor, 'dhol')){
+      const drum = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.22, 0.22, 0.35, 16),
+        new THREE.MeshStandardMaterial({ color:0x8B4513, roughness:0.8 })
+      );
+      drum.position.set(-1.1, 0.18, 0.2);
+      drum.rotation.z = Math.PI / 2;
+      group.add(drum);
+    }
+    const djLight = new THREE.PointLight(glow, tier === 'high' ? 2.4 : 1.4, 8, 2);
+    djLight.position.set(0, 1.6, 0.2);
+    group.add(djLight);
+    scene.userData.vendorLights.push({ light: djLight, base: djLight.intensity, speed: 0.009 });
+  } else {
+    const stage = new THREE.Mesh(
+      new THREE.BoxGeometry(2.4, 0.18, 1.1),
+      new THREE.MeshStandardMaterial({
+        color: mixColor('#3a3548', accent, 0.2), roughness:0.65, metalness: tier === 'high' ? 0.2 : 0.05
+      })
+    );
+    stage.position.y = 0.09;
+    group.add(stage);
+    const playerCount = vendorHas(vendor, 'quartet', 'gamelan', 'ensemble') ? 4 : 3;
+    for(let i=0; i<playerCount; i++){
+      const px = -0.75 + i * (1.5 / Math.max(playerCount - 1, 1));
+      const body = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.12, 0.14, 0.55, 10),
+        new THREE.MeshStandardMaterial({ color:0x2a2438, roughness:0.85 })
+      );
+      body.position.set(px, 0.46, 0);
+      group.add(body);
+      const instrumentColor = vendorHas(vendor, 'mariachi') ? 0xC96F4A
+        : vendorHas(vendor, 'gamelan') ? 0xC9A267
+        : vendorHas(vendor, 'bouzouki', 'taarab') ? 0x8B6914
+        : 0x4a4038;
+      const inst = new THREE.Mesh(
+        vendorHas(vendor, 'gamelan') ? new THREE.BoxGeometry(0.35, 0.12, 0.22) : new THREE.BoxGeometry(0.38, 0.06, 0.12),
+        new THREE.MeshStandardMaterial({ color: instrumentColor, emissive: accent, emissiveIntensity:0.15 })
+      );
+      inst.position.set(px, 0.62, 0.18);
+      group.add(inst);
+    }
+    const bandLight = new THREE.PointLight(accent, tier === 'high' ? 1.8 : 1.1, 7, 2);
+    bandLight.position.set(0, 1.4, 0.3);
+    group.add(bandLight);
+    scene.userData.vendorLights.push({ light: bandLight, base: bandLight.intensity, speed: 0.006 });
+  }
+  scene.add(group);
+}
+
+function addFlowerDecor(scene, couple, vendor, tier){
+  const group = new THREE.Group();
+  const flowerMat = new THREE.MeshStandardMaterial({
+    color: couple.palette.glow,
+    emissive: couple.palette.glow,
+    emissiveIntensity: tier === 'high' ? 1.0 : 0.65,
+    roughness: 0.45
+  });
+  const leafMat = new THREE.MeshStandardMaterial({
+    color: mixColor('#4a6b4a', couple.palette.accent, 0.15),
+    roughness: 0.9
+  });
+  const priceRatio = vendor.price / Math.max(couple.budgetTotal, 1);
+  const density = tier === 'high' ? 1.35 : tier === 'low' ? 0.75 : 1;
+  const aisleMarkers = Math.round(6 + priceRatio * 14 * density);
+
+  for(let i=0; i<aisleMarkers; i++){
+    const z = -0.5 + (i / Math.max(aisleMarkers - 1, 1)) * 10;
+    [-1.15, 1.15].forEach(sx => {
+      const cluster = new THREE.Group();
+      cluster.position.set(sx * 2.8, 0, z);
+      const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 0.22, 10), leafMat);
+      pot.position.y = 0.11;
+      cluster.add(pot);
+      for(let f=0; f<(tier === 'high' ? 4 : 3); f++){
+        const bloom = new THREE.Mesh(
+          new THREE.SphereGeometry(tier === 'high' ? 0.11 : 0.09, 10, 10),
+          flowerMat
+        );
+        bloom.position.set((f - 1) * 0.08, 0.28 + f * 0.05, (f % 2 ? 0.04 : -0.04));
+        cluster.add(bloom);
+      }
+      group.add(cluster);
+    });
+  }
+
+  [-1.8, 1.8].forEach(sx => {
+    const pillar = new THREE.Group();
+    pillar.position.set(sx, 0, -2.2);
+    const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 1.6, 8), leafMat);
+    stand.position.y = 0.8;
+    pillar.add(stand);
+    for(let h=0; h<5; h++){
+      const orb = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 10), flowerMat);
+      orb.position.set(0, 0.35 + h * 0.28, 0);
+      pillar.add(orb);
+    }
+    group.add(pillar);
+  });
+
+  if(vendorHas(vendor, 'marigold', 'orchid', 'bougainvillea', 'frangipani', 'rose', 'kente')){
+    const archBase = new THREE.Mesh(
+      new THREE.TorusGeometry(0.55, 0.08, 8, 24, Math.PI),
+      flowerMat
+    );
+    archBase.rotation.x = Math.PI / 2;
+    archBase.position.set(0, 0.12, -2);
+    group.add(archBase);
+  }
+  scene.add(group);
+}
+
+function addCateringSetup(scene, couple, vendor, tier){
+  const group = new THREE.Group();
+  const clothColor = mixColor('#FAF7F2', couple.palette.accent, 0.12);
+  const tableCount = tier === 'high' ? 3 : tier === 'low' ? 1 : 2;
+  const stations = vendorHas(vendor, 'bar', 'mezcal', 'chaat', 'seafood', 'grill', 'taco', 'wine', 'antipasti') ? tableCount + 1 : tableCount;
+
+  for(let i=0; i<stations; i++){
+    const table = new THREE.Group();
+    const x = -2.2 + i * (4.4 / Math.max(stations - 1, 1));
+    table.position.set(x, 0, 10.5);
+    const top = new THREE.Mesh(
+      new THREE.BoxGeometry(1.55, 0.06, 0.72),
+      new THREE.MeshStandardMaterial({ color: clothColor, roughness: 0.92 })
+    );
+    top.position.y = 0.78;
+    table.add(top);
+    const legMat = new THREE.MeshStandardMaterial({ color: 0x8B7355, roughness: 0.85 });
+    [[-0.65, -0.28], [0.65, -0.28], [-0.65, 0.28], [0.65, 0.28]].forEach(([lx, lz]) => {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.78, 0.06), legMat);
+      leg.position.set(lx, 0.39, lz);
+      table.add(leg);
+    });
+    const dishCount = tier === 'high' ? 4 : 2;
+    for(let d=0; d<dishCount; d++){
+      const dish = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.12, 0.1, 0.08, 10),
+        new THREE.MeshStandardMaterial({
+          color: mixColor('#e8dcc8', couple.palette.glow, 0.08),
+          emissive: couple.palette.accent,
+          emissiveIntensity: 0.08
+        })
+      );
+      dish.position.set(-0.45 + d * 0.3, 0.86, 0);
+      table.add(dish);
+    }
+    if(vendorHas(vendor, 'wine', 'mezcal', 'bar')){
+      const bottle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.04, 0.04, 0.28, 8),
+        new THREE.MeshStandardMaterial({ color: vendorHas(vendor, 'wine') ? 0x5c2030 : 0x2a6040, roughness: 0.4, metalness: 0.2 })
+      );
+      bottle.position.set(0.45, 0.98, 0.15);
+      table.add(bottle);
+    }
+    group.add(table);
+  }
+
+  if(tier !== 'low'){
+    const cake = new THREE.Group();
+    cake.position.set(0, 0, 9.2);
+    for(let layer=0; layer<(tier === 'high' ? 3 : 2); layer++){
+      const r = 0.28 - layer * 0.06;
+      const tierMesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(r, r + 0.02, 0.18, 16),
+        new THREE.MeshStandardMaterial({ color: 0xFFF5E8, roughness: 0.75 })
+      );
+      tierMesh.position.y = 0.85 + layer * 0.18;
+      cake.add(tierMesh);
+    }
+    group.add(cake);
+  }
+  scene.add(group);
+}
+
+function addVenueFeatures(scene, couple, vendor, tier){
+  const group = new THREE.Group();
+  const whiteMat = new THREE.MeshStandardMaterial({ color: 0xF5F0E8, roughness: 0.82 });
+  const woodMat = new THREE.MeshStandardMaterial({ color: 0x6B4E3D, roughness: 0.9 });
+  const vineMat = new THREE.MeshStandardMaterial({ color: mixColor('#5a7048', couple.palette.accent, 0.2), roughness: 0.95 });
+
+  if(vendorHas(vendor, 'vineyard', 'borgo', 'terrace', 'barrel', 'stone')){
+    [-4.5, 4.5].forEach(sx => {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, 2.4, 8), woodMat);
+      post.position.set(sx, 1.2, -1);
+      group.add(post);
+      for(let r=0; r<4; r++){
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.04, 3.2), vineMat);
+        rail.position.set(sx, 0.7 + r * 0.45, 0.5);
+        rail.rotation.x = 0.08 * (r % 2 ? 1 : -1);
+        group.add(rail);
+      }
+    });
+    if(vendorHas(vendor, 'barrel')){
+      [-3.8, 3.8].forEach(sx => {
+        const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.34, 0.55, 12), woodMat);
+        barrel.position.set(sx, 0.28, 8.5);
+        group.add(barrel);
+      });
+    }
+  }
+
+  if(vendorHas(vendor, 'cliff', 'caldera', 'villa', 'mykonos', 'whitewash')){
+    [-3.2, 3.2].forEach(sx => {
+      const wall = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.8, 2.2), whiteMat);
+      wall.position.set(sx, 0.9, -3.5);
+      group.add(wall);
+      const cap = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.12, 2.35), whiteMat);
+      cap.position.set(sx, 1.86, -3.5);
+      group.add(cap);
+    });
+  }
+
+  if(vendorHas(vendor, 'cenote', 'jungle', 'clearing')){
+    for(let i=0; i<6; i++){
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.14, 0.2, 3.2 + (i % 3) * 0.4, 8),
+        new THREE.MeshStandardMaterial({ color: mixColor('#4a3828', '#2a4020', 0.35), roughness: 0.95 })
+      );
+      const angle = (i / 6) * Math.PI * 2;
+      trunk.position.set(Math.cos(angle) * 11, 1.6, -4 + Math.sin(angle) * 3);
+      group.add(trunk);
+      const canopy = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9 + (i % 2) * 0.3, 8, 8),
+        new THREE.MeshStandardMaterial({ color: mixColor('#2d5a28', couple.palette.accent, 0.08), roughness: 1 })
+      );
+      canopy.position.copy(trunk.position);
+      canopy.position.y += 2.1;
+      group.add(canopy);
+    }
+  }
+
+  if(vendorHas(vendor, 'beach', 'pavilion', 'lawn', 'ocean')){
+    const canopyMat = new THREE.MeshStandardMaterial({
+      color: mixColor('#FAF7F2', couple.palette.accent, 0.08),
+      transparent: true,
+      opacity: tier === 'high' ? 0.55 : 0.38,
+      side: THREE.DoubleSide,
+      roughness: 1
+    });
+    const canopy = new THREE.Mesh(new THREE.PlaneGeometry(8, 5), canopyMat);
+    canopy.rotation.x = -Math.PI / 2 + 0.12;
+    canopy.position.set(0, 3.8, -1);
+    group.add(canopy);
+    [-3.5, 3.5].forEach(sx => {
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 3.9, 8), woodMat);
+      pole.position.set(sx, 1.95, -3.2);
+      group.add(pole);
+    });
+  }
+
+  if(vendorHas(vendor, 'chapel', 'pavilion', 'uluwatu')){
+    const peak = new THREE.Mesh(
+      new THREE.ConeGeometry(0.9, 1.2, 4),
+      new THREE.MeshStandardMaterial({ color: mixColor('#8B6914', couple.palette.accent, 0.15), roughness: 0.75 })
+    );
+    peak.position.set(0, 3.2, -2);
+    peak.rotation.y = Math.PI / 4;
+    group.add(peak);
+  }
+
+  scene.add(group);
+}
+
+function addTravelWelcome(scene, couple, vendor, tier){
+  const group = new THREE.Group();
+  group.position.set(0, 0, 11.8);
+  const postMat = new THREE.MeshStandardMaterial({ color: 0x8B7355, roughness: 0.85 });
+  [-0.9, 0.9].forEach(sx => {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 1.5, 8), postMat);
+    post.position.set(sx, 0.75, 0);
+    group.add(post);
+  });
+  const sign = new THREE.Mesh(
+    new THREE.BoxGeometry(2.1, 0.55, 0.08),
+    new THREE.MeshStandardMaterial({
+      color: mixColor('#FAF7F2', couple.palette.accent, 0.1),
+      emissive: couple.palette.accent,
+      emissiveIntensity: tier === 'high' ? 0.25 : 0.12,
+      roughness: 0.9
+    })
+  );
+  sign.position.y = 1.35;
+  group.add(sign);
+
+  if(vendorHas(vendor, 'air', 'charter', 'flight', 'transfer')){
+    const path = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.4, 0.04),
+      new THREE.MeshStandardMaterial({ color: couple.palette.glow, emissive: couple.palette.glow, emissiveIntensity: 0.2, transparent: true, opacity: 0.5 })
+    );
+    path.rotation.x = -Math.PI / 2;
+    path.position.set(0, 0.03, 1.2);
+    group.add(path);
+  }
+  scene.add(group);
 }
 
 function buildWeddingScene(couple){
@@ -1511,7 +2295,8 @@ function buildWeddingScene(couple){
     archGroup.add(arch2);
   }
 
-  const flowerCount = tier === 'high' ? 14 : tier === 'low' ? 5 : 8;
+  const flowerVendor = (couple.vendors || []).find(v => v.category === 'Flowers');
+  const flowerCount = flowerVendor ? (tier === 'high' ? 14 : tier === 'low' ? 5 : 8) : 0;
   const flowerMat = new THREE.MeshStandardMaterial({
     color: couple.palette.glow,
     emissive: couple.palette.glow,
@@ -1615,6 +2400,8 @@ function buildWeddingScene(couple){
     scene.add(petalPoints);
   }
 
+  addVendorSceneElements(scene, couple, tier);
+
   camera.position.set(CAM_START.x, CAM_START.y, CAM_START.z);
   camera.lookAt(TARGET.x, TARGET.y, TARGET.z);
 
@@ -1643,7 +2430,15 @@ function startScene(couple){
   $('#scene-loc').textContent = `${couple.location} · ${couple.date}`;
   const tierLabel = { low:'Intimate setting', mid:'Signature celebration', high:'Grand celebration' };
   couple.tier = couple.tier || getBudgetTier(couple.budgetTotal, couple.guests);
-  $('#scene-tier').textContent = tierLabel[couple.tier] || '';
+  const sceneFeatures = (couple.vendors || []).map(v => {
+    if(v.category === 'Music') return vendorHas(v, 'dj') ? 'DJ booth' : 'Live music';
+    if(v.category === 'Flowers') return 'Floral aisle';
+    if(v.category === 'Catering') return 'Catering spread';
+    if(v.category === 'Venue') return 'Venue details';
+    if(v.category === 'Travel') return 'Welcome path';
+    return v.category;
+  }).join(' · ');
+  $('#scene-tier').textContent = `${tierLabel[couple.tier] || ''}${sceneFeatures ? ' · ' + sceneFeatures : ''}`;
   const overlay = $('#scene-overlay');
   overlay.classList.remove('show');
   requestAnimationFrame(() => overlay.classList.add('show'));
@@ -1714,6 +2509,12 @@ function animateScene(now){
     posAttr.needsUpdate = true;
   }
 
+  if(scene.userData.vendorLights){
+    scene.userData.vendorLights.forEach(entry => {
+      entry.light.intensity = entry.base + Math.sin(now * entry.speed) * entry.base * 0.35;
+    });
+  }
+
   renderer.render(scene, camera);
   requestAnimationFrame(animateScene);
 }
@@ -1722,7 +2523,9 @@ function animateScene(now){
    INIT
    ========================================================================= */
 renderLanding();
-navigate('landing');
+if(!openSharedCardFromHash()){
+  navigate('landing');
+}
 </script>
 </body>
 </html>
