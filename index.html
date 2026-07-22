@@ -1937,6 +1937,39 @@ function makeHeroPhotoMaterial(tex){
   return mat;
 }
 
+function makeFeatheredHeroTexture(tex){
+  const img = tex.image;
+  if(!img || !img.width) return tex;
+  const w = 1024;
+  const h = Math.max(64, Math.round(w * (img.height / img.width)));
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(img, 0, 0, w, h);
+
+  // Fade the photo's bottom and sides so it melts into the 3D sand instead of
+  // ending in a hard framed edge.
+  ctx.globalCompositeOperation = 'destination-in';
+  const vMask = ctx.createLinearGradient(0, 0, 0, h);
+  vMask.addColorStop(0, 'rgba(0,0,0,1)');
+  vMask.addColorStop(0.78, 'rgba(0,0,0,1)');
+  vMask.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = vMask;
+  ctx.fillRect(0, 0, w, h);
+  const hMask = ctx.createLinearGradient(0, 0, w, 0);
+  hMask.addColorStop(0, 'rgba(0,0,0,0)');
+  hMask.addColorStop(0.09, 'rgba(0,0,0,1)');
+  hMask.addColorStop(0.91, 'rgba(0,0,0,1)');
+  hMask.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = hMask;
+  ctx.fillRect(0, 0, w, h);
+
+  const out = new THREE.CanvasTexture(c);
+  if(THREE.SRGBColorSpace) out.colorSpace = THREE.SRGBColorSpace;
+  out.needsUpdate = true;
+  return out;
+}
+
 function addCeremonyBackdrop(scene, tex, tier, buildId){
   const aspect = heroPhotoAspect(tex);
   const w = tier === 'high' ? 20 : tier === 'low' ? 13 : 16;
@@ -1944,20 +1977,21 @@ function addCeremonyBackdrop(scene, tex, tier, buildId){
   const group = new THREE.Group();
   group.userData.buildId = buildId;
 
-  const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(w + 0.45, h + 0.45, 0.16),
-    new THREE.MeshStandardMaterial({
-      color: 0xfaf7f2, roughness: 0.35, metalness: 0.08,
-      emissive: 0x221810, emissiveIntensity: 0.08
+  const photo = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({
+      map: makeFeatheredHeroTexture(tex),
+      transparent: true,
+      depthWrite: false,
+      fog: false,
+      toneMapped: false,
+      side: THREE.FrontSide
     })
   );
-  group.add(frame);
-
-  const photo = new THREE.Mesh(new THREE.PlaneGeometry(w, h), makeHeroPhotoMaterial(tex));
-  photo.position.z = 0.09;
   group.add(photo);
 
-  group.position.set(0, 1.6 + h * 0.5, -9.5);
+  // Sink the fade zone into the sand so photo-beach blends into scene-beach.
+  group.position.set(0, h * 0.5 - 0.6, -9.5);
   scene.userData.photoFrame = group;
   group.userData.billboard = true;
   scene.add(group);
@@ -1997,11 +2031,47 @@ function addAislePhotoEasels(scene, tex, tier, buildId){
   });
 }
 
-function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
-  applySkyTexture(skyMat, SKY_URL, buildId);
+function makeHeroPanoramaTexture(tex, palette, tier){
+  const img = tex.image;
+  return makeCanvasTexture((ctx, w, h) => {
+    paintSkyFallback(ctx, w, h, palette, tier);
+    if(!img || !img.width) return;
 
+    // Wrap the destination photo around the horizon band, mirror-tiled so the
+    // cylinder seam never shows, then feather its top edge into the painted sky.
+    const bandH = Math.round(h * 0.66);
+    const bandY = h - bandH;
+    const band = document.createElement('canvas');
+    band.width = w; band.height = bandH;
+    const bctx = band.getContext('2d');
+
+    const tileW = Math.max(64, Math.round(bandH * (img.width / img.height)));
+    const tiles = Math.ceil(w / tileW) + 1;
+    for(let i = 0; i < tiles; i++){
+      bctx.save();
+      bctx.translate(i * tileW + (i % 2 ? tileW : 0), 0);
+      if(i % 2) bctx.scale(-1, 1);
+      bctx.drawImage(img, 0, 0, tileW, bandH);
+      bctx.restore();
+    }
+    bctx.globalCompositeOperation = 'destination-in';
+    const mask = bctx.createLinearGradient(0, 0, 0, bandH);
+    mask.addColorStop(0, 'rgba(0,0,0,0)');
+    mask.addColorStop(0.34, 'rgba(0,0,0,1)');
+    mask.addColorStop(1, 'rgba(0,0,0,1)');
+    bctx.fillStyle = mask;
+    bctx.fillRect(0, 0, w, bandH);
+
+    ctx.drawImage(band, 0, bandY);
+  }, 4096, 1024);
+}
+
+function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
   const heroUrl = getCoupleImage(couple);
-  if(!heroUrl) return;
+  if(!heroUrl){
+    applySkyTexture(skyMat, SKY_URL, buildId);
+    return;
+  }
 
   loadSceneTexture(heroUrl, tex => {
     if(buildId !== sceneBuildId){ tex.dispose(); return; }
@@ -2009,9 +2079,13 @@ function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
     tex.wrapS = THREE.ClampToEdgeWrapping;
     tex.wrapT = THREE.ClampToEdgeWrapping;
     scene.userData.heroTexture = tex;
+
+    // The destination image becomes the world: guests stand inside it.
+    applySkyTextureFromTex(skyMat, makeHeroPanoramaTexture(tex, couple.palette, tier), buildId);
+
     addCeremonyBackdrop(scene, tex, tier, buildId);
     addAislePhotoEasels(scene, tex, tier, buildId);
-  });
+  }, () => applySkyTexture(skyMat, SKY_URL, buildId));
 }
 
 function initThree(){
