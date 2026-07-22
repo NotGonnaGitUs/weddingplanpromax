@@ -1819,11 +1819,7 @@ function applySkyTexture(skyMat, url, buildId){
       if(buildId !== sceneBuildId){ tex.dispose(); return; }
       if(!skyMat || skyMat.map === undefined){ tex.dispose(); return; }
       if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-      const old = skyMat.map;
-      skyMat.map = tex;
-      skyMat.color.setHex(0xffffff);
-      skyMat.needsUpdate = true;
-      if(old && old !== tex) old.dispose();
+      applySkyTextureFromTex(skyMat, tex, buildId);
     } catch (err) {
       console.warn('Sky texture apply failed; keeping canvas fallback', err);
       try { tex.dispose(); } catch (_) {}
@@ -1831,29 +1827,90 @@ function applySkyTexture(skyMat, url, buildId){
   });
 }
 
-function addDestinationBillboard(scene, couple, tier, buildId){
-  const imgUrl = getCoupleImage(couple);
-  if(!imgUrl) return;
-  const w = tier === 'high' ? 8 : tier === 'low' ? 5.5 : 6.5;
+function applySkyTextureFromTex(skyMat, tex, buildId){
+  if(buildId !== sceneBuildId) return;
+  if(!skyMat || skyMat.map === undefined) return;
+  const old = skyMat.map;
+  skyMat.map = tex;
+  skyMat.color.setHex(0xffffff);
+  skyMat.needsUpdate = true;
+  if(old && old !== tex && old.isCanvasTexture) old.dispose();
+}
+
+function addPanoramaBackdrop(scene, tex, tier, buildId){
+  const radius = 56;
+  const height = tier === 'high' ? 30 : 24;
+  const geo = new THREE.CylinderGeometry(radius, radius, height, 64, 1, true, -Math.PI * 0.72, Math.PI * 1.44);
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    side: THREE.BackSide,
+    fog: true,
+    transparent: true,
+    opacity: tier === 'high' ? 0.88 : 0.72,
+    depthWrite: false
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(0, height * 0.45, -6);
+  mesh.userData.buildId = buildId;
+  scene.add(mesh);
+}
+
+function addHorizonPhotoPlane(scene, tex, tier, buildId){
+  const w = tier === 'high' ? 100 : 80;
+  const h = tier === 'high' ? 22 : 18;
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    opacity: tier === 'high' ? 0.42 : 0.3,
+    fog: true,
+    depthWrite: false
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
+  mesh.position.set(0, tier === 'high' ? 8 : 6.5, -42);
+  mesh.rotation.x = -0.08;
+  mesh.userData.buildId = buildId;
+  scene.add(mesh);
+}
+
+function addCeremonyPhotoFrame(scene, tex, tier, buildId){
+  const w = tier === 'high' ? 7 : tier === 'low' ? 4.8 : 5.8;
   const h = w * 0.56;
   const frameGroup = new THREE.Group();
   const frame = new THREE.Mesh(
-    new THREE.BoxGeometry(w + 0.18, h + 0.18, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0xfaf7f2, roughness: 0.45, metalness: 0.08 })
+    new THREE.BoxGeometry(w + 0.2, h + 0.2, 0.12),
+    new THREE.MeshStandardMaterial({
+      color: 0xfaf7f2, roughness: 0.4, metalness: 0.12,
+      emissive: 0x221810, emissiveIntensity: 0.08
+    })
   );
   frameGroup.add(frame);
-  const photoMat = new THREE.MeshBasicMaterial({ color: 0xd8d0c8, side: THREE.DoubleSide });
-  const photo = new THREE.Mesh(new THREE.PlaneGeometry(w, h), photoMat);
-  photo.position.z = 0.06;
+  const photo = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({ map: tex, side: THREE.FrontSide })
+  );
+  photo.position.z = 0.07;
   frameGroup.add(photo);
-  frameGroup.position.set(0, 2.6 + h * 0.5, -17.5);
+  frameGroup.position.set(0, 2.8 + h * 0.5, -14);
+  frameGroup.userData.billboard = true;
+  frameGroup.userData.buildId = buildId;
+  scene.userData.photoFrame = frameGroup;
   scene.add(frameGroup);
-  loadSceneTexture(imgUrl, tex => {
+}
+
+function integrateHeroEnvironment(scene, couple, tier, buildId, skyMat){
+  const url = getCoupleImage(couple) || SKY_URL;
+  loadSceneTexture(url, tex => {
     if(buildId !== sceneBuildId){ tex.dispose(); return; }
     if(THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-    photoMat.map = tex;
-    photoMat.color.setHex(0xffffff);
-    photoMat.needsUpdate = true;
+    tex.wrapS = THREE.ClampToEdgeWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
+    scene.userData.heroTexture = tex;
+    applySkyTextureFromTex(skyMat, tex, buildId);
+    addPanoramaBackdrop(scene, tex, tier, buildId);
+    addHorizonPhotoPlane(scene, tex, tier, buildId);
+    addCeremonyPhotoFrame(scene, tex, tier, buildId);
+  }, () => {
+    if(url !== SKY_URL) applySkyTexture(skyMat, SKY_URL, buildId);
   });
 }
 
@@ -2001,9 +2058,9 @@ function paintSeaTexture(ctx, w, h, palette, tier){
   ctx.globalAlpha = 1;
 }
 
-function disposeMaterial(mt){
+function disposeMaterial(mt, sharedTex){
   ['map','emissiveMap','normalMap','roughnessMap','metalnessMap','alphaMap'].forEach(k => {
-    if(mt[k]) mt[k].dispose();
+    if(mt[k] && mt[k] !== sharedTex) mt[k].dispose();
   });
   mt.dispose();
 }
@@ -2487,10 +2544,9 @@ function buildBeachEnvironment(scene, couple, tier, buildId){
   scene.add(sky);
 
   try {
-    const skyUrl = getCoupleImage(couple) || SKY_URL;
-    applySkyTexture(skyMat, skyUrl, buildId);
+    integrateHeroEnvironment(scene, couple, tier, buildId, skyMat);
   } catch (err) {
-    console.warn('TextureLoader unavailable; using canvas sky', err);
+    console.warn('Hero environment integration failed; using canvas sky', err);
   }
 }
 
@@ -2532,7 +2588,6 @@ function buildWeddingScene(couple){
   }
 
   buildBeachEnvironment(scene, couple, tier, buildId);
-  addDestinationBillboard(scene, couple, tier, buildId);
 
   // arch — scale + ornament by tier
   const archR = tier === 'high' ? 2.55 : tier === 'low' ? 2.0 : 2.3;
@@ -2677,13 +2732,15 @@ function buildWeddingScene(couple){
 
 function disposeScene(){
   if(!scene) return;
+  const sharedTex = scene.userData.heroTexture;
   scene.traverse(obj => {
     if(obj.geometry) obj.geometry.dispose();
     if(obj.material){
-      if(Array.isArray(obj.material)) obj.material.forEach(disposeMaterial);
-      else disposeMaterial(obj.material);
+      if(Array.isArray(obj.material)) obj.material.forEach(m => disposeMaterial(m, sharedTex));
+      else disposeMaterial(obj.material, sharedTex);
     }
   });
+  if(sharedTex) sharedTex.dispose();
   scene = null;
   confettiPoints = null;
   petalPoints = null;
@@ -2807,6 +2864,11 @@ function animateScene(now){
     scene.userData.vendorLights.forEach(entry => {
       entry.light.intensity = entry.base + Math.sin(now * entry.speed) * entry.base * 0.35;
     });
+  }
+
+  if(scene.userData.photoFrame?.userData.billboard){
+    const frame = scene.userData.photoFrame;
+    frame.lookAt(camera.position.x, frame.position.y, camera.position.z);
   }
 
   renderer.render(scene, camera);
