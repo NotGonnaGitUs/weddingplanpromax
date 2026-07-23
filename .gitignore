@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Build / generated
+dist/
+build/
+.next/
+.turbo/
+*.tsbuildinfo
+apps/cms/src/payload-types.ts
+
+# Local Payload SQLite / uploads
+apps/cms/data/
+*.db
+*.db-*
+media/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.log

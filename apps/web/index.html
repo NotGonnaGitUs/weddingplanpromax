@@ -114,7 +114,25 @@
   }
   .form-submit:hover{transform:translateY(-2px);background:#2a2840;}
 
+  .landing-cta{
+    width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--paper);color:var(--ink);font-weight:600;font-size:14.5px;
+    padding:15px 22px;border-radius:999px;margin-top:8px;
+    transition:transform .18s ease, background .18s ease;
+  }
+  .landing-cta:hover{transform:translateY(-2px);background:#f3efe6;}
+
   .quick-fills{margin-top:22px;text-align:center;}
+  .plan-details{max-width:560px;margin:0 auto;}
+  .plan-details-intro{text-align:center;margin:0 0 22px;}
+  .plan-details-intro h3{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:26px;color:var(--paper);margin:0 0 8px;
+  }
+  .plan-details-intro p{
+    font-size:13.5px;color:rgba(250,247,242,.5);line-height:1.5;margin:0;
+  }
+  .plan-details .quick-fills{margin-top:18px;}
   .qf-label{
     font-size:11px;letter-spacing:.14em;text-transform:uppercase;
     color:rgba(250,247,242,.4);margin-bottom:10px;
@@ -431,6 +449,171 @@
   }
   .vendor-row.flagged .v-name{color:#EFCFC4;}
   .v-hint{font-size:11px;color:rgba(250,247,242,.35);margin-top:2px;}
+  .vendor-section{margin-bottom:36px;}
+  .vendor-section:last-child{margin-bottom:0;}
+  .vendor-section-title{
+    font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--paper);
+    margin:0 0 6px;
+  }
+  .vendor-section-sub{
+    font-size:12.5px;color:rgba(250,247,242,.45);margin:0 0 16px;line-height:1.45;
+  }
+  .vendor-empty{
+    font-size:13.5px;color:rgba(250,247,242,.42);padding:12px 0 4px;font-style:italic;
+  }
+  .v-meta{font-size:12px;color:rgba(250,247,242,.42);margin-top:2px;}
+  .v-rating{font-size:11.5px;color:var(--gold);font-weight:600;}
+  .vendor-drawer.marketplace .vd-booked{display:none;}
+  .vendor-drawer.marketplace .vd-why-wrap{display:none;}
+  .vendor-search{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px;
+  }
+  .vendor-search-input{
+    flex:1 1 220px;min-width:0;
+    background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.16);
+    color:var(--paper);border-radius:12px;padding:12px 14px;font-size:14px;
+    outline:none;transition:border-color .15s,background .15s;
+  }
+  .vendor-search-input::placeholder{color:rgba(250,247,242,.38);}
+  .vendor-search-input:focus{
+    border-color:color-mix(in srgb, var(--accent) 55%, transparent);
+    background:rgba(250,247,242,.09);
+  }
+  .vendor-search-count{
+    font-size:12px;color:rgba(250,247,242,.42);white-space:nowrap;
+  }
+  .vendor-filters{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px;
+  }
+  .vendor-filter-field{
+    display:flex;flex-direction:column;gap:5px;min-width:0;
+  }
+  .vendor-filter-field label{
+    font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);font-weight:600;
+  }
+  .vendor-filter-select{
+    appearance:none;min-width:140px;
+    background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.16);
+    color:var(--paper);border-radius:12px;padding:10px 34px 10px 12px;font-size:13px;
+    outline:none;cursor:pointer;
+    background-image:linear-gradient(45deg, transparent 50%, rgba(250,247,242,.45) 50%),
+      linear-gradient(135deg, rgba(250,247,242,.45) 50%, transparent 50%);
+    background-position:calc(100% - 16px) calc(50% - 2px), calc(100% - 11px) calc(50% - 2px);
+    background-size:5px 5px, 5px 5px;background-repeat:no-repeat;
+    transition:border-color .15s,background-color .15s;
+  }
+  .vendor-filter-select:focus{
+    border-color:color-mix(in srgb, var(--accent) 55%, transparent);
+    background-color:rgba(250,247,242,.09);
+  }
+  .vendor-filter-select option{color:var(--ink);background:#fff;}
+  .vendor-filter-type{flex:1 1 100%;}
+  .vendor-filter-chips{
+    display:flex;flex-wrap:wrap;gap:7px;
+  }
+  .vendor-filter-chip{
+    appearance:none;border:1px solid rgba(250,247,242,.18);
+    background:rgba(250,247,242,.05);color:rgba(250,247,242,.72);
+    font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;
+    transition:border-color .15s,background .15s,color .15s;
+  }
+  .vendor-filter-chip:hover{
+    border-color:rgba(250,247,242,.35);color:var(--paper);background:rgba(250,247,242,.1);
+  }
+  .vendor-filter-chip.active{
+    border-color:color-mix(in srgb, var(--accent) 60%, transparent);
+    background:color-mix(in srgb, var(--accent) 20%, transparent);
+    color:var(--paper);
+  }
+  .vendor-filter-clear{
+    appearance:none;border:none;background:transparent;cursor:pointer;
+    font-size:12px;color:var(--accent);padding:8px 4px;align-self:flex-end;
+    margin-left:auto;
+  }
+  .vendor-filter-clear:hover{color:var(--paper);}
+  .vendor-filter-clear.hidden{display:none;}
+  @media (max-width:560px){
+    .vendor-filter-select{min-width:0;width:100%;}
+    .vendor-filter-field{flex:1 1 calc(50% - 5px);}
+    .vendor-filter-clear{margin-left:0;align-self:center;}
+  }
+  .v-add-btn{
+    appearance:none;border:1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    background:color-mix(in srgb, var(--accent) 18%, transparent);color:var(--paper);
+    font-size:12px;font-weight:600;padding:7px 12px;border-radius:999px;cursor:pointer;
+    transition:background .15s,border-color .15s,transform .15s;white-space:nowrap;
+  }
+  .v-add-btn:hover{
+    background:color-mix(in srgb, var(--accent) 32%, transparent);
+    border-color:var(--accent);transform:translateY(-1px);
+  }
+  .v-add-btn.in-plan{
+    background:rgba(250,247,242,.08);border-color:rgba(250,247,242,.2);
+    color:rgba(250,247,242,.55);cursor:default;transform:none;
+  }
+  .vd-add-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    margin-top:22px;appearance:none;border:none;cursor:pointer;
+    background:var(--accent);color:var(--ink);font-weight:600;font-size:14px;
+    padding:14px 20px;border-radius:999px;transition:transform .18s ease, opacity .15s;
+  }
+  .vd-add-btn:hover{transform:translateY(-1px);}
+  .vd-add-btn.in-plan{
+    background:rgba(250,247,242,.12);color:rgba(250,247,242,.7);cursor:default;transform:none;
+  }
+  .vendor-drawer:not(.marketplace) .vd-add-btn{display:none;}
+
+  .history-list{display:flex;flex-direction:column;gap:10px;}
+  .history-row{
+    display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;
+    padding:16px 18px;border-radius:14px;cursor:pointer;
+    border:1px solid rgba(250,247,242,.12);background:rgba(250,247,242,.04);
+    transition:background .15s,border-color .15s;
+  }
+  .history-row:hover{background:rgba(250,247,242,.08);border-color:rgba(250,247,242,.28);}
+  .history-row.active{border-color:color-mix(in srgb, var(--accent) 55%, transparent);}
+  .h-names{font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin:0 0 4px;}
+  .h-meta{font-size:12.5px;color:rgba(250,247,242,.48);line-height:1.45;}
+  .h-vendors{
+    display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;
+  }
+  .h-vendor-chip{
+    display:inline-flex;align-items:baseline;gap:6px;
+    padding:4px 9px;border-radius:999px;
+    background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.12);
+    font-size:11.5px;color:rgba(250,247,242,.72);line-height:1.3;
+  }
+  .h-vendor-chip .h-v-cat{
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);font-weight:600;
+  }
+  .h-vendors-empty{
+    margin-top:8px;font-size:12px;color:rgba(250,247,242,.35);font-style:italic;
+  }
+  .h-right{text-align:right;}
+  .h-budget{font-size:15px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;}
+  .h-when{font-size:11px;color:rgba(250,247,242,.38);margin-top:4px;}
+  .landing-history{
+    margin-top:28px;text-align:left;width:100%;
+  }
+  .landing-history.hidden{display:none;}
+  .lh-label{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);margin-bottom:10px;text-align:center;
+  }
+  .lh-list{display:flex;flex-direction:column;gap:8px;}
+  .lh-row{
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    padding:12px 14px;border-radius:12px;cursor:pointer;text-align:left;
+    border:1px solid rgba(250,247,242,.14);background:rgba(250,247,242,.05);
+    color:rgba(250,247,242,.78);font-size:13px;transition:border-color .15s,background .15s;
+  }
+  .lh-row:hover{border-color:rgba(250,247,242,.35);background:rgba(250,247,242,.1);color:var(--paper);}
+  .lh-names{font-family:'Fraunces',serif;font-size:15px;}
+  .lh-sub{font-size:11.5px;color:rgba(250,247,242,.42);margin-top:2px;}
+  .lh-vendors{font-size:11px;color:rgba(250,247,242,.5);margin-top:4px;line-height:1.4;}
+  .lh-open{font-size:12px;color:var(--accent);white-space:nowrap;}
 
   .budget-row{padding:16px 2px;border-bottom:1px solid rgba(250,247,242,.08);}
   .budget-row-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
@@ -534,67 +717,11 @@
     <h1 class="landing-mark">Marrymap</h1>
     <p class="landing-sub">It's your special day. Tell us how you imagine it — we'll find the vendors, book every detail, and bring your wedding to life.</p>
 
-    <form class="wedding-form" id="wedding-form" novalidate>
-      <div class="form-row">
-        <div class="field">
-          <label for="f-p1">One of you</label>
-          <input id="f-p1" name="partner1" type="text" placeholder="Priya" required autocomplete="given-name">
-        </div>
-        <div class="field">
-          <label for="f-p2">And the other</label>
-          <input id="f-p2" name="partner2" type="text" placeholder="Arjun" required autocomplete="given-name">
-        </div>
-      </div>
-      <div class="form-row full">
-        <div class="field">
-          <label for="f-loc">Where it happens</label>
-          <input id="f-loc" name="location" type="text" placeholder="Goa, India" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="f-date">The date</label>
-          <input id="f-date" name="date" type="text" placeholder="February 14, 2027" required>
-        </div>
-        <div class="field">
-          <label for="f-guests">How many</label>
-          <input id="f-guests" name="guests" type="number" min="10" max="500" placeholder="80" required>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="field">
-          <label for="f-budget">Rough budget</label>
-          <span class="hint">USD, give or take</span>
-          <input id="f-budget" name="budget" type="number" min="5000" max="500000" step="1000" placeholder="42000" required>
-        </div>
-        <div class="field">
-          <label for="f-vibe">Setting</label>
-          <span class="hint">A starting point</span>
-          <select id="f-vibe" name="vibe">
-            <option value="beach">Beach</option>
-            <option value="vineyard">Vineyard</option>
-            <option value="island">Island</option>
-            <option value="jungle">Jungle</option>
-            <option value="coastal">Coastal</option>
-            <option value="wine">Wine country</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row full">
-        <div class="field notes-field">
-          <label for="f-notes">Other notes — what should this wedding feel like?</label>
-          <span class="hint">Free write. Traditions, energy, must-haves, what you want guests to remember.</span>
-          <textarea id="f-notes" name="notes" maxlength="600" placeholder="Barefoot ceremony, long dinner under string lights, no stiff timeline — just the people we love and a sunset that won’t quit…"></textarea>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button type="submit" class="form-submit">Start planning your day →</button>
-      </div>
-    </form>
+    <button type="button" class="landing-cta" id="landing-start">Start planning your day →</button>
 
-    <div class="quick-fills">
-      <div class="qf-label">Try a destination</div>
-      <div class="qf-chips" id="qf-chips"></div>
+    <div class="landing-history hidden" id="landing-history">
+      <div class="lh-label">Your past plans</div>
+      <div class="lh-list" id="landing-history-list"></div>
     </div>
   </div>
 </div>
@@ -627,14 +754,130 @@
     <button class="rerun-btn" id="rerun-btn">↻ Plan again</button>
   </div>
   <div class="tabs-nav">
-    <button class="tab-btn active" data-tab="invite">Invite</button>
-    <button class="tab-btn" data-tab="share">Share Card</button>
+    <button class="tab-btn active" data-tab="details">Details</button>
     <button class="tab-btn" data-tab="vendors">Vendors</button>
+    <button class="tab-btn" data-tab="invite">Invite</button>
+    <button class="tab-btn" data-tab="share">Share Card</button>
     <button class="tab-btn" data-tab="budget">Budget</button>
+    <button class="tab-btn" data-tab="history">Past Plans</button>
     <button class="tab-btn wedding-tab" data-tab="wedding">Your Wedding</button>
   </div>
   <div class="tabs-body">
-    <div class="tab-panel active" id="tab-invite">
+    <div class="tab-panel active" id="tab-details">
+      <div class="plan-details">
+        <div class="plan-details-intro">
+          <h3>Plan your day</h3>
+          <p>Edit the basics, then add vendors from the catalog on the Vendors tab.</p>
+        </div>
+        <form class="wedding-form" id="wedding-form" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-p1">One of you</label>
+              <input id="f-p1" name="partner1" type="text" placeholder="Priya" required autocomplete="given-name">
+            </div>
+            <div class="field">
+              <label for="f-p2">And the other</label>
+              <input id="f-p2" name="partner2" type="text" placeholder="Arjun" required autocomplete="given-name">
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="field">
+              <label for="f-loc">Where it happens</label>
+              <input id="f-loc" name="location" type="text" placeholder="Goa, India" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-date">The date</label>
+              <input id="f-date" name="date" type="text" placeholder="February 14, 2027" required>
+            </div>
+            <div class="field">
+              <label for="f-guests">How many</label>
+              <input id="f-guests" name="guests" type="number" min="10" max="500" placeholder="80" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-budget">Rough budget</label>
+              <span class="hint">USD, give or take</span>
+              <input id="f-budget" name="budget" type="number" min="5000" max="500000" step="1000" placeholder="42000" required>
+            </div>
+            <div class="field">
+              <label for="f-vibe">Setting</label>
+              <span class="hint">A starting point</span>
+              <select id="f-vibe" name="vibe">
+                <option value="beach">Beach</option>
+                <option value="vineyard">Vineyard</option>
+                <option value="island">Island</option>
+                <option value="jungle">Jungle</option>
+                <option value="coastal">Coastal</option>
+                <option value="wine">Wine country</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="field notes-field">
+              <label for="f-notes">Other notes — what should this wedding feel like?</label>
+              <span class="hint">Free write. Traditions, energy, must-haves, what you want guests to remember.</span>
+              <textarea id="f-notes" name="notes" maxlength="600" placeholder="Barefoot ceremony, long dinner under string lights, no stiff timeline — just the people we love and a sunset that won’t quit…"></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="form-submit" id="wedding-form-submit">Match vendors for this plan →</button>
+          </div>
+        </form>
+        <div class="quick-fills">
+          <div class="qf-label">Try a destination</div>
+          <div class="qf-chips" id="qf-chips"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-panel" id="tab-vendors">
+      <section class="vendor-section">
+        <h3 class="vendor-section-title">Your plan</h3>
+        <p class="vendor-section-sub">Vendors currently on this wedding plan.</p>
+        <div id="vendor-list"></div>
+      </section>
+      <section class="vendor-section">
+        <h3 class="vendor-section-title">Add vendors</h3>
+        <p class="vendor-section-sub">Search the catalog and add vendors while you build this plan.</p>
+        <div class="vendor-search">
+          <input
+            type="search"
+            class="vendor-search-input"
+            id="marketplace-search"
+            placeholder="Search by name, category, or area…"
+            autocomplete="off"
+          />
+          <span class="vendor-search-count" id="marketplace-count"></span>
+        </div>
+        <div class="vendor-filters" id="marketplace-filters">
+          <div class="vendor-filter-field vendor-filter-type">
+            <label>Type</label>
+            <div class="vendor-filter-chips" id="marketplace-type-chips"></div>
+          </div>
+          <div class="vendor-filter-field">
+            <label for="marketplace-price">Price</label>
+            <select class="vendor-filter-select" id="marketplace-price">
+              <option value="">Any price</option>
+              <option value="under-2k">Under $2k</option>
+              <option value="2k-5k">$2k–$5k</option>
+              <option value="5k-10k">$5k–$10k</option>
+              <option value="10k-plus">$10k+</option>
+            </select>
+          </div>
+          <div class="vendor-filter-field">
+            <label for="marketplace-area">Area</label>
+            <select class="vendor-filter-select" id="marketplace-area">
+              <option value="">Any area</option>
+            </select>
+          </div>
+          <button type="button" class="vendor-filter-clear hidden" id="marketplace-clear">Clear filters</button>
+        </div>
+        <div id="marketplace-list"></div>
+      </section>
+    </div>
+    <div class="tab-panel" id="tab-invite">
       <div class="invite-card">
         <img class="card-hero hidden" id="inv-hero" alt="" />
         <div class="invite-loc" id="inv-loc"></div>
@@ -698,15 +941,17 @@
         </div>
       </div>
     </div>
-    <div class="tab-panel" id="tab-vendors">
-      <div id="vendor-list"></div>
-    </div>
     <div class="tab-panel" id="tab-budget">
       <div id="budget-list"></div>
       <div class="budget-total">
         <div class="bt-label">Total allocated</div>
         <div class="bt-value"><span id="budget-total-value">$0</span> <small id="budget-total-of"></small></div>
       </div>
+    </div>
+    <div class="tab-panel" id="tab-history">
+      <h3 class="vendor-section-title">Past plans</h3>
+      <p class="vendor-section-sub">Plans you’ve completed in this browser.</p>
+      <div class="history-list" id="history-list"></div>
     </div>
   </div>
 </div>
@@ -750,15 +995,18 @@
   <h3 class="vd-name" id="vd-name"></h3>
   <div class="vd-price" id="vd-price"></div>
   <p class="vd-blurb" id="vd-blurb"></p>
-  <div class="vd-section">What's included</div>
+  <div class="vd-section" id="vd-includes-label">What's included</div>
   <ul class="vd-includes" id="vd-includes"></ul>
-  <div class="vd-section">Why we picked this</div>
-  <ul class="vd-why" id="vd-why"></ul>
-  <div class="vd-section">Reviews</div>
+  <div class="vd-why-wrap">
+    <div class="vd-section">Why we picked this</div>
+    <ul class="vd-why" id="vd-why"></ul>
+  </div>
+  <div class="vd-section" id="vd-reviews-label">Reviews</div>
   <div class="vd-reviews" id="vd-reviews"></div>
-  <div class="vd-section">Style note</div>
+  <div class="vd-section" id="vd-style-label">Style note</div>
   <div class="vd-style" id="vd-style"></div>
-  <div class="vd-booked">✓ Booked for your day</div>
+  <div class="vd-booked" id="vd-booked">✓ Booked for your day</div>
+  <button type="button" class="vd-add-btn" id="vd-add-btn">Add to wedding plan</button>
 </aside>
 
 <div class="share-toast" id="share-toast" role="status" aria-live="polite"></div>
@@ -767,7 +1015,8 @@
 /* =========================================================================
    SEED DATA
    ========================================================================= */
-const COUPLES = [
+/* Fallback only if Payload CMS is unreachable — prefer live /api/package-templates */
+const FALLBACK_COUPLES = [
   {
     id:'priya-arjun',
     names:'Priya & Arjun',
@@ -776,6 +1025,8 @@ const COUPLES = [
     guests:62,
     budgetTotal:42000,
     vibe:'beach',
+    isDefaultForVibe:true,
+    locationKeywords:['goa','india'],
     heroImage:'assets/weddings/priya-arjun-hero.png',
     palette:{ bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
     inviteCopy:'Mehndi, music, and the Arabian Sea — three days of celebration on the sands of Goa. Join us as we begin our forever.',
@@ -783,8 +1034,8 @@ const COUPLES = [
     vendors:[
       {category:'Travel',  name:'GoaAir Group Blocks',            price:9800,  note:'62 guests, DEL/BOM → GOI'},
       {category:'Venue',   name:'Taj-style Beachfront Lawn',       price:14500, note:'3-day mehndi + sangeet + ceremony'},
-      {category:'Catering',name:'Spice Route Caterers',            price:10200, note:'Live chaat + seafood counters'},
-      {category:'Flowers', name:'Marigold & Co.',                  price:4700,  note:'Marigold + orchid mandap garlands', flag:'15% above typical'},
+      {category:'Caterer',name:'Spice Route Caterers',            price:10200, note:'Live chaat + seafood counters'},
+      {category:'Florist', name:'Marigold & Co.',                  price:4700,  note:'Marigold + orchid mandap garlands', flag:'15% above typical'},
       {category:'Music',   name:'DJ Bollywood Nights + dhol duo',  price:2800,  note:'Sangeet + reception'},
     ]
   },
@@ -796,6 +1047,8 @@ const COUPLES = [
     guests:80,
     budgetTotal:48000,
     vibe:'vineyard',
+    isDefaultForVibe:true,
+    locationKeywords:['tuscany','italy','florence','firenze'],
     heroImage:'assets/weddings/jake-emily-hero.png',
     palette:{ bg:'#3a2f1f', accent:'#7A8450', glow:'#C96F4A' },
     inviteCopy:'Sun-warmed hills, long tables, and wine under the Tuscan stars. Come celebrate love the way Italy does — slowly, joyfully, together.',
@@ -803,8 +1056,8 @@ const COUPLES = [
     vendors:[
       {category:'Travel',  name:'Firenze Charter Coaches',        price:8500,  note:'80 guests, FLR/PSA transfers'},
       {category:'Venue',   name:'Il Borgo Vineyard Estate',        price:18000, note:'Weekend buyout, hilltop chapel'},
-      {category:'Catering',name:"Nonna's Table Catering",          price:12000, note:'Family-style, 6-course antipasti to dolce'},
-      {category:'Flowers', name:'Fiori di Toscana',                price:5800,  note:'Olive branch + wildflower arrangements', flag:'18% above typical'},
+      {category:'Caterer',name:"Nonna's Table Catering",          price:12000, note:'Family-style, 6-course antipasti to dolce'},
+      {category:'Florist', name:'Fiori di Toscana',                price:5800,  note:'Olive branch + wildflower arrangements', flag:'18% above typical'},
       {category:'Music',   name:'Quartetto Classico + DJ Set',     price:3700,  note:'Ceremony strings, reception DJ'},
     ]
   },
@@ -816,6 +1069,8 @@ const COUPLES = [
     guests:70,
     budgetTotal:50000,
     vibe:'island',
+    isDefaultForVibe:true,
+    locationKeywords:['mykonos','greece','santorini','aegean'],
     heroImage:'assets/weddings/marcus-david-hero.png',
     palette:{ bg:'#1f2f3a', accent:'#2E6FA3', glow:'#FF8C69' },
     inviteCopy:"Whitewashed walls, endless blue, and a sunset that never quite ends. We're saying 'I do' on the cliffs of Mykonos.",
@@ -823,8 +1078,8 @@ const COUPLES = [
     vendors:[
       {category:'Travel',  name:'Aegean Air Group Charter',        price:11000, note:'70 guests, JMK island transfers'},
       {category:'Venue',   name:'Cliffside Caldera Villa',         price:19500, note:'Private cliff estate, sunset ceremony'},
-      {category:'Catering',name:'Meze & Marble Catering',          price:11500, note:'Aegean seafood + mezze stations'},
-      {category:'Flowers', name:'Santorini Bloom Co.',             price:4500,  note:'White bougainvillea + olive greenery', flag:'14% above typical'},
+      {category:'Caterer',name:'Meze & Marble Catering',          price:11500, note:'Aegean seafood + mezze stations'},
+      {category:'Florist', name:'Santorini Bloom Co.',             price:4500,  note:'White bougainvillea + olive greenery', flag:'14% above typical'},
       {category:'Music',   name:'DJ Kastro + Bouzouki Trio',       price:3500,  note:'Ceremony bouzouki, reception DJ'},
     ]
   },
@@ -836,14 +1091,16 @@ const COUPLES = [
     guests:90,
     budgetTotal:38000,
     vibe:'jungle',
+    isDefaultForVibe:true,
+    locationKeywords:['tulum','mexico','cancun','cancún'],
     heroImage:'assets/weddings/sofia-mateo-hero.png',
     palette:{ bg:'#2f1f2a', accent:'#E8862E', glow:'#C4386B' },
     inviteCopy:'Marigolds, mezcal, and the hum of the jungle at dusk. Our wedding is a love letter to Tulum — join the celebration.',
     vendors:[
       {category:'Travel',  name:'Cancún Transfers & Charters',     price:7200,  note:'90 guests, CUN → Tulum vans'},
       {category:'Venue',   name:'Cenote Jungle Clearing',          price:12800, note:'Open-air, lantern-lit ceremony'},
-      {category:'Catering',name:'Cocina de la Costa',              price:9500,  note:'Taco bar + mezcal tasting station'},
-      {category:'Flowers', name:'Cempasúchil Floral Studio',       price:4300,  note:'Marigold + fuchsia bougainvillea', flag:'16% above typical'},
+      {category:'Caterer',name:'Cocina de la Costa',              price:9500,  note:'Taco bar + mezcal tasting station'},
+      {category:'Florist', name:'Cempasúchil Floral Studio',       price:4300,  note:'Marigold + fuchsia bougainvillea', flag:'16% above typical'},
       {category:'Music',   name:'Mariachi Sunset + DJ',            price:4200,  note:'Ceremony mariachi, reception DJ'},
     ]
   },
@@ -855,14 +1112,16 @@ const COUPLES = [
     guests:56,
     budgetTotal:34000,
     vibe:'coastal',
+    isDefaultForVibe:true,
+    locationKeywords:['bali','indonesia','uluwatu'],
     heroImage:'assets/weddings/aiko-wei-hero.png',
     palette:{ bg:'#242b2a', accent:'#9BAF9B', glow:'#B9A6D9' },
     inviteCopy:'Incense, ocean cliffs, and quiet ceremony as the sun dips into Bali. Come witness two families become one.',
     vendors:[
       {category:'Travel',  name:'Denpasar Group Transfers',        price:6000,  note:'56 guests, DPS island transfers'},
       {category:'Venue',   name:'Uluwatu Cliffside Pavilion',      price:12500, note:'Open pavilion, ocean-facing altar'},
-      {category:'Catering',name:'Sawah Rice & Spice Catering',     price:8500,  note:'Balinese rijsttafel feast'},
-      {category:'Flowers', name:'Frangipani & Lotus',              price:3400,  note:'Frangipani gate + lotus centerpieces', flag:'13% above typical'},
+      {category:'Caterer',name:'Sawah Rice & Spice Catering',     price:8500,  note:'Balinese rijsttafel feast'},
+      {category:'Florist', name:'Frangipani & Lotus',              price:3400,  note:'Frangipani gate + lotus centerpieces', flag:'13% above typical'},
       {category:'Music',   name:'Gamelan Ensemble + DJ',           price:3600,  note:'Ceremony gamelan, reception DJ'},
     ]
   },
@@ -874,14 +1133,16 @@ const COUPLES = [
     guests:68,
     budgetTotal:46000,
     vibe:'wine',
+    isDefaultForVibe:true,
+    locationKeywords:['napa','sonoma','california','wine'],
     heroImage:'assets/weddings/lena-sarah-hero.png',
     palette:{ bg:'#2a1f22', accent:'#7A2E3C', glow:'#C4A265' },
     inviteCopy:"Vineyard rows, golden light, and a toast that's been years in the making. Join us for a Napa wedding weekend to remember.",
     vendors:[
       {category:'Travel',  name:'Wine Country Shuttle Fleet',      price:5200,  note:'68 guests, SFO/OAK transfers'},
       {category:'Venue',   name:'Stone Terrace Vineyard',          price:20000, note:'Weekend buyout, barrel room reception'},
-      {category:'Catering',name:'Harvest Table Catering',          price:13500, note:'Farm-to-table, estate wine pairing'},
-      {category:'Flowers', name:'Cabernet & Bloom',                price:4300,  note:'Garden rose + grapevine arrangements', flag:'17% above typical'},
+      {category:'Caterer',name:'Harvest Table Catering',          price:13500, note:'Farm-to-table, estate wine pairing'},
+      {category:'Florist', name:'Cabernet & Bloom',                price:4300,  note:'Garden rose + grapevine arrangements', flag:'17% above typical'},
       {category:'Music',   name:'String Trio + DJ Set',            price:3000,  note:'Ceremony strings, reception DJ'},
     ]
   },
@@ -893,23 +1154,335 @@ const COUPLES = [
     guests:75,
     budgetTotal:40000,
     vibe:'beach',
+    isDefaultForVibe:false,
+    locationKeywords:['zanzibar','tanzania','africa'],
     heroImage:'assets/weddings/kwame-ngozi-hero.png',
     palette:{ bg:'#1f2a2a', accent:'#E3A008', glow:'#2A7F9E' },
     inviteCopy:"Kente cloth, ocean drums, and the warmth of Zanzibar's shore. We invite you to dance us into marriage.",
     vendors:[
       {category:'Travel',  name:'Stone Town Group Charters',       price:7500,  note:'75 guests, ZNZ island transfers'},
       {category:'Venue',   name:'Indian Ocean Beach Pavilion',     price:15500, note:'Beachfront pavilion, tidal-view aisle'},
-      {category:'Catering',name:'Swahili Coast Catering',          price:10500, note:'Pilau, seafood grill + spice bar'},
-      {category:'Flowers', name:'Kente Bloom Florals',             price:3200,  note:'Gold kente-wrapped arrangements', flag:'12% above typical'},
+      {category:'Caterer',name:'Swahili Coast Catering',          price:10500, note:'Pilau, seafood grill + spice bar'},
+      {category:'Florist', name:'Kente Bloom Florals',             price:3200,  note:'Gold kente-wrapped arrangements', flag:'12% above typical'},
       {category:'Music',   name:'Taarab Ensemble + DJ',            price:3300,  note:'Ceremony taarab, reception DJ'},
     ]
   },
 ];
 
-const VIBE_TO_SEED = {
-  beach:'priya-arjun', vineyard:'jake-emily', island:'marcus-david',
-  jungle:'sofia-mateo', coastal:'aiko-wei', wine:'lena-sarah'
+let COUPLES = FALLBACK_COUPLES.slice();
+let VIBE_TO_SEED = {};
+let LOC_KEYWORDS = [];
+let MARKETPLACE_VENDORS = [];
+let marketplaceSearchQuery = '';
+let marketplaceFilters = { category: '', priceBucket: '', area: '' };
+let drawerMarketplaceVendor = null;
+const PRICE_BUCKETS = {
+  'under-2k': { min: 0, max: 2000 },
+  '2k-5k': { min: 2000, max: 5000 },
+  '5k-10k': { min: 5000, max: 10000 },
+  '10k-plus': { min: 10000, max: Infinity },
 };
+const PLAN_HISTORY_KEY = 'marrymapPlanHistory';
+const PLAN_HISTORY_MAX = 20;
+
+const CATEGORY_LABELS = {
+  travel: 'Travel',
+  venue: 'Venue',
+  caterer: 'Caterer',
+  photographer: 'Photographer',
+  florist: 'Florist',
+  music: 'Music',
+  videographer: 'Videographer',
+  bakery: 'Bakery',
+  officiant: 'Officiant',
+};
+
+function getPayloadApiBase(){
+  const params = new URLSearchParams(window.location.search);
+  return (
+    params.get('api') ||
+    window.localStorage.getItem('marrymapApiUrl') ||
+    window.MARRYMAP_API_URL ||
+    'http://localhost:3000'
+  ).replace(/\/$/, '');
+}
+
+function categoryLabel(value){
+  if(!value) return '';
+  return CATEGORY_LABELS[value] || (value.charAt(0).toUpperCase() + value.slice(1));
+}
+
+function fmtTypicalPrice(typical){
+  if(!typical) return '';
+  const min = Number(typical.minPrice);
+  const max = Number(typical.maxPrice);
+  const unit = typical.unitText || 'wedding';
+  if(Number.isFinite(min) && Number.isFinite(max) && min !== max){
+    return `${fmtMoney(min)}–${fmtMoney(max)} / ${unit}`;
+  }
+  if(Number.isFinite(min)) return `from ${fmtMoney(min)} / ${unit}`;
+  if(Number.isFinite(max)) return `up to ${fmtMoney(max)} / ${unit}`;
+  return '';
+}
+
+function mapMarketplaceVendorDoc(doc){
+  const category = categoryLabel(doc.category);
+  const typical = doc.typicalPrice || {};
+  const rating = doc.aggregateRating || {};
+  const services = (doc.services || []).map(s => s.name).filter(Boolean);
+  const amenities = (doc.amenities || [])
+    .filter(a => a && a.value !== false)
+    .map(a => a.name)
+    .filter(Boolean);
+  const area = doc.serviceAreaSummary
+    || [doc.address?.addressLocality, doc.address?.addressRegion].filter(Boolean).join(', ');
+  const priceLabel = fmtTypicalPrice(typical) || doc.priceRange || '';
+  const midPrice = Number.isFinite(Number(typical.minPrice)) && Number.isFinite(Number(typical.maxPrice))
+    ? Math.round((Number(typical.minPrice) + Number(typical.maxPrice)) / 2)
+    : Number(typical.minPrice) || Number(typical.maxPrice) || 0;
+
+  return {
+    source: 'marketplace',
+    id: doc.id,
+    slug: doc.slug,
+    name: doc.name,
+    category,
+    categoryKey: doc.category,
+    note: area || doc.description || '',
+    description: doc.description || '',
+    price: midPrice,
+    priceLabel,
+    priceRange: doc.priceRange || '',
+    area,
+    ratingValue: rating.ratingValue,
+    reviewCount: rating.reviewCount,
+    services,
+    amenities,
+    url: doc.url || '',
+  };
+}
+
+async function loadMarketplaceVendors(){
+  const base = getPayloadApiBase();
+  try{
+    const res = await fetch(`${base}/api/vendors?limit=100`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const docs = data.docs || [];
+    MARKETPLACE_VENDORS = docs.map(mapMarketplaceVendorDoc);
+    console.info(`[marrymap] Loaded ${MARKETPLACE_VENDORS.length} marketplace vendors from ${base}`);
+    return true;
+  }catch(err){
+    MARKETPLACE_VENDORS = [];
+    console.warn(`[marrymap] Marketplace vendors unavailable (${base})`, err);
+    return false;
+  }
+}
+
+function loadPlanHistory(){
+  try{
+    const raw = window.localStorage.getItem(PLAN_HISTORY_KEY);
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  }catch{
+    return [];
+  }
+}
+
+function persistPlanHistory(entries){
+  window.localStorage.setItem(PLAN_HISTORY_KEY, JSON.stringify(entries.slice(0, PLAN_HISTORY_MAX)));
+}
+
+function serializePlanForHistory(couple){
+  return {
+    id: couple.id,
+    savedAt: new Date().toISOString(),
+    names: couple.names,
+    location: couple.location,
+    date: couple.date,
+    guests: couple.guests,
+    budgetTotal: couple.budgetTotal,
+    vibe: couple.vibe,
+    notes: couple.notes || '',
+    palette: couple.palette ? { ...couple.palette } : undefined,
+    heroImage: couple.heroImage || null,
+    inviteCopy: couple.inviteCopy || '',
+    vendors: (couple.vendors || []).map(v => ({
+      category: v.category,
+      name: v.name,
+      price: v.price,
+      note: v.note || '',
+      ...(v.flag ? { flag: v.flag } : {}),
+      ...(v.source ? { source: v.source } : {}),
+      ...(v.marketplaceId != null ? { marketplaceId: v.marketplaceId } : {}),
+    })),
+    seedId: couple.seedId || null,
+    tier: couple.tier || null,
+  };
+}
+
+function isVendorInPlan(vendor, couple = currentCouple){
+  if(!vendor || !couple?.vendors?.length) return false;
+  return couple.vendors.some(v =>
+    (vendor.id != null && v.marketplaceId != null && String(v.marketplaceId) === String(vendor.id)) ||
+    (v.name === vendor.name && v.category === vendor.category)
+  );
+}
+
+function historyVendorsMarkup(vendors){
+  if(!vendors?.length){
+    return `<div class="h-vendors-empty">No matched vendors saved</div>`;
+  }
+  return `<div class="h-vendors">${vendors.map(v => `
+    <span class="h-vendor-chip"><span class="h-v-cat">${v.category}</span>${v.name}</span>
+  `).join('')}</div>`;
+}
+
+function landingVendorsLine(vendors){
+  if(!vendors?.length) return 'No matched vendors';
+  const names = vendors.map(v => v.name).filter(Boolean);
+  if(names.length <= 3) return names.join(' · ');
+  return `${names.slice(0, 3).join(' · ')} +${names.length - 3} more`;
+}
+
+function addVendorToPlan(vendor){
+  if(!currentCouple){
+    showShareToast('Open a wedding plan first');
+    return false;
+  }
+  if(!vendor) return false;
+  if(isVendorInPlan(vendor, currentCouple)){
+    showShareToast('Already in your plan');
+    return false;
+  }
+
+  const planVendor = {
+    category: vendor.category,
+    name: vendor.name,
+    price: Number(vendor.price) || 0,
+    note: vendor.note || vendor.area || vendor.description || '',
+    marketplaceId: vendor.id,
+  };
+
+  const vendors = (currentCouple.vendors || []).slice();
+  const catIdx = vendors.findIndex(v => v.category === vendor.category);
+  if(catIdx >= 0){
+    vendors[catIdx] = planVendor;
+    showShareToast(`Replaced ${vendor.category} with ${vendor.name}`);
+  } else {
+    vendors.push(planVendor);
+    showShareToast(`Added ${vendor.name} to your plan`);
+  }
+  currentCouple.vendors = vendors;
+  savePlanToHistory(currentCouple);
+  refreshPlanLists(currentCouple);
+  renderMarketplaceList();
+  updateDrawerAddButton(vendor);
+  return true;
+}
+
+function updateDrawerAddButton(vendor){
+  const btn = $('#vd-add-btn');
+  if(!btn) return;
+  drawerMarketplaceVendor = vendor?.source === 'marketplace' ? vendor : null;
+  if(!drawerMarketplaceVendor){
+    btn.classList.remove('in-plan');
+    btn.textContent = 'Add to wedding plan';
+    return;
+  }
+  const inPlan = isVendorInPlan(drawerMarketplaceVendor);
+  btn.classList.toggle('in-plan', inPlan);
+  btn.textContent = inPlan ? 'Already in your plan' : 'Add to wedding plan';
+}
+
+function savePlanToHistory(couple){
+  if(!couple?.id) return;
+  const entry = serializePlanForHistory(couple);
+  const existing = loadPlanHistory().filter(p => p.id !== entry.id);
+  persistPlanHistory([entry, ...existing]);
+}
+
+function reopenPlanFromHistory(entry){
+  if(!entry) return;
+  const couple = {
+    ...entry,
+    vendors: (entry.vendors || []).map(v => ({ ...v })),
+    palette: entry.palette
+      ? { ...entry.palette }
+      : { bg:'#2a1f3d', accent:'#F2A93B', glow:'#E0447C' },
+  };
+  preferredPlanTab = 'vendors';
+  navigate('plan', couple);
+}
+
+function mapPackageTemplateDoc(doc){
+  const key = doc.key || doc.id;
+  const keywords = Array.isArray(doc.locationKeywords)
+    ? doc.locationKeywords.map(row => (typeof row === 'string' ? row : row?.keyword)).filter(Boolean)
+    : [];
+  return {
+    id: key,
+    names: doc.names,
+    location: doc.location,
+    date: doc.date,
+    guests: Number(doc.guests) || 80,
+    budgetTotal: Number(doc.budgetTotal) || 40000,
+    vibe: doc.vibe || 'beach',
+    isDefaultForVibe: Boolean(doc.isDefaultForVibe),
+    locationKeywords: keywords,
+    heroImage: doc.heroImage || (key ? `assets/weddings/${key}-hero.png` : null),
+    palette: {
+      bg: doc.palette?.bg || '#2a1f3d',
+      accent: doc.palette?.accent || '#F2A93B',
+      glow: doc.palette?.glow || '#E0447C',
+    },
+    inviteCopy: doc.inviteCopy || '',
+    notes: doc.notes || '',
+    vendors: (doc.vendors || []).map(v => ({
+      category: v.category,
+      name: v.name,
+      price: Number(v.price) || 0,
+      note: v.note || '',
+      ...(v.flag ? { flag: v.flag } : {}),
+    })),
+  };
+}
+
+function rebuildPackageIndexes(){
+  VIBE_TO_SEED = {};
+  LOC_KEYWORDS = [];
+  COUPLES.forEach(couple => {
+    if(couple.isDefaultForVibe || !VIBE_TO_SEED[couple.vibe]){
+      VIBE_TO_SEED[couple.vibe] = couple.id;
+    }
+    if(couple.locationKeywords?.length){
+      LOC_KEYWORDS.push({ keys: couple.locationKeywords.slice(), id: couple.id });
+    }
+  });
+}
+
+async function loadPackagesFromPayload(){
+  const base = getPayloadApiBase();
+  try{
+    const res = await fetch(`${base}/api/package-templates?limit=100`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const docs = data.docs || [];
+    if(!docs.length) throw new Error('No package-templates returned');
+    COUPLES = docs.map(mapPackageTemplateDoc);
+    rebuildPackageIndexes();
+    console.info(`[marrymap] Loaded ${COUPLES.length} packages from Payload at ${base}`);
+    return true;
+  }catch(err){
+    COUPLES = FALLBACK_COUPLES.slice();
+    rebuildPackageIndexes();
+    console.warn(`[marrymap] Payload unavailable (${base}); using embedded fallback`, err);
+    return false;
+  }
+}
+
+rebuildPackageIndexes();
 
 function getCoupleImage(couple){
   if(!couple) return null;
@@ -932,16 +1505,6 @@ function applyCardHero(imgEl, couple){
     imgEl.classList.add('hidden');
   }
 }
-
-const LOC_KEYWORDS = [
-  {keys:['goa','india'], id:'priya-arjun'},
-  {keys:['tuscany','italy','florence','firenze'], id:'jake-emily'},
-  {keys:['mykonos','greece','santorini','aegean'], id:'marcus-david'},
-  {keys:['tulum','mexico','cancun','cancún'], id:'sofia-mateo'},
-  {keys:['bali','indonesia','uluwatu'], id:'aiko-wei'},
-  {keys:['napa','sonoma','california','wine'], id:'lena-sarah'},
-  {keys:['zanzibar','tanzania','africa'], id:'kwame-ngozi'},
-];
 
 /* =========================================================================
    HELPERS
@@ -1232,13 +1795,13 @@ const CATEGORY_INCLUDES = {
     'On-site coordinator for timeline run-of-show',
     'Sunset / golden-hour ceremony hold'
   ],
-  Catering: [
+  Caterer: [
     'Seated or station meal for all guests',
     'Cake cutting + late-night snack option',
     'Bar service window (beer/wine + signature cocktail)',
     'Dietary accommodations for common restrictions'
   ],
-  Flowers: [
+  Florist: [
     'Ceremony arch / altar floral focal',
     'Aisle accents + head-table arrangement',
     'Personal flowers (bouquets / boutonnieres)',
@@ -1255,8 +1818,8 @@ const CATEGORY_INCLUDES = {
 const CATEGORY_BLURBS = {
   Travel: 'Gets every guest from airport to aisle without a spreadsheet meltdown.',
   Venue: 'The physical stage for vows, dinner, and the first dance — locked and styled.',
-  Catering: 'The meal people will actually remember — paced for celebration, not cafeteria.',
-  Flowers: 'Color, scent, and structure that photograph like a magazine spread.',
+  Caterer: 'The meal people will actually remember — paced for celebration, not cafeteria.',
+  Florist: 'Color, scent, and structure that photograph like a magazine spread.',
   Music: 'The emotional arc of the day, from hush to dance floor.'
 };
 
@@ -1285,11 +1848,11 @@ const CATEGORY_REVIEWS = {
     { stars:'★★★★★', quote:'The space held ceremony and dinner without feeling like a hotel ballroom.', by:'Elena M., 2025' },
     { stars:'4.8/5 · 86 weddings', quote:'Golden-hour timing was perfect. Guests still talk about the view.', by:'Destination Digest' }
   ],
-  Catering: [
+  Caterer: [
     { stars:'★★★★★', quote:'Stations that moved like a party, not a cafeteria line. People went back for thirds.', by:'Jordan K., 2024' },
     { stars:'Editor’s pick · 4.9/5', quote:'Dietary needs handled quietly — nobody felt like an exception.', by:'The Knot Local' }
   ],
-  Flowers: [
+  Florist: [
     { stars:'★★★★☆', quote:'Looked magazine-real in person and held through humidity and wind.', by:'Mei L., 2025' },
     { stars:'Couples Choice · 4.8/5', quote:'Arch was the photo everyone sent home. Strike was seamless.', by:'Marrymap Marketplace' }
   ],
@@ -1308,10 +1871,10 @@ const HERO_REVIEWS = {
     { stars:'★★★★★', quote:'Three days on one lawn and it never felt repetitive — mehndi to vows to dinner.', by:'Arjun M., 2025' },
     { stars:'4.9/5 · beachfront estates', quote:'Arabian Sea backdrop without fighting hotel event rules.', by:'India Wedding Report' }
   ],
-  'priya-arjun|Catering': [
+  'priya-arjun|Caterer': [
     { stars:'★★★★★', quote:'Live chaat that somehow stayed elegant. Uncles still text about the seafood counter.', by:'Neha P., 2024' }
   ],
-  'priya-arjun|Flowers': [
+  'priya-arjun|Florist': [
     { stars:'★★★★★', quote:'Marigold and orchid mandap that smelled like celebration the second you walked in.', by:'Kavya R., 2025' }
   ],
   'priya-arjun|Music': [
@@ -1324,10 +1887,10 @@ const HERO_REVIEWS = {
     { stars:'★★★★★', quote:'Hilltop chapel at golden hour — our photographer cried before we did.', by:'Jake H., 2024' },
     { stars:'Couples Choice · 4.9/5', quote:'Weekend buyout meant our people owned the borgo, not a shared schedule.', by:'Marrymap Marketplace' }
   ],
-  'jake-emily|Catering': [
+  'jake-emily|Caterer': [
     { stars:'★★★★★', quote:'Family-style that tasted like Nonna actually cooked. Wine pairings never missed.', by:'Chiara B., 2025' }
   ],
-  'jake-emily|Flowers': [
+  'jake-emily|Florist': [
     { stars:'★★★★☆', quote:'Olive branch and wildflowers — romantic without looking arranged-for-Instagram.', by:'Sophie L., 2025' }
   ],
   'jake-emily|Music': [
@@ -1341,10 +1904,10 @@ const HERO_REVIEWS = {
     { stars:'★★★★★', quote:'Private cliff estate — sunset vows with zero strangers on the terrace.', by:'David R., 2025' },
     { stars:'4.9/5 · 64 cliff weddings', quote:'Caldera light does the heavy lifting; the team protected the timeline.', by:'Hellenic Bride' }
   ],
-  'marcus-david|Catering': [
+  'marcus-david|Caterer': [
     { stars:'★★★★★', quote:'Mezze that kept arriving like the night refused to end. Seafood was absurdly fresh.', by:'Nikos P., 2024' }
   ],
-  'marcus-david|Flowers': [
+  'marcus-david|Florist': [
     { stars:'★★★★☆', quote:'White bougainvillea against that blue — simple, wind-smart, unforgettable.', by:'Helena K., 2025' }
   ],
   'marcus-david|Music': [
@@ -1368,9 +1931,9 @@ function humanizeVendorLine(vendor, couple){
       return `Guest arrivals for ${couple.guests} in ${place}: ${raw || 'smooth airport-to-venue transfers'}.`;
     case 'Venue':
       return `The ceremony home — ${raw || 'a site that holds vows and dinner in one breath'}.`;
-    case 'Catering':
+    case 'Caterer':
       return `The table story: ${raw || 'a menu paced for celebration'}.`;
-    case 'Flowers':
+    case 'Florist':
       return `Florals that photograph clean: ${raw || 'arch, aisle, and personal flowers'}.`;
     case 'Music':
       return `The day’s soundtrack — ${raw || 'ceremony hush into a full dance floor'}.`;
@@ -1409,8 +1972,8 @@ function buildWhyReasons(vendor, couple){
   const catWhy = {
     Travel: `Proven group logistics into ${place} — coordinators who treat arrivals like hospitality, not a bus route.`,
     Venue: `One site that holds ceremony and reception so guests aren’t venue-hopping.`,
-    Catering: `Menu pacing and stations that photograph well and feed a hungry dance floor.`,
-    Flowers: `Design language that survives wind, heat, and a full photo timeline.`,
+    Caterer: `Menu pacing and stations that photograph well and feed a hungry dance floor.`,
+    Florist: `Design language that survives wind, heat, and a full photo timeline.`,
     Music: `Live cues plus reception energy that follows the room, not a rigid playlist.`
   };
   reasons.push(catWhy[cat] || 'Topped peer quotes on availability, reviews, and timeline fit this week.');
@@ -1462,6 +2025,7 @@ function vendorDetail(vendor, couple){
 let currentScreen = 'landing';
 let currentCouple = null;
 let vendorDrawerOpen = false;
+let preferredPlanTab = null;
 const BACK_MAP = { agent:'landing', plan:'landing', scene:'plan', 'shared-card':'landing' };
 
 function setPalette(couple){
@@ -1481,9 +2045,29 @@ function navigate(to, couple){
   currentScreen = to;
   if(couple) currentCouple = couple;
 
+  if(to === 'landing'){ renderLandingHistory(); }
   if(to === 'agent'){ setPalette(currentCouple); startAgent(currentCouple); }
-  if(to === 'plan'){ setPalette(currentCouple); renderPlan(currentCouple); }
+  if(to === 'plan'){
+    setPalette(currentCouple);
+    renderPlan(currentCouple);
+    activateTab(preferredPlanTab || 'details');
+    preferredPlanTab = null;
+  }
   if(to === 'scene'){ setPalette(currentCouple); startScene(currentCouple); }
+}
+
+function buildDraftFromFormOrDefault(){
+  const form = $('#wedding-form');
+  if(form && $('#f-p1')?.value?.trim() && $('#f-p2')?.value?.trim()){
+    return buildWeddingFromForm(Object.fromEntries(new FormData(form).entries()));
+  }
+  if(COUPLES[0]) fillFormFromCouple(COUPLES[0]);
+  return buildWeddingFromForm(Object.fromEntries(new FormData($('#wedding-form')).entries()));
+}
+
+function openPlanningWorkspace(couple, tab = 'details'){
+  preferredPlanTab = tab;
+  navigate('plan', couple || buildDraftFromFormOrDefault());
 }
 
 function goBack(){
@@ -1513,30 +2097,47 @@ function fillFormFromCouple(couple){
 
 function renderLanding(){
   const chips = $('#qf-chips');
-  chips.innerHTML = '';
-  COUPLES.forEach(couple => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'qf-chip';
-    if(couple.heroImage){
-      const thumb = document.createElement('img');
-      thumb.className = 'qf-chip-thumb';
-      thumb.src = resolveAssetUrl(couple.heroImage);
-      thumb.alt = couple.location;
-      btn.appendChild(thumb);
-    }
-    btn.appendChild(document.createTextNode(couple.location.split(',')[0]));
-    btn.addEventListener('click', () => fillFormFromCouple(couple));
-    chips.appendChild(btn);
-  });
-  // Sensible demo defaults
-  fillFormFromCouple(COUPLES[0]);
+  if(chips){
+    chips.innerHTML = '';
+    COUPLES.forEach(couple => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'qf-chip';
+      if(couple.heroImage){
+        const thumb = document.createElement('img');
+        thumb.className = 'qf-chip-thumb';
+        thumb.src = resolveAssetUrl(couple.heroImage);
+        thumb.alt = couple.location;
+        btn.appendChild(thumb);
+      }
+      btn.appendChild(document.createTextNode(couple.location.split(',')[0]));
+      btn.addEventListener('click', () => {
+        fillFormFromCouple(couple);
+        if(currentScreen === 'plan'){
+          const draft = buildWeddingFromForm(Object.fromEntries(new FormData($('#wedding-form')).entries()));
+          if(currentCouple?.id) draft.id = currentCouple.id;
+          currentCouple = draft;
+          renderPlan(currentCouple);
+          activateTab('details');
+        }
+      });
+      chips.appendChild(btn);
+    });
+  }
+  if(COUPLES[0]) fillFormFromCouple(COUPLES[0]);
+  renderLandingHistory();
 }
+
+$('#landing-start').addEventListener('click', () => {
+  openPlanningWorkspace(buildDraftFromFormOrDefault(), 'details');
+});
 
 $('#wedding-form').addEventListener('submit', e => {
   e.preventDefault();
   const fd = new FormData(e.target);
   const wedding = buildWeddingFromForm(Object.fromEntries(fd.entries()));
+  if(currentCouple?.id) wedding.id = currentCouple.id;
+  preferredPlanTab = 'vendors';
   navigate('agent', wedding);
 });
 
@@ -1580,7 +2181,11 @@ function startAgent(couple){
 
   function step(){
     if(idx >= lines.length){
-      agentTimer = setTimeout(() => navigate('plan', couple), 900);
+      agentTimer = setTimeout(() => {
+        savePlanToHistory(couple);
+        preferredPlanTab = 'vendors';
+        navigate('plan', couple);
+      }, 900);
       return;
     }
     const line = lines[idx++];
@@ -1606,14 +2211,66 @@ function stopAgent(){
 /* =========================================================================
    VENDOR DRAWER
    ========================================================================= */
+function openMarketplaceVendorDetail(vendor){
+  const drawer = $('#vendor-drawer');
+  drawer.classList.add('marketplace');
+  $('#vd-cat').textContent = vendor.category;
+  $('#vd-name').textContent = vendor.name;
+  $('#vd-price').textContent = vendor.priceLabel || vendor.priceRange || 'Ask for quote';
+  $('#vd-blurb').textContent = vendor.description || 'Marketplace vendor listing.';
+  const includes = vendor.services.length
+    ? vendor.services
+    : ['Contact this vendor for a custom package quote.'];
+  $('#vd-includes-label').textContent = 'Services';
+  $('#vd-includes').innerHTML = includes.map(i => `<li>${i}</li>`).join('');
+  $('#vd-why').innerHTML = '';
+  if(vendor.ratingValue != null){
+    const stars = '★'.repeat(Math.round(Number(vendor.ratingValue) || 0)).padEnd(5, '☆');
+    const count = vendor.reviewCount != null ? `${vendor.reviewCount} reviews` : 'Marketplace rating';
+    $('#vd-reviews-label').textContent = 'Rating';
+    $('#vd-reviews').innerHTML = `
+      <div class="vd-review">
+        <div class="vd-review-stars">${stars} ${Number(vendor.ratingValue).toFixed(1)}</div>
+        <p class="vd-review-quote">${count}</p>
+        <div class="vd-review-by">${vendor.area || 'Marrymap marketplace'}</div>
+      </div>`;
+  } else {
+    $('#vd-reviews-label').textContent = 'Rating';
+    $('#vd-reviews').innerHTML = `<div class="vd-review"><p class="vd-review-quote">No ratings yet.</p></div>`;
+  }
+  $('#vd-style-label').textContent = 'Details';
+  const detailBits = [
+    vendor.area ? `Serves ${vendor.area}` : '',
+    vendor.amenities.length ? vendor.amenities.slice(0, 4).join(' · ') : '',
+    vendor.url || '',
+  ].filter(Boolean);
+  $('#vd-style').textContent = detailBits.join(' — ') || 'Browse this vendor in the Marrymap marketplace.';
+  $('#vd-booked').textContent = 'Marketplace listing';
+  updateDrawerAddButton(vendor);
+  $('#vendor-backdrop').classList.add('open');
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  vendorDrawerOpen = true;
+}
+
 function openVendorDetail(vendor, couple){
+  // Catalog listings carry a services array; plan vendors only keep marketplaceId.
+  if(vendor?.source === 'marketplace' && Array.isArray(vendor.services)){
+    openMarketplaceVendorDetail(vendor);
+    return;
+  }
   const d = vendorDetail(vendor, couple);
+  const drawer = $('#vendor-drawer');
+  drawer.classList.remove('marketplace');
+  updateDrawerAddButton(null);
   $('#vd-cat').textContent = d.category;
   $('#vd-name').textContent = d.name;
   $('#vd-price').textContent = fmtMoney(d.price);
   $('#vd-blurb').textContent = d.blurb;
+  $('#vd-includes-label').textContent = "What's included";
   $('#vd-includes').innerHTML = d.includes.map(i => `<li>${i}</li>`).join('');
   $('#vd-why').innerHTML = d.why.map(r => `<li>${r}</li>`).join('');
+  $('#vd-reviews-label').textContent = 'Reviews';
   $('#vd-reviews').innerHTML = d.reviews.map(r => `
     <div class="vd-review">
       <div class="vd-review-stars">${r.stars}</div>
@@ -1621,10 +2278,12 @@ function openVendorDetail(vendor, couple){
       <div class="vd-review-by">${r.by}</div>
     </div>
   `).join('');
+  $('#vd-style-label').textContent = 'Style note';
   $('#vd-style').textContent = d.style;
+  $('#vd-booked').textContent = '✓ Booked for your day';
   $('#vendor-backdrop').classList.add('open');
-  $('#vendor-drawer').classList.add('open');
-  $('#vendor-drawer').setAttribute('aria-hidden', 'false');
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
   vendorDrawerOpen = true;
 }
 
@@ -1633,23 +2292,258 @@ function closeVendorDetail(){
   $('#vendor-drawer').classList.remove('open');
   $('#vendor-drawer').setAttribute('aria-hidden', 'true');
   vendorDrawerOpen = false;
+  drawerMarketplaceVendor = null;
 }
 
 $('#vd-close').addEventListener('click', closeVendorDetail);
 $('#vendor-backdrop').addEventListener('click', closeVendorDetail);
+$('#vd-add-btn').addEventListener('click', () => {
+  if(!drawerMarketplaceVendor) return;
+  if(isVendorInPlan(drawerMarketplaceVendor)) return;
+  addVendorToPlan(drawerMarketplaceVendor);
+});
 
 /* =========================================================================
    PLAN
    ========================================================================= */
-function renderPlan(couple){
-  $('#plan-title').textContent = couple.names;
-  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier} tier`;
+function marketplaceFiltersActive(){
+  return Boolean(
+    marketplaceSearchQuery.trim() ||
+    marketplaceFilters.category ||
+    marketplaceFilters.priceBucket ||
+    marketplaceFilters.area
+  );
+}
 
-  renderInvitePanels(couple);
+function matchesPriceBucket(price, bucketKey){
+  if(!bucketKey) return true;
+  const bucket = PRICE_BUCKETS[bucketKey];
+  if(!bucket) return true;
+  const p = Number(price) || 0;
+  if(p <= 0) return false;
+  if(bucketKey === '10k-plus') return p >= bucket.min;
+  return p >= bucket.min && p < bucket.max;
+}
 
+function getFilteredMarketplaceVendors(){
+  const q = marketplaceSearchQuery.trim().toLowerCase();
+  return MARKETPLACE_VENDORS.filter(v => {
+    if(marketplaceFilters.category && v.categoryKey !== marketplaceFilters.category) return false;
+    if(!matchesPriceBucket(v.price, marketplaceFilters.priceBucket)) return false;
+    if(marketplaceFilters.area && (v.area || '') !== marketplaceFilters.area) return false;
+    if(!q) return true;
+    const haystack = [
+      v.name, v.category, v.categoryKey, v.area, v.note, v.description, v.priceLabel,
+      ...(v.services || []),
+    ].filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(q);
+  });
+}
+
+function syncMarketplaceFilterControls(){
+  const priceEl = $('#marketplace-price');
+  const areaEl = $('#marketplace-area');
+  const clearEl = $('#marketplace-clear');
+  if(priceEl) priceEl.value = marketplaceFilters.priceBucket || '';
+  if(areaEl) areaEl.value = marketplaceFilters.area || '';
+  if(clearEl) clearEl.classList.toggle('hidden', !marketplaceFiltersActive());
+  $$('#marketplace-type-chips .vendor-filter-chip').forEach(chip => {
+    chip.classList.toggle('active', (chip.dataset.category || '') === (marketplaceFilters.category || ''));
+  });
+}
+
+let marketplaceFilterOptionsKey = '';
+
+function populateMarketplaceFilterOptions(){
+  const chips = $('#marketplace-type-chips');
+  const areaEl = $('#marketplace-area');
+  const optionsKey = MARKETPLACE_VENDORS.map(v => `${v.id}:${v.categoryKey}:${v.area || ''}`).join('|');
+  const needsRebuild = optionsKey !== marketplaceFilterOptionsKey || !chips?.children.length;
+  if(!needsRebuild){
+    syncMarketplaceFilterControls();
+    return;
+  }
+  marketplaceFilterOptionsKey = optionsKey;
+
+  if(chips){
+    const categories = [];
+    const seen = new Set();
+    MARKETPLACE_VENDORS.forEach(v => {
+      if(!v.categoryKey || seen.has(v.categoryKey)) return;
+      seen.add(v.categoryKey);
+      categories.push({ key: v.categoryKey, label: v.category || categoryLabel(v.categoryKey) });
+    });
+    categories.sort((a, b) => a.label.localeCompare(b.label));
+    chips.innerHTML = '';
+    const allBtn = document.createElement('button');
+    allBtn.type = 'button';
+    allBtn.className = 'vendor-filter-chip';
+    allBtn.dataset.category = '';
+    allBtn.textContent = 'All types';
+    chips.appendChild(allBtn);
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'vendor-filter-chip';
+      btn.dataset.category = cat.key;
+      btn.textContent = cat.label;
+      chips.appendChild(btn);
+    });
+  }
+  if(areaEl){
+    const areas = [...new Set(
+      MARKETPLACE_VENDORS.map(v => v.area).filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b));
+    const current = marketplaceFilters.area;
+    areaEl.innerHTML = `<option value="">Any area</option>` +
+      areas.map(a => `<option value="${a.replace(/"/g, '&quot;')}">${a}</option>`).join('');
+    if(current && areas.includes(current)){
+      marketplaceFilters.area = current;
+    } else {
+      marketplaceFilters.area = '';
+    }
+  }
+  syncMarketplaceFilterControls();
+}
+
+function clearMarketplaceFilters(){
+  marketplaceSearchQuery = '';
+  marketplaceFilters = { category: '', priceBucket: '', area: '' };
+  const searchEl = $('#marketplace-search');
+  if(searchEl) searchEl.value = '';
+  syncMarketplaceFilterControls();
+  renderMarketplaceList();
+}
+
+function renderMarketplaceList(){
+  const list = $('#marketplace-list');
+  const countEl = $('#marketplace-count');
+  if(!list) return;
+  list.innerHTML = '';
+  if(!MARKETPLACE_VENDORS.length){
+    if(countEl) countEl.textContent = '';
+    list.innerHTML = `<div class="vendor-empty">Marketplace vendors unavailable — start the CMS or run the seed.</div>`;
+    return;
+  }
+  populateMarketplaceFilterOptions();
+  const filtered = getFilteredMarketplaceVendors();
+  if(countEl){
+    countEl.textContent = marketplaceFiltersActive()
+      ? `${filtered.length} of ${MARKETPLACE_VENDORS.length}`
+      : `${MARKETPLACE_VENDORS.length} vendors`;
+  }
+  if(!filtered.length){
+    list.innerHTML = `<div class="vendor-empty">No vendors match these filters.</div>`;
+    return;
+  }
+  filtered.forEach(v => {
+    const rating = v.ratingValue != null
+      ? `<span class="v-rating">★ ${Number(v.ratingValue).toFixed(1)}${v.reviewCount != null ? ` · ${v.reviewCount}` : ''}</span>`
+      : '';
+    const inPlan = isVendorInPlan(v);
+    const row = document.createElement('div');
+    row.className = 'vendor-row';
+    row.innerHTML = `
+      <div class="v-cat">${v.category}</div>
+      <div>
+        <div class="v-name">${v.name}</div>
+        <div class="v-note">${v.note || v.description || ''}</div>
+        <div class="v-meta">${v.area || ''}</div>
+        <div class="v-hint">Click for services →</div>
+      </div>
+      <div class="v-right">
+        <span class="v-price">${v.priceLabel || v.priceRange || 'Quote'}</span>
+        ${rating}
+        <button type="button" class="v-add-btn${inPlan ? ' in-plan' : ''}" data-add-vendor>
+          ${inPlan ? 'In your plan' : 'Add to plan'}
+        </button>
+      </div>
+    `;
+    const addBtn = row.querySelector('[data-add-vendor]');
+    addBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(inPlan) return;
+      addVendorToPlan(v);
+    });
+    row.addEventListener('click', () => openVendorDetail(v, currentCouple));
+    list.appendChild(row);
+  });
+}
+
+function formatHistoryWhen(iso){
+  if(!iso) return '';
+  try{
+    return new Date(iso).toLocaleString(undefined, {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: 'numeric', minute: '2-digit',
+    });
+  }catch{
+    return iso;
+  }
+}
+
+function renderHistoryList(activeId){
+  const list = $('#history-list');
+  if(!list) return;
+  const history = loadPlanHistory();
+  list.innerHTML = '';
+  if(!history.length){
+    list.innerHTML = `<div class="vendor-empty">No past plans yet — finish a plan to save it here.</div>`;
+    return;
+  }
+  history.forEach(entry => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'history-row' + (entry.id === activeId ? ' active' : '');
+    row.innerHTML = `
+      <div>
+        <div class="h-names">${entry.names}</div>
+        <div class="h-meta">${entry.location} · ${entry.date} · ${entry.guests} guests</div>
+        ${historyVendorsMarkup(entry.vendors)}
+      </div>
+      <div class="h-right">
+        <div class="h-budget">${fmtMoney(entry.budgetTotal)}</div>
+        <div class="h-when">${formatHistoryWhen(entry.savedAt)}</div>
+      </div>
+    `;
+    row.addEventListener('click', () => reopenPlanFromHistory(entry));
+    list.appendChild(row);
+  });
+}
+
+function renderLandingHistory(){
+  const wrap = $('#landing-history');
+  const list = $('#landing-history-list');
+  if(!wrap || !list) return;
+  const history = loadPlanHistory();
+  if(!history.length){
+    wrap.classList.add('hidden');
+    list.innerHTML = '';
+    return;
+  }
+  wrap.classList.remove('hidden');
+  list.innerHTML = '';
+  history.slice(0, 5).forEach(entry => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'lh-row';
+    row.innerHTML = `
+      <div>
+        <div class="lh-names">${entry.names}</div>
+        <div class="lh-sub">${entry.location} · ${entry.date}</div>
+        <div class="lh-vendors">${landingVendorsLine(entry.vendors)}</div>
+      </div>
+      <span class="lh-open">Open →</span>
+    `;
+    row.addEventListener('click', () => reopenPlanFromHistory(entry));
+    list.appendChild(row);
+  });
+}
+
+function refreshPlanLists(couple){
   const vendorList = $('#vendor-list');
   vendorList.innerHTML = '';
-  couple.vendors.forEach(v => {
+  (couple.vendors || []).forEach(v => {
     const row = document.createElement('div');
     row.className = 'vendor-row' + (v.flag ? ' flagged' : '');
     row.innerHTML = `
@@ -1671,7 +2565,7 @@ function renderPlan(couple){
 
   const budgetList = $('#budget-list');
   budgetList.innerHTML = '';
-  couple.vendors.forEach(v => {
+  (couple.vendors || []).forEach(v => {
     const pct = Math.round((v.price / couple.budgetTotal) * 100);
     const row = document.createElement('div');
     row.className = 'budget-row' + (v.flag ? ' flagged' : '');
@@ -1690,8 +2584,18 @@ function renderPlan(couple){
     budgetList.appendChild(row);
   });
   $('#budget-total-of').textContent = `of ${fmtMoney(couple.budgetTotal)}`;
+  renderHistoryList(couple.id);
+  renderLandingHistory();
+}
 
-  activateTab('invite');
+function renderPlan(couple){
+  $('#plan-title').textContent = couple.names;
+  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier || 'mid'} tier`;
+
+  fillFormFromCouple(couple);
+  renderInvitePanels(couple);
+  refreshPlanLists(couple);
+  renderMarketplaceList();
 }
 
 function sparkBars(){
@@ -1704,6 +2608,52 @@ function activateTab(name){
   $$('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
   if(name === 'budget') animateBudget();
   if(name === 'share' && currentCouple) renderInvitePanels(currentCouple);
+  if(name === 'history') renderHistoryList(currentCouple?.id);
+  if(name === 'vendors') renderMarketplaceList();
+  if(name === 'details' && currentCouple) fillFormFromCouple(currentCouple);
+}
+
+const marketplaceSearchInput = $('#marketplace-search');
+if(marketplaceSearchInput){
+  marketplaceSearchInput.addEventListener('input', () => {
+    marketplaceSearchQuery = marketplaceSearchInput.value || '';
+    syncMarketplaceFilterControls();
+    renderMarketplaceList();
+  });
+}
+
+const marketplaceTypeChips = $('#marketplace-type-chips');
+if(marketplaceTypeChips){
+  marketplaceTypeChips.addEventListener('click', (e) => {
+    const chip = e.target.closest('.vendor-filter-chip');
+    if(!chip) return;
+    marketplaceFilters.category = chip.dataset.category || '';
+    syncMarketplaceFilterControls();
+    renderMarketplaceList();
+  });
+}
+
+const marketplacePriceSelect = $('#marketplace-price');
+if(marketplacePriceSelect){
+  marketplacePriceSelect.addEventListener('change', () => {
+    marketplaceFilters.priceBucket = marketplacePriceSelect.value || '';
+    syncMarketplaceFilterControls();
+    renderMarketplaceList();
+  });
+}
+
+const marketplaceAreaSelect = $('#marketplace-area');
+if(marketplaceAreaSelect){
+  marketplaceAreaSelect.addEventListener('change', () => {
+    marketplaceFilters.area = marketplaceAreaSelect.value || '';
+    syncMarketplaceFilterControls();
+    renderMarketplaceList();
+  });
+}
+
+const marketplaceClearBtn = $('#marketplace-clear');
+if(marketplaceClearBtn){
+  marketplaceClearBtn.addEventListener('click', clearMarketplaceFilters);
 }
 
 function animateBudget(){
@@ -1737,7 +2687,10 @@ $$('.tab-btn').forEach(btn => {
   });
 });
 $$('[data-go-scene]').forEach(btn => btn.addEventListener('click', () => navigate('scene', currentCouple)));
-$('#rerun-btn').addEventListener('click', () => navigate('agent', currentCouple));
+$('#rerun-btn').addEventListener('click', () => {
+  preferredPlanTab = 'vendors';
+  navigate('agent', currentCouple);
+});
 
 /* =========================================================================
    SHARE CARD
@@ -2118,8 +3071,8 @@ function addVendorSceneElements(scene, couple, tier){
   scene.userData.vendorLights = [];
 
   if(byCat.Music) addMusicSetup(scene, couple, byCat.Music, tier);
-  if(byCat.Flowers) addFlowerDecor(scene, couple, byCat.Flowers, tier);
-  if(byCat.Catering) addCateringSetup(scene, couple, byCat.Catering, tier);
+  if(byCat.Florist) addFlowerDecor(scene, couple, byCat.Florist, tier);
+  if(byCat.Caterer) addCateringSetup(scene, couple, byCat.Caterer, tier);
   if(byCat.Venue) addVenueFeatures(scene, couple, byCat.Venue, tier);
   if(byCat.Travel) addTravelWelcome(scene, couple, byCat.Travel, tier);
 }
@@ -2653,7 +3606,7 @@ function buildWeddingScene(couple){
     archGroup.add(arch2);
   }
 
-  const flowerVendor = (couple.vendors || []).find(v => v.category === 'Flowers');
+  const flowerVendor = (couple.vendors || []).find(v => v.category === 'Florist');
   const flowerCount = flowerVendor ? (tier === 'high' ? 14 : tier === 'low' ? 5 : 8) : 0;
   const flowerMat = new THREE.MeshStandardMaterial({
     color: couple.palette.glow,
@@ -2794,8 +3747,8 @@ function startScene(couple){
   couple.tier = couple.tier || getBudgetTier(couple.budgetTotal, couple.guests);
   const sceneFeatures = (couple.vendors || []).map(v => {
     if(v.category === 'Music') return vendorHas(v, 'dj') ? 'DJ booth' : 'Live music';
-    if(v.category === 'Flowers') return 'Floral aisle';
-    if(v.category === 'Catering') return 'Catering spread';
+    if(v.category === 'Florist') return 'Floral aisle';
+    if(v.category === 'Caterer') return 'Catering spread';
     if(v.category === 'Venue') return 'Venue details';
     if(v.category === 'Travel') return 'Welcome path';
     return v.category;
@@ -2916,10 +3869,14 @@ function animateScene(now){
 /* =========================================================================
    INIT
    ========================================================================= */
-renderLanding();
-if(!openSharedCardFromHash()){
-  navigate('landing');
+async function initApp(){
+  await Promise.all([loadPackagesFromPayload(), loadMarketplaceVendors()]);
+  renderLanding();
+  if(!openSharedCardFromHash()){
+    navigate('landing');
+  }
 }
+initApp();
 </script>
 </body>
 </html>

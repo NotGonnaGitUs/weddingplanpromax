@@ -1,0 +1,10 @@
+{
+  "name": "@marrymap/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Marrymap interactive planning demo",
+  "scripts": {
+    "dev": "npx --yes serve . -l 5173",
+    "start": "npx --yes serve . -l 5173"
+  }
+}
