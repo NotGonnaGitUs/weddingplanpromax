@@ -447,10 +447,52 @@
   .v-rating{font-size:11.5px;color:var(--gold);font-weight:600;}
   .vendor-drawer.marketplace .vd-booked{display:none;}
   .vendor-drawer.marketplace .vd-why-wrap{display:none;}
+  .vendor-search{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px;
+  }
+  .vendor-search-input{
+    flex:1 1 220px;min-width:0;
+    background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.16);
+    color:var(--paper);border-radius:12px;padding:12px 14px;font-size:14px;
+    outline:none;transition:border-color .15s,background .15s;
+  }
+  .vendor-search-input::placeholder{color:rgba(250,247,242,.38);}
+  .vendor-search-input:focus{
+    border-color:color-mix(in srgb, var(--accent) 55%, transparent);
+    background:rgba(250,247,242,.09);
+  }
+  .vendor-search-count{
+    font-size:12px;color:rgba(250,247,242,.42);white-space:nowrap;
+  }
+  .v-add-btn{
+    appearance:none;border:1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    background:color-mix(in srgb, var(--accent) 18%, transparent);color:var(--paper);
+    font-size:12px;font-weight:600;padding:7px 12px;border-radius:999px;cursor:pointer;
+    transition:background .15s,border-color .15s,transform .15s;white-space:nowrap;
+  }
+  .v-add-btn:hover{
+    background:color-mix(in srgb, var(--accent) 32%, transparent);
+    border-color:var(--accent);transform:translateY(-1px);
+  }
+  .v-add-btn.in-plan{
+    background:rgba(250,247,242,.08);border-color:rgba(250,247,242,.2);
+    color:rgba(250,247,242,.55);cursor:default;transform:none;
+  }
+  .vd-add-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    margin-top:22px;appearance:none;border:none;cursor:pointer;
+    background:var(--accent);color:var(--ink);font-weight:600;font-size:14px;
+    padding:14px 20px;border-radius:999px;transition:transform .18s ease, opacity .15s;
+  }
+  .vd-add-btn:hover{transform:translateY(-1px);}
+  .vd-add-btn.in-plan{
+    background:rgba(250,247,242,.12);color:rgba(250,247,242,.7);cursor:default;transform:none;
+  }
+  .vendor-drawer:not(.marketplace) .vd-add-btn{display:none;}
 
   .history-list{display:flex;flex-direction:column;gap:10px;}
   .history-row{
-    display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+    display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;
     padding:16px 18px;border-radius:14px;cursor:pointer;
     border:1px solid rgba(250,247,242,.12);background:rgba(250,247,242,.04);
     transition:background .15s,border-color .15s;
@@ -459,6 +501,22 @@
   .history-row.active{border-color:color-mix(in srgb, var(--accent) 55%, transparent);}
   .h-names{font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin:0 0 4px;}
   .h-meta{font-size:12.5px;color:rgba(250,247,242,.48);line-height:1.45;}
+  .h-vendors{
+    display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;
+  }
+  .h-vendor-chip{
+    display:inline-flex;align-items:baseline;gap:6px;
+    padding:4px 9px;border-radius:999px;
+    background:rgba(250,247,242,.06);border:1px solid rgba(250,247,242,.12);
+    font-size:11.5px;color:rgba(250,247,242,.72);line-height:1.3;
+  }
+  .h-vendor-chip .h-v-cat{
+    font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(250,247,242,.4);font-weight:600;
+  }
+  .h-vendors-empty{
+    margin-top:8px;font-size:12px;color:rgba(250,247,242,.35);font-style:italic;
+  }
   .h-right{text-align:right;}
   .h-budget{font-size:15px;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums;}
   .h-when{font-size:11px;color:rgba(250,247,242,.38);margin-top:4px;}
@@ -480,6 +538,7 @@
   .lh-row:hover{border-color:rgba(250,247,242,.35);background:rgba(250,247,242,.1);color:var(--paper);}
   .lh-names{font-family:'Fraunces',serif;font-size:15px;}
   .lh-sub{font-size:11.5px;color:rgba(250,247,242,.42);margin-top:2px;}
+  .lh-vendors{font-size:11px;color:rgba(250,247,242,.5);margin-top:4px;line-height:1.4;}
   .lh-open{font-size:12px;color:var(--accent);white-space:nowrap;}
 
   .budget-row{padding:16px 2px;border-bottom:1px solid rgba(250,247,242,.08);}
@@ -685,6 +744,7 @@
     <button class="tab-btn active" data-tab="invite">Invite</button>
     <button class="tab-btn" data-tab="share">Share Card</button>
     <button class="tab-btn" data-tab="vendors">Vendors</button>
+    <button class="tab-btn" data-tab="browse">Browse</button>
     <button class="tab-btn" data-tab="budget">Budget</button>
     <button class="tab-btn" data-tab="history">Past Plans</button>
     <button class="tab-btn wedding-tab" data-tab="wedding">Your Wedding</button>
@@ -757,12 +817,24 @@
     <div class="tab-panel" id="tab-vendors">
       <section class="vendor-section">
         <h3 class="vendor-section-title">Your plan</h3>
-        <p class="vendor-section-sub">Vendors locked into this wedding package.</p>
+        <p class="vendor-section-sub">Matched vendors locked into this wedding package.</p>
         <div id="vendor-list"></div>
       </section>
+    </div>
+    <div class="tab-panel" id="tab-browse">
       <section class="vendor-section">
-        <h3 class="vendor-section-title">Marketplace</h3>
-        <p class="vendor-section-sub">Sample vendors from the Marrymap catalog.</p>
+        <h3 class="vendor-section-title">Browse vendors</h3>
+        <p class="vendor-section-sub">Search the Marrymap catalog and add vendors to your current wedding plan.</p>
+        <div class="vendor-search">
+          <input
+            type="search"
+            class="vendor-search-input"
+            id="marketplace-search"
+            placeholder="Search by name, category, or area…"
+            autocomplete="off"
+          />
+          <span class="vendor-search-count" id="marketplace-count"></span>
+        </div>
         <div id="marketplace-list"></div>
       </section>
     </div>
@@ -831,6 +903,7 @@
   <div class="vd-section" id="vd-style-label">Style note</div>
   <div class="vd-style" id="vd-style"></div>
   <div class="vd-booked" id="vd-booked">✓ Booked for your day</div>
+  <button type="button" class="vd-add-btn" id="vd-add-btn">Add to wedding plan</button>
 </aside>
 
 <div class="share-toast" id="share-toast" role="status" aria-live="polite"></div>
@@ -997,6 +1070,8 @@ let COUPLES = FALLBACK_COUPLES.slice();
 let VIBE_TO_SEED = {};
 let LOC_KEYWORDS = [];
 let MARKETPLACE_VENDORS = [];
+let marketplaceSearchQuery = '';
+let drawerMarketplaceVendor = null;
 const PLAN_HISTORY_KEY = 'marrymapPlanHistory';
 const PLAN_HISTORY_MAX = 20;
 
@@ -1129,10 +1204,86 @@ function serializePlanForHistory(couple){
       price: v.price,
       note: v.note || '',
       ...(v.flag ? { flag: v.flag } : {}),
+      ...(v.source ? { source: v.source } : {}),
+      ...(v.marketplaceId != null ? { marketplaceId: v.marketplaceId } : {}),
     })),
     seedId: couple.seedId || null,
     tier: couple.tier || null,
   };
+}
+
+function isVendorInPlan(vendor, couple = currentCouple){
+  if(!vendor || !couple?.vendors?.length) return false;
+  return couple.vendors.some(v =>
+    (vendor.id != null && v.marketplaceId != null && String(v.marketplaceId) === String(vendor.id)) ||
+    (v.name === vendor.name && v.category === vendor.category)
+  );
+}
+
+function historyVendorsMarkup(vendors){
+  if(!vendors?.length){
+    return `<div class="h-vendors-empty">No matched vendors saved</div>`;
+  }
+  return `<div class="h-vendors">${vendors.map(v => `
+    <span class="h-vendor-chip"><span class="h-v-cat">${v.category}</span>${v.name}</span>
+  `).join('')}</div>`;
+}
+
+function landingVendorsLine(vendors){
+  if(!vendors?.length) return 'No matched vendors';
+  const names = vendors.map(v => v.name).filter(Boolean);
+  if(names.length <= 3) return names.join(' · ');
+  return `${names.slice(0, 3).join(' · ')} +${names.length - 3} more`;
+}
+
+function addVendorToPlan(vendor){
+  if(!currentCouple){
+    showShareToast('Open a wedding plan first');
+    return false;
+  }
+  if(!vendor) return false;
+  if(isVendorInPlan(vendor, currentCouple)){
+    showShareToast('Already in your plan');
+    return false;
+  }
+
+  const planVendor = {
+    category: vendor.category,
+    name: vendor.name,
+    price: Number(vendor.price) || 0,
+    note: vendor.note || vendor.area || vendor.description || '',
+    marketplaceId: vendor.id,
+  };
+
+  const vendors = (currentCouple.vendors || []).slice();
+  const catIdx = vendors.findIndex(v => v.category === vendor.category);
+  if(catIdx >= 0){
+    vendors[catIdx] = planVendor;
+    showShareToast(`Replaced ${vendor.category} with ${vendor.name}`);
+  } else {
+    vendors.push(planVendor);
+    showShareToast(`Added ${vendor.name} to your plan`);
+  }
+  currentCouple.vendors = vendors;
+  savePlanToHistory(currentCouple);
+  refreshPlanLists(currentCouple);
+  renderMarketplaceList();
+  updateDrawerAddButton(vendor);
+  return true;
+}
+
+function updateDrawerAddButton(vendor){
+  const btn = $('#vd-add-btn');
+  if(!btn) return;
+  drawerMarketplaceVendor = vendor?.source === 'marketplace' ? vendor : null;
+  if(!drawerMarketplaceVendor){
+    btn.classList.remove('in-plan');
+    btn.textContent = 'Add to wedding plan';
+    return;
+  }
+  const inPlan = isVendorInPlan(drawerMarketplaceVendor);
+  btn.classList.toggle('in-plan', inPlan);
+  btn.textContent = inPlan ? 'Already in your plan' : 'Add to wedding plan';
 }
 
 function savePlanToHistory(couple){
@@ -1948,6 +2099,7 @@ function openMarketplaceVendorDetail(vendor){
   ].filter(Boolean);
   $('#vd-style').textContent = detailBits.join(' — ') || 'Browse this vendor in the Marrymap marketplace.';
   $('#vd-booked').textContent = 'Marketplace listing';
+  updateDrawerAddButton(vendor);
   $('#vendor-backdrop').classList.add('open');
   drawer.classList.add('open');
   drawer.setAttribute('aria-hidden', 'false');
@@ -1955,13 +2107,15 @@ function openMarketplaceVendorDetail(vendor){
 }
 
 function openVendorDetail(vendor, couple){
-  if(vendor?.source === 'marketplace'){
+  // Catalog listings carry a services array; plan vendors only keep marketplaceId.
+  if(vendor?.source === 'marketplace' && Array.isArray(vendor.services)){
     openMarketplaceVendorDetail(vendor);
     return;
   }
   const d = vendorDetail(vendor, couple);
   const drawer = $('#vendor-drawer');
   drawer.classList.remove('marketplace');
+  updateDrawerAddButton(null);
   $('#vd-cat').textContent = d.category;
   $('#vd-name').textContent = d.name;
   $('#vd-price').textContent = fmtMoney(d.price);
@@ -1991,26 +2145,57 @@ function closeVendorDetail(){
   $('#vendor-drawer').classList.remove('open');
   $('#vendor-drawer').setAttribute('aria-hidden', 'true');
   vendorDrawerOpen = false;
+  drawerMarketplaceVendor = null;
 }
 
 $('#vd-close').addEventListener('click', closeVendorDetail);
 $('#vendor-backdrop').addEventListener('click', closeVendorDetail);
+$('#vd-add-btn').addEventListener('click', () => {
+  if(!drawerMarketplaceVendor) return;
+  if(isVendorInPlan(drawerMarketplaceVendor)) return;
+  addVendorToPlan(drawerMarketplaceVendor);
+});
 
 /* =========================================================================
    PLAN
    ========================================================================= */
+function filterMarketplaceVendors(query){
+  const q = (query || '').trim().toLowerCase();
+  if(!q) return MARKETPLACE_VENDORS.slice();
+  return MARKETPLACE_VENDORS.filter(v => {
+    const haystack = [
+      v.name, v.category, v.categoryKey, v.area, v.note, v.description, v.priceLabel,
+      ...(v.services || []),
+    ].filter(Boolean).join(' ').toLowerCase();
+    return haystack.includes(q);
+  });
+}
+
 function renderMarketplaceList(){
   const list = $('#marketplace-list');
+  const countEl = $('#marketplace-count');
   if(!list) return;
   list.innerHTML = '';
   if(!MARKETPLACE_VENDORS.length){
+    if(countEl) countEl.textContent = '';
     list.innerHTML = `<div class="vendor-empty">Marketplace vendors unavailable — start the CMS or run the seed.</div>`;
     return;
   }
-  MARKETPLACE_VENDORS.forEach(v => {
+  const filtered = filterMarketplaceVendors(marketplaceSearchQuery);
+  if(countEl){
+    countEl.textContent = marketplaceSearchQuery.trim()
+      ? `${filtered.length} of ${MARKETPLACE_VENDORS.length}`
+      : `${MARKETPLACE_VENDORS.length} vendors`;
+  }
+  if(!filtered.length){
+    list.innerHTML = `<div class="vendor-empty">No vendors match “${marketplaceSearchQuery.trim()}”.</div>`;
+    return;
+  }
+  filtered.forEach(v => {
     const rating = v.ratingValue != null
       ? `<span class="v-rating">★ ${Number(v.ratingValue).toFixed(1)}${v.reviewCount != null ? ` · ${v.reviewCount}` : ''}</span>`
       : '';
+    const inPlan = isVendorInPlan(v);
     const row = document.createElement('div');
     row.className = 'vendor-row';
     row.innerHTML = `
@@ -2024,9 +2209,17 @@ function renderMarketplaceList(){
       <div class="v-right">
         <span class="v-price">${v.priceLabel || v.priceRange || 'Quote'}</span>
         ${rating}
-        <span class="v-status">Marketplace</span>
+        <button type="button" class="v-add-btn${inPlan ? ' in-plan' : ''}" data-add-vendor>
+          ${inPlan ? 'In your plan' : 'Add to plan'}
+        </button>
       </div>
     `;
+    const addBtn = row.querySelector('[data-add-vendor]');
+    addBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if(inPlan) return;
+      addVendorToPlan(v);
+    });
     row.addEventListener('click', () => openVendorDetail(v, currentCouple));
     list.appendChild(row);
   });
@@ -2061,6 +2254,7 @@ function renderHistoryList(activeId){
       <div>
         <div class="h-names">${entry.names}</div>
         <div class="h-meta">${entry.location} · ${entry.date} · ${entry.guests} guests</div>
+        ${historyVendorsMarkup(entry.vendors)}
       </div>
       <div class="h-right">
         <div class="h-budget">${fmtMoney(entry.budgetTotal)}</div>
@@ -2092,6 +2286,7 @@ function renderLandingHistory(){
       <div>
         <div class="lh-names">${entry.names}</div>
         <div class="lh-sub">${entry.location} · ${entry.date}</div>
+        <div class="lh-vendors">${landingVendorsLine(entry.vendors)}</div>
       </div>
       <span class="lh-open">Open →</span>
     `;
@@ -2100,15 +2295,10 @@ function renderLandingHistory(){
   });
 }
 
-function renderPlan(couple){
-  $('#plan-title').textContent = couple.names;
-  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier || 'mid'} tier`;
-
-  renderInvitePanels(couple);
-
+function refreshPlanLists(couple){
   const vendorList = $('#vendor-list');
   vendorList.innerHTML = '';
-  couple.vendors.forEach(v => {
+  (couple.vendors || []).forEach(v => {
     const row = document.createElement('div');
     row.className = 'vendor-row' + (v.flag ? ' flagged' : '');
     row.innerHTML = `
@@ -2128,12 +2318,9 @@ function renderPlan(couple){
     vendorList.appendChild(row);
   });
 
-  renderMarketplaceList();
-  renderHistoryList(couple.id);
-
   const budgetList = $('#budget-list');
   budgetList.innerHTML = '';
-  couple.vendors.forEach(v => {
+  (couple.vendors || []).forEach(v => {
     const pct = Math.round((v.price / couple.budgetTotal) * 100);
     const row = document.createElement('div');
     row.className = 'budget-row' + (v.flag ? ' flagged' : '');
@@ -2152,7 +2339,17 @@ function renderPlan(couple){
     budgetList.appendChild(row);
   });
   $('#budget-total-of').textContent = `of ${fmtMoney(couple.budgetTotal)}`;
+  renderHistoryList(couple.id);
+  renderLandingHistory();
+}
 
+function renderPlan(couple){
+  $('#plan-title').textContent = couple.names;
+  $('#plan-sub').textContent = `${couple.location} · ${couple.date} · ${couple.guests} guests · ${couple.tier || 'mid'} tier`;
+
+  renderInvitePanels(couple);
+  refreshPlanLists(couple);
+  renderMarketplaceList();
   activateTab('invite');
 }
 
@@ -2167,7 +2364,15 @@ function activateTab(name){
   if(name === 'budget') animateBudget();
   if(name === 'share' && currentCouple) renderInvitePanels(currentCouple);
   if(name === 'history') renderHistoryList(currentCouple?.id);
-  if(name === 'vendors') renderMarketplaceList();
+  if(name === 'browse') renderMarketplaceList();
+}
+
+const marketplaceSearchInput = $('#marketplace-search');
+if(marketplaceSearchInput){
+  marketplaceSearchInput.addEventListener('input', () => {
+    marketplaceSearchQuery = marketplaceSearchInput.value || '';
+    renderMarketplaceList();
+  });
 }
 
 function animateBudget(){
